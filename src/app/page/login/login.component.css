@@ -1,0 +1,138 @@
+
+.login {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+::ng-deep .mat-form-field-outline {
+    color: #a3d8c6 !important;
+}
+
+::ng-deep .mat-form-field-label {
+    color: #6f7977 !important;
+}
+
+::ng-deep .mat-form-field-required-marker {
+    color: #6f7977 !important;
+}
+
+::ng-deep .mat-form-field-caret {
+    color: #6f7977 !important;
+}
+
+::ng-deep .mat-input-element {
+    caret-color: #38d39f !important;
+}
+
+.login-content {
+	display: flex;
+	text-align: center;
+}
+
+.login-content form {
+	width: 320px;
+}
+
+.login-content .img{
+	width: 30px;
+}
+
+
+.login-content h2{
+	color: #333;
+    padding-bottom: 25px;
+}
+
+.login-content .input{
+	position: relative;
+    display: grid;
+    grid-template-columns: 12% 86%;
+}
+
+.icon{
+	color: #d9d9d9;
+	display: flex;
+	justify-content: center;
+    align-items: center;
+    font-size: 30px;
+    height: 45px;
+    transition: .3s;
+}
+
+a{
+	display: block;
+	text-align: right;
+	text-decoration: none;
+	color: #999;
+	font-size: 0.9rem;
+	transition: .3s;
+}
+
+a:hover{
+	color: #38d39f;
+}
+
+.btn{
+	width: 40%;
+	height: 40px;
+	border-radius: 25px;
+	outline: none;
+	border: none;
+	background-image: linear-gradient(to right, #32be8f, #38d39f, #32be8f);
+	background-size: 200%;
+	font-size: 1.2rem;
+	color: #fff;
+	text-transform: uppercase;
+	margin: 1rem 0;
+	cursor: pointer;
+	transition: .5s;
+}
+
+.btn:hover{
+	background-position: right;
+}
+
+.disabled{
+	background-image: linear-gradient(to right, rgb(194, 194, 194), #999, #999);
+}
+
+.help-block {
+    color: red;
+}
+
+@media screen and (max-width: 1050px){
+	.container{
+		grid-gap: 5rem;
+	}
+}
+
+@media screen and (max-width: 1000px){
+	form{
+		width: 290px;
+	}
+
+	.login-content h2{
+        font-size: 2.4rem;
+        margin: 8px 0;
+	}
+}
+
+@media screen and (max-width: 900px){
+	.container{
+		grid-template-columns: 1fr;
+	}
+
+	.img{
+		display: none;
+	}
+
+	.wave{
+		display: none;
+	}
+
+	.login-content{
+		justify-content: center;
+	}
+}

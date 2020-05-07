@@ -1,0 +1,49 @@
+<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+
+<ng-sidebar-container
+    (onBackdropClicked)="_onBackdropClicked()"
+    class="container">
+  <ng-sidebar
+    [(opened)]="_opened"
+    [keyClose]="true"
+    [dock]="_dock"
+    [dockedSize]="'50px'"
+    [closeOnClickOutside]="_closeOnClickOutside"
+    [showBackdrop]="_showBackdrop"
+    (onOpenStart)="_onOpenStart()"
+    (onOpened)="_onOpened()"
+    (onCloseStart)="_onCloseStart()"
+    (onClosed)="_onClosed()"
+    (onTransitionEnd)="_onTransitionEnd()">
+    <button class="toogle-close" (click)="_toggleOpened()">Close sidebar</button>
+    <ul class="list-items">
+      <li>
+        <a class="nav-item nav-link" [routerLink]="['/']" [routerLinkActive]="'active'" [routerLinkActiveOptions]="{ exact: true }">Home</a>
+      </li>
+
+      <li>
+        <a class="nav-item nav-link" [routerLink]="['/about']" [routerLinkActive]="'active'">About</a>
+      </li>
+
+      <li>
+        <a class="nav-item nav-link" [routerLink]="['/control']" [routerLinkActive]="'active'">Control</a>
+      </li>
+
+      <li>
+        <a class="nav-item nav-link" [routerLink]="['/login']" [routerLinkActive]="'active'">Login</a>
+      </li>
+    </ul>
+  </ng-sidebar>
+  <div ng-sidebar-content>
+    <header class="header">
+      <div class="toggle-open">
+        <i class="fa fa-bars" (click)="_toggleOpened()"></i>
+      </div>
+      <span class="tittle"> Home Connected App</span>
+      <div class="toogle-logout">
+        <i class="fas fa-sign-out-alt" (click)="_toggleLogout()"></i>
+      </div>
+    </header>
+    <router-outlet></router-outlet>
+  </div>
+</ng-sidebar-container>
