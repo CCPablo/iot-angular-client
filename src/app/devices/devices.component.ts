@@ -20,8 +20,7 @@ export class DeviceComponent implements OnInit {
     ) { }
 
     ngOnInit() {
-        this.http.get(`${environment.apiUrl}/devices`)
-        .subscribe(devices => {
+        this.http.get(`${environment.apiUrl}/nodes`).subscribe(devices => {
             this.deviceStore.setDevices(devices);
             this.changeDetector.detectChanges();
         })

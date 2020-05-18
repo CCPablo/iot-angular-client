@@ -18,19 +18,19 @@
     <button class="toogle-close" (click)="_toggleOpened()">Close sidebar</button>
     <ul class="list-items">
       <li>
-        <a class="nav-item nav-link" [routerLink]="['/']" [routerLinkActive]="'active'" [routerLinkActiveOptions]="{ exact: true }">Home</a>
+        <a class="nav-item nav-link" (click)="_toggleOpened()" [routerLink]="['/']" [routerLinkActive]="'active'" [routerLinkActiveOptions]="{ exact: true }">Home</a>
       </li>
 
       <li>
-        <a class="nav-item nav-link" [routerLink]="['/about']" [routerLinkActive]="'active'">About</a>
+        <a class="nav-item nav-link" (click)="_toggleOpened()" [routerLink]="['/about']" [routerLinkActive]="'active'">About</a>
       </li>
 
       <li>
-        <a class="nav-item nav-link" [routerLink]="['/control']" [routerLinkActive]="'active'">Control</a>
+        <a class="nav-item nav-link" (click)="_toggleOpened()" [routerLink]="['/control']" [routerLinkActive]="'active'">Control</a>
       </li>
 
       <li>
-        <a class="nav-item nav-link" [routerLink]="['/login']" [routerLinkActive]="'active'">Login</a>
+        <a class="nav-item nav-link" (click)="_toggleOpened()" [routerLink]="['/login']" [routerLinkActive]="'active'">Login</a>
       </li>
     </ul>
   </ng-sidebar>

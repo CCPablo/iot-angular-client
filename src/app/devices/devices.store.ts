@@ -9,15 +9,19 @@ export class DeviceStore {
     @observable private devices = [];
 
     @action setDevices(devices) {
-        this.devices = devices;
+      this.devices = devices;
     }
 
     getDevices() {
-        return this.devices;
+      return this.devices;
+    }
+
+    getDeviceWithId(deviceId) {
+      return this.devices[deviceId];
     }
 
     getMockedDevices() {
-        return mockedDevices;
+      return mockedDevices;
     }
 }
 
@@ -60,7 +64,7 @@ export const mockedDevices = [
             description: 'Rele de activación1',
             unitType: 'ACTUADOR'
         }
-    ]  
+    ]
     },
     {
       name: 'Device3',

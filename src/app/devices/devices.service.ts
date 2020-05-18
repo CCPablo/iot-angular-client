@@ -8,18 +8,26 @@ import { Injectable } from '@angular/core';
 export class DeviceService {
 
     constructor(
-        private deviceStore: DeviceStore
+      private deviceStore: DeviceStore
     ) { }
 
     setDevices(devices) {
-        this.deviceStore.setDevices(devices);
+      this.deviceStore.setDevices(devices);
+    }
+
+    getDeviceWithId(deviceId) {
+      return this.deviceStore.getDeviceWithId(deviceId);
     }
 
     getDevices() {
-        return this.deviceStore.getDevices();
+      return this.deviceStore.getDevices();
+    }
+
+    getUnits(deviceId) {
+      return this.deviceStore.getDeviceWithId(deviceId)
     }
 
     getMockedDevices() : any {
-        return this.deviceStore.getMockedDevices();
+      return this.deviceStore.getMockedDevices();
     }
 }

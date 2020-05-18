@@ -26,6 +26,7 @@ import { ControlComponent } from './page/control/control.component'
 
 import { JwtInterceptor } from './authentication/interceptor/jwt.interceptor';
 import { GraphComponent } from './graph/graph.component';
+import { DeviceViewerComponent } from './device-viewer/device-viewer.component';
 
 @NgModule({
   declarations: [
@@ -37,7 +38,8 @@ import { GraphComponent } from './graph/graph.component';
     CanvasComponent,
     HeaderComponent,
     ControlComponent,
-    GraphComponent
+    GraphComponent,
+    DeviceViewerComponent
   ],
   imports: [
     BrowserModule,
