@@ -1,0 +1,10 @@
+.device-boxes {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.device-container {
+  padding: 10px;
+  flex-grow: 1;
+}

@@ -1,5 +1,5 @@
 
-import { DeviceStore, mockedDevices } from './devices.store'
+import { DeviceStore } from './devices.store'
 import { Injectable } from '@angular/core';
 
 @Injectable({
@@ -23,11 +23,15 @@ export class DeviceService {
       return this.deviceStore.getDevices();
     }
 
-    getUnits(deviceId) {
-      return this.deviceStore.getDeviceWithId(deviceId)
+    getTemperatureDevices() {
+      return this.deviceStore.temperatureDevices;
     }
 
-    getMockedDevices() : any {
+    getMockedDevices() {
       return this.deviceStore.getMockedDevices();
+    }
+
+    getUnits(deviceId) {
+      return this.deviceStore.getDeviceWithId(deviceId)
     }
 }

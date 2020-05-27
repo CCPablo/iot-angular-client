@@ -5,7 +5,7 @@
     left: 50%;
     transform: translate(-50%, -50%);
 }
-
+/*
 ::ng-deep .mat-form-field-outline {
     color: #a3d8c6 !important;
 }
@@ -25,6 +25,7 @@
 ::ng-deep .mat-input-element {
     caret-color: #38d39f !important;
 }
+*/
 
 .login-content {
 	display: flex;

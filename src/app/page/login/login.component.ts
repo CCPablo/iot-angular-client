@@ -59,10 +59,10 @@ export class LoginComponent implements OnInit {
                 token => {
                     console.log(token)
                     this.correctLogin(token);
-                    //this.canvas.animationInit();
+                    this.canvas.animationInit();
                 },
                 error => {
-                    //this.canvas.reset();
+                    this.canvas.reset();
                     this.error = JSON.parse(error._body);
                 });
     }

@@ -1,25 +1,35 @@
-import { Injectable } from "@angular/core";
-import { HttpClient, HttpResponseBase, HttpParams } from "@angular/common/http";
+import { Injectable, OnDestroy, OnInit } from "@angular/core";
+import { HttpClient, HttpParams } from "@angular/common/http";
 import { LoginObject } from "../model/login-object.model";
-import { map, tap } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import { Session } from "../model/session.model";
 import { Router } from '@angular/router';
+import { ToolbarService } from 'src/app/toolbar/toolbar.service';
+import { Subscription, Subject, Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
-export class AuthenticationService {
+export class AuthenticationService implements OnDestroy {
 
     private currentSession : Session = null;
+    private authUrl = '/login';
+
+    private logoutSubscription : Subscription;
 
     constructor(
         private http: HttpClient,
-        private router: Router
+        private router: Router,
+        private toolbarService: ToolbarService
         ) {
-        this.currentSession = this.loadSessionData();
+      this.currentSession = this.loadSessionData();
+      this.logoutSubscription = this.toolbarService.logout$.subscribe(()=>{
+        this.logout();
+      });
     }
 
-    private authUrl = '/login';
-    private logoutPath = '/logout';
+    ngOnDestroy() {
+      this.logoutSubscription.unsubscribe();
+    }
 
     login(loginObj: LoginObject) {
         let params = new HttpParams();

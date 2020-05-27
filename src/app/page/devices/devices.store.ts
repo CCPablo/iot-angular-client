@@ -1,27 +1,44 @@
 import { Injectable } from '@angular/core';
-import { observable, action } from 'mobx-angular';
+import { observable, action, computed } from 'mobx-angular';
 
 @Injectable({
     providedIn: 'root'
   })
 export class DeviceStore {
 
-    @observable private devices = [];
-
-    @action setDevices(devices) {
-      this.devices = devices;
-    }
+    @observable devices = [];
 
     getDevices() {
       return this.devices;
     }
 
-    getDeviceWithId(deviceId) {
-      return this.devices[deviceId];
+    @action setDevices(devices) {
+      console.log('action completed on devices')
+      this.devices = devices;
+    }
+
+    @computed get temperatureDevices() {
+      console.count('computing temperature devices')
+      let auxDevices = this.devices;
+      auxDevices.forEach((device, deviceIndex) => device.units.forEach(
+        (unit, unitIndex) => {
+          if(unit.type != 'TEMPERATURE_SENSOR') {
+            auxDevices[deviceIndex].units.splice(unitIndex, 1);
+          }
+        }));
+
+      return auxDevices.filter(
+        device =>
+          device.units.length != 0
+        );
     }
 
     getMockedDevices() {
       return mockedDevices;
+    }
+
+    getDeviceWithId(deviceId) {
+      return this.devices[deviceId];
     }
 }
 
@@ -37,12 +54,6 @@ export const mockedDevices = [
             name: 'Relé',
             description: 'Relé de activación',
             unitType: 'ACTUATOR'
-        },
-        {
-            unitId: 1,
-            name: 'Sensor1',
-            description: 'Sensor de temperatura',
-            unitType: 'SENSOR'
         }
     ]
     },
@@ -76,7 +87,7 @@ export const mockedDevices = [
             unitId: 2,
             name: 'Sensor2',
             description: 'Sensor de humedad',
-            unitType: 'SENSOR'
+            unitType: 'TEMPERATURE_SENSOR'
         },
         {
             unitId: 1,

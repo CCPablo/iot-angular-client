@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { DeviceService } from '../devices/devices.service';
+import { DeviceService } from '../page/devices/devices.service';
 
 @Component({
   selector: 'app-device-viewer',
