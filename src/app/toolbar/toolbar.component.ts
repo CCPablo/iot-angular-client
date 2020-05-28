@@ -1,9 +1,8 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { AuthenticationService } from '../authentication/service/authentication.service';
-import { Router, NavigationEnd } from '@angular/router';
-import { SidenavService } from '../navbar/side-navbar.service';
-import { Subject, Subscription } from 'rxjs';
 import { ToolbarService } from './toolbar.service';
+import { ProfileSheetComponent } from './profile-sheet.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-toolbar',
@@ -16,13 +15,24 @@ export class ToolbarComponent implements OnInit {
 
   constructor(
     private toolbarService: ToolbarService,
-    private authenticationService: AuthenticationService) {  }
+    private authenticationService: AuthenticationService,
+    private profileSheet: MatDialog) {  }
 
   ngOnInit(): void {
   }
 
   logout(): void {
     this.authenticationService.logout();
+  }
+
+  openProfileSheet() {
+    const dialogRef = this.profileSheet.open(ProfileSheetComponent, {
+      width: '250px',
+      data: {user: this.authenticationService.getCurrentUser()}
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+    });
   }
 
   toggleSidebar(): void {

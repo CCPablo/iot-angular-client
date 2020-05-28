@@ -1,10 +1,11 @@
-.device-boxes {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
+.node-card-container {
+  padding: 10px;
 }
 
-.device-container {
-  padding: 10px;
-  flex-grow: 1;
+.unit-card-container {
+  padding: 3px;
+}
+
+.node-card {
+  border-radius: 27px 27px 27px 27px;
 }

@@ -29,6 +29,8 @@ import { DeviceViewerComponent } from './device-viewer/device-viewer.component';
 import { ToolbarComponent } from './toolbar/toolbar.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { AemetComponent } from './aemet/aemet.component';
+import { ProfileSheetComponent } from './toolbar/profile-sheet.component';
+import { UnitItemComponent } from './unit-item/unit-item.component';
 
 @NgModule({
   declarations: [
@@ -45,7 +47,9 @@ import { AemetComponent } from './aemet/aemet.component';
     ToolbarComponent,
     NavbarComponent,
     TemperatureComponent,
-    AemetComponent
+    AemetComponent,
+    ProfileSheetComponent,
+    UnitItemComponent
   ],
   imports: [
     BrowserModule,

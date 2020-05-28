@@ -6,19 +6,17 @@ import { observable, action, computed } from 'mobx-angular';
   })
 export class DeviceStore {
 
-    @observable devices = [];
+    @observable.shallow devices = [];
 
     getDevices() {
       return this.devices;
     }
 
     @action setDevices(devices) {
-      console.log('action completed on devices')
       this.devices = devices;
     }
 
     @computed get temperatureDevices() {
-      console.count('computing temperature devices')
       let auxDevices = this.devices;
       auxDevices.forEach((device, deviceIndex) => device.units.forEach(
         (unit, unitIndex) => {
@@ -53,7 +51,7 @@ export const mockedDevices = [
             unitId: 1,
             name: 'Relé',
             description: 'Relé de activación',
-            unitType: 'ACTUATOR'
+            type: 'ACTUATOR'
         }
     ]
     },
@@ -67,13 +65,13 @@ export const mockedDevices = [
             unitId: 2,
             name: 'Actuador2',
             description: 'Relé de activación2',
-            unitType: 'ACTUATOR'
+            type: 'ACTUATOR'
         },
         {
             unitId: 1,
             name: 'Actuador1',
             description: 'Rele de activación1',
-            unitType: 'ACTUADOR'
+            type: 'ACTUADOR'
         }
     ]
     },
@@ -87,13 +85,13 @@ export const mockedDevices = [
             unitId: 2,
             name: 'Sensor2',
             description: 'Sensor de humedad',
-            unitType: 'TEMPERATURE_SENSOR'
+            type: 'TEMPERATURE_SENSOR'
         },
         {
             unitId: 1,
             name: 'Sensor1',
             description: 'Sensor de temperatura2',
-            unitType: 'SENSOR'
+            type: 'SENSOR'
         }
     ]
     }

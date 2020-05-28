@@ -38,15 +38,7 @@ export class AemetComponent implements OnInit {
                 content: content
               });
             })
-            console.log(this.andaluciaPreds);
           })
         })
-  }
-
-  callEndpoint(response: AemetResponse) : any {
-    this.http.get(response.datos).subscribe(
-      resp => {
-        console.log(resp)
-      })
   }
 }

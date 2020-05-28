@@ -11,8 +11,8 @@ import { Subscription, Subject, Observable } from 'rxjs';
 @Injectable({ providedIn: 'root' })
 export class AuthenticationService implements OnDestroy {
 
-    private currentSession : Session = null;
-    private authUrl = '/login';
+    private currentSession : Session;
+    authUrl = '/login';
 
     private logoutSubscription : Subscription;
 
@@ -29,16 +29,6 @@ export class AuthenticationService implements OnDestroy {
 
     ngOnDestroy() {
       this.logoutSubscription.unsubscribe();
-    }
-
-    login(loginObj: LoginObject) {
-        let params = new HttpParams();
-        params = params.append('username', loginObj.username);
-        params = params.append('password', loginObj.password);
-        return this.http.post<any>(`${environment.apiUrl}${this.authUrl}`, null, {params: params, observe: 'response'})
-            .pipe(map(res => {
-              return res.headers.get('Authorization');
-        }));
     }
 
     setCurrentSession(session: Session): void {
@@ -61,11 +51,6 @@ export class AuthenticationService implements OnDestroy {
         return this.currentSession;
     }
 
-    removeCurrentSession(): void {
-        localStorage.removeItem('currentSession');
-        this.currentSession = null;
-    }
-
     getCurrentUser(): string {
         var session: Session = this.getCurrentSession();
         return (session && session.user) ? session.user : null;
@@ -84,6 +69,11 @@ export class AuthenticationService implements OnDestroy {
         this.removeCurrentSession();
         this.router.navigate(['/login']);
     }
+
+    private removeCurrentSession(): void {
+      localStorage.removeItem('currentSession');
+      this.currentSession = null;
+  }
 
     /*
     logout() {

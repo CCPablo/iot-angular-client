@@ -32,7 +32,6 @@ export class CanvasComponent implements OnInit {
   }
 
   public animate = () =>  {
-    console.log(this.canvas)
     this.canvas.loop();
 
     this.loggedIn = true;
@@ -50,7 +49,6 @@ export class CanvasComponent implements OnInit {
   }
 
   private createCanvas = () => {
-    console.log('creating canvas');
     const myCanvas = document.getElementById('mainCanvas');
 
     this.canvas = new p5(sketch.bind(this) , myCanvas);
@@ -58,7 +56,6 @@ export class CanvasComponent implements OnInit {
   }
 
   private destroyCanvas = () => {
-    console.log('destroying canvas');
     this.canvas.noCanvas();
 
     this.loggedIn = false;

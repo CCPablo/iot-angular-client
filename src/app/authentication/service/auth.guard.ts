@@ -8,7 +8,6 @@ export class AuthorizatedGuard implements CanActivate {
     private authenticationService: AuthenticationService) { }
 
     canActivate() {
-        console.log(this.authenticationService.isAuthenticated());
         if (this.authenticationService.isAuthenticated()) {
             return true;
         }

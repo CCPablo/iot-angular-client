@@ -1,20 +1,21 @@
-<div fxLayout="row wrap" fxLayout.xs="column" fxLayoutAlign="space-around center" fxLayoutGap="25px">
-  {{ count() }}
-    <div *ngFor="let device of getDevices()"fxFlex="calc(33%-25px)" fxFlex.sm="calc(50%-25px)">
-      <mat-card>
-        <mat-card-header>
-        {{device.name}}
-        </mat-card-header>
-        <mat-card-subtitle>
-          {{device.description}}
-        </mat-card-subtitle>
-        <mat-card-content>
-          <mat-card-actions>
-            <button mat-raised-button color="primary">Like</button>
-            <button mat-raised-button color="accent">Share</button>
-            <button mat-raised-button color="warn">Subscribe</button>
-            </mat-card-actions>
-        </mat-card-content>
-      </mat-card>
-    </div>
+<div>
+  <div  fxLayout="row wrap" fxFill fxLayoutAlign="space-evenly center" >
+    <div class="node-card-container" *ngFor="let device of getDevices()">
+    <mat-card class="node-card mat-elevation-z8" fxFlex="120">
+      <mat-card-title>
+      {{device.name}}
+      </mat-card-title>
+      <mat-card-subtitle>
+        {{device.description}}
+      </mat-card-subtitle>
+      <mat-card-content>
+        <div fxLayout="row wrap" fxLayoutAlign="space-evenly center">
+          <div class="unit-card-container" *ngFor="let unit of device.units" >
+            <app-unit-item class="mat-elevation-z8" [item]=unit></app-unit-item>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+  </div>
 </div>
