@@ -1,0 +1,16 @@
+<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+{{count()}}
+
+<mat-card class="unit-card">
+  <mat-card-title>
+    <i *ngIf="unitData.type=='SENSOR'" class="fas fa-thermometer-half"></i>
+    <mat-icon [ngStyle]="{'color': iconColor}" matListIcon (mouseenter)="onMouseEnterIcon()" (mouseleave)="onMouseLeaveIcon()">
+      {{iconName}}
+    </mat-icon>
+      <mat-slider class="pop-up-slider" *ngIf="popUpVisible" color=primary (mouseenter)="onMouseEnterPopUp()" (mouseleave)="onMouseLeavePopUp()">
+      </mat-slider>
+  </mat-card-title>
+  <mat-card-subtitle class="unit-name">
+    {{unitData.name}}
+  </mat-card-subtitle>
+</mat-card>

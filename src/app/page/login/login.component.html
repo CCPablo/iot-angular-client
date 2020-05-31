@@ -26,7 +26,7 @@
             <button [ngClass]="{ 'disabled': formControls.password.invalid }"
             (click)="submitLogin()" class="btn">Login</button>
             -->
-            <button type="button" (keyup.enter)="submitLogin()" (click)="submitLogin()" mat-stroked-button color="primary">Login</button>
+            <button (keyup.enter)="submitLogin()" (click)="submitLogin()" mat-stroked-button color="primary">Login</button>
         </form>
     </div>
 </div>

@@ -9,3 +9,8 @@
 .node-card {
   border-radius: 27px 27px 27px 27px;
 }
+
+.undescripted {
+  min-height: 48px;
+  margin-bottom: 8px;
+}

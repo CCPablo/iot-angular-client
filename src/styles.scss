@@ -1,0 +1,16 @@
+@import '@angular/material/prebuilt-themes/indigo-pink.css';
+@import './styles/mixins.scss';
+@import './styles/icons.scss';
+
+body { margin: 0; font-family: 'Open Sans', sans-serif; }
+
+#app-content {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  height: 100vh;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}

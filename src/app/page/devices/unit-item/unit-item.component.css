@@ -1,0 +1,18 @@
+.unit-card {
+  box-shadow: 7px 7px 5px 0px rgb(164, 164, 164);
+  border-radius: 22px 22px 22px 22px;
+  height: 52px;
+  min-width: 80px;
+}
+
+.pop-up-slider {
+  display: block;
+  float: right;
+  min-width: 0;
+  width: 50px;
+  top: -10px;
+}
+
+.unit-name {
+  position: absolute;
+}

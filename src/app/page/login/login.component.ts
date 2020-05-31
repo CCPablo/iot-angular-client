@@ -1,16 +1,18 @@
 import { Component, OnInit } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
 import { FormGroup, Validators } from '@angular/forms';
 import { first, map } from 'rxjs/operators';
 import { LoginObject } from '../../authentication/model/login-object.model';
 
 import { AuthenticationService } from '../../authentication/service/authentication.service';
 import { FormControl } from '@angular/forms';
-import { CanvasComponent } from '../../canvas/canvas.component'
-import { EngineService } from '../../threeJS/engine.service'
+import { CanvasComponent } from '../../renderers/canvas/canvas.component'
+import { EngineService } from '../../renderers/threeJS/engine.service'
 import { HttpParams, HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { Observable } from 'rxjs';
+
+
 
 @Component({
   selector: 'app-login',
@@ -19,6 +21,11 @@ import { Observable } from 'rxjs';
 export class LoginComponent implements OnInit {
   loginForm: FormGroup;
   submitted = false;
+
+  httpErrorAlertMessages = {
+    0: 'Sin respuesta de servidor',
+    401: 'Nombre de usuario o contraseña no válidos'
+  }
 
   constructor(
       private router: Router,
@@ -60,8 +67,8 @@ export class LoginComponent implements OnInit {
               },
               error => {
                   //this.canvas.reset();
-                  console.log(error.message);
-                  alert('contraseña incorrecta');
+                  console.log(error);
+                  alert(this.httpErrorAlertMessages[error.status]);
               });
   }
 

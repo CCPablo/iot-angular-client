@@ -9,7 +9,7 @@ import { LoginComponent } from './page/login/login.component';
 import { TemperatureComponent } from './page/temperature/temperature.component';
 
 
-import { EngineComponent } from './threeJS/engine.component';
+import { EngineComponent } from './renderers/threeJS/engine.component';
 import { Ng5SliderModule } from 'ng5-slider';
 import { FlexLayoutModule } from "@angular/flex-layout";
 
@@ -17,20 +17,19 @@ import { FlexLayoutModule } from "@angular/flex-layout";
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AngularMaterialModule } from './angular-material.module'
 /* Angular Flex Layout */
-import { CanvasComponent } from './canvas/canvas.component';
+import { CanvasComponent } from './renderers/canvas/canvas.component';
 import { SidebarModule } from 'ng-sidebar';
-import { HeaderComponent } from './header/header.component';
 import { HomeComponent } from './page/home/home.component';
 import { ControlComponent } from './page/control/control.component'
 
 import { JwtInterceptor } from './authentication/interceptor/jwt.interceptor';
-import { GraphComponent } from './graph/graph.component';
-import { DeviceViewerComponent } from './device-viewer/device-viewer.component';
-import { ToolbarComponent } from './toolbar/toolbar.component';
-import { NavbarComponent } from './navbar/navbar.component';
-import { AemetComponent } from './aemet/aemet.component';
-import { ProfileSheetComponent } from './toolbar/profile-sheet.component';
-import { UnitItemComponent } from './unit-item/unit-item.component';
+import { ToolbarComponent } from './main-view/toolbar/toolbar.component';
+import { NavbarComponent } from './main-view/navbar/navbar.component';
+import { AemetComponent } from './page/aemet/aemet.component';
+import { ProfileSheetComponent } from './main-view/toolbar/profile-sheet.component';
+import { UnitItemComponent } from './page/devices/unit-item/unit-item.component';
+
+import { MatAnimatedIconComponent } from './main-view/mat-animated-icon/mat-animated-icon.component'
 
 @NgModule({
   declarations: [
@@ -40,16 +39,14 @@ import { UnitItemComponent } from './unit-item/unit-item.component';
     HomeComponent,
     LoginComponent,
     CanvasComponent,
-    HeaderComponent,
     ControlComponent,
-    GraphComponent,
-    DeviceViewerComponent,
     ToolbarComponent,
     NavbarComponent,
     TemperatureComponent,
     AemetComponent,
     ProfileSheetComponent,
-    UnitItemComponent
+    UnitItemComponent,
+    MatAnimatedIconComponent
   ],
   imports: [
     BrowserModule,

@@ -5,7 +5,7 @@ import { map } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import { Session } from "../model/session.model";
 import { Router } from '@angular/router';
-import { ToolbarService } from 'src/app/toolbar/toolbar.service';
+import { ToolbarService } from 'src/app/main-view/toolbar/toolbar.service';
 import { Subscription, Subject, Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })

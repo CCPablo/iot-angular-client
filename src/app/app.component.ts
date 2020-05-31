@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { AuthenticationService } from './authentication/service/authentication.service';
-import { NavbarComponent } from './navbar/navbar.component'
+import { NavbarComponent } from './main-view/navbar/navbar.component'
 import { Router } from '@angular/router';
 
 @Component({
@@ -15,6 +15,10 @@ export class AppComponent {
     private router: Router) {}
 
   ngOnInit(): void {
+  }
+
+  count() {
+    console.count('approot')
   }
 
   public isAuthenticated() {
