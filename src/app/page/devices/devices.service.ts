@@ -20,9 +20,7 @@ export class DeviceService implements OnInit{
     }
 
     ngOnInit() {
-
     }
-
 
     setDevices(devices) {
       this.deviceStore.setDevices(devices);
@@ -34,6 +32,10 @@ export class DeviceService implements OnInit{
 
     getDevices() {
       return this.deviceStore.getDevices();
+    }
+
+    getLightUnits() {
+      return this.deviceStore.lightUnits;
     }
 
     getTemperatureDevices() {

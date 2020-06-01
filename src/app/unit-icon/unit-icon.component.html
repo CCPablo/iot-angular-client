@@ -1,0 +1,7 @@
+<i
+  class="fas"
+  [ngStyle]="{'color': color}"
+  [ngClass]="{
+    'fa-thermometer-half': unitType=='SENSOR',
+    'fa-lightbulb': unitType=='DIMMER',
+    iconName: unitType=='custom'}"></i>

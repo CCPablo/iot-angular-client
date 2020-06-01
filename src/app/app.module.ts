@@ -7,11 +7,12 @@ import { AppComponent } from './app.component';
 import { DeviceComponent } from './page/devices/devices.component';
 import { LoginComponent } from './page/login/login.component';
 import { TemperatureComponent } from './page/temperature/temperature.component';
-
+import { LightsComponent } from './page/lights/lights.component'
 
 import { EngineComponent } from './renderers/threeJS/engine.component';
 import { Ng5SliderModule } from 'ng5-slider';
 import { FlexLayoutModule } from "@angular/flex-layout";
+import { ChartsModule } from 'ng2-charts';
 
 /* Angular Material */
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -28,8 +29,12 @@ import { NavbarComponent } from './main-view/navbar/navbar.component';
 import { AemetComponent } from './page/aemet/aemet.component';
 import { ProfileSheetComponent } from './main-view/toolbar/profile-sheet.component';
 import { UnitItemComponent } from './page/devices/unit-item/unit-item.component';
+import { SensorChartComponent } from './page/devices/unit-item/sensor-chart/sensor-chart.component'
 
-import { MatAnimatedIconComponent } from './main-view/mat-animated-icon/mat-animated-icon.component'
+import { MatAnimatedIconComponent } from './main-view/mat-animated-icon/mat-animated-icon.component';
+import { UnitIconComponent } from './unit-icon/unit-icon.component';
+import { EditableTextComponent } from './editable-text/editable-text.component';
+import { NodeItemComponent } from './page/devices/node-item/node-item.component';
 
 @NgModule({
   declarations: [
@@ -46,7 +51,12 @@ import { MatAnimatedIconComponent } from './main-view/mat-animated-icon/mat-anim
     AemetComponent,
     ProfileSheetComponent,
     UnitItemComponent,
-    MatAnimatedIconComponent
+    MatAnimatedIconComponent,
+    SensorChartComponent,
+    LightsComponent,
+    UnitIconComponent,
+    EditableTextComponent,
+    NodeItemComponent
   ],
   imports: [
     BrowserModule,
@@ -58,7 +68,8 @@ import { MatAnimatedIconComponent } from './main-view/mat-animated-icon/mat-anim
     SidebarModule,
     Ng5SliderModule,
     AngularMaterialModule,
-    FlexLayoutModule
+    FlexLayoutModule,
+    ChartsModule
    ],
   providers: [
     CanvasComponent,

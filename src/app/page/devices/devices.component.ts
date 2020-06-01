@@ -23,6 +23,12 @@ export class DeviceComponent implements OnInit {
     });
   }
 
+  editing = false;
+
+  editContent( ) {
+    this.editing = !this.editing;
+  }
+
   getDevices() {
     return this.deviceService.getDevices();
   }

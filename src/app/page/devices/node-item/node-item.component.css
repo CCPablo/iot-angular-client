@@ -1,0 +1,19 @@
+
+.node-card {
+  border-radius: 27px 27px 27px 27px;
+}
+
+.unit-card-container {
+  padding: 3px;
+}
+
+.settings-icon {
+  right: 0;
+  top: -10px;
+  color: #1f1f1f;
+  cursor: pointer;
+  font-size: 23px;
+  text-align: center;
+  background: #ffffff;
+  position: absolute;
+}

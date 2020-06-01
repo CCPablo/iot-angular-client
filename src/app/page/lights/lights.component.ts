@@ -8,7 +8,7 @@ import { autorun } from 'mobx';
   templateUrl: './lights.component.html',
   styleUrls: ['./lights.component.css']
 })
-export class Light implements OnInit {
+export class LightsComponent implements OnInit {
 
   constructor(
     private changeDetector: ChangeDetectorRef,
@@ -22,10 +22,10 @@ export class Light implements OnInit {
   }
 
   getLightUnits() {
-    return this.deviceService.getTemperatureDevices();
+    return this.deviceService.getLightUnits();
   }
 
   count() {
-    console.count('HTML TEMP: change in html')
+    console.count('HTML LIGHTSD: change in html')
   }
 }

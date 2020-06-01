@@ -1,16 +1,35 @@
-<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
-{{count()}}
 
-<mat-card class="unit-card">
-  <mat-card-title>
-    <i *ngIf="unitData.type=='SENSOR'" class="fas fa-thermometer-half"></i>
-    <mat-icon [ngStyle]="{'color': iconColor}" matListIcon (mouseenter)="onMouseEnterIcon()" (mouseleave)="onMouseLeaveIcon()">
-      {{iconName}}
-    </mat-icon>
-      <mat-slider class="pop-up-slider" *ngIf="popUpVisible" color=primary (mouseenter)="onMouseEnterPopUp()" (mouseleave)="onMouseLeavePopUp()">
+<div class="card-container">
+  <div class='flippable' [@flipCard]="flip">
+    <mat-card class="unit-card front">
+      <mat-card-title>
+        <app-unit-icon class="unit-icon" (click)="toggleFlip()" [color]="iconColor" [unitType]="unitData.type" >
+        </app-unit-icon>
+      </mat-card-title>
+      <mat-card-subtitle class="unit-name">
+        {{unitData.name}}
+      </mat-card-subtitle>
+      <!--
+      <div class="flip-button"
+        mat-icon-button
+        [matMenuTriggerFor]="options">
+        <i class="flip-icon fas fa-ellipsis-v"></i>
+      </div>
+      <mat-menu #options>
+        <div>
+          <i class="flip-icon far fa-eye"></i>
+        </div>
+        <div (click)="toggleEdit()">
+          <i class="edit-icon fas fa-edit"></i>
+        </div>
+      </mat-menu>
+      -->
+    </mat-card>
+    <mat-card class='unit-card back' (click)="toggleFlip()">
+      <app-sensor-chart></app-sensor-chart>
+      <mat-slider class="pop-up-slider" color=primary>
       </mat-slider>
-  </mat-card-title>
-  <mat-card-subtitle class="unit-name">
-    {{unitData.name}}
-  </mat-card-subtitle>
-</mat-card>
+    </mat-card>
+
+  </div>
+</div>

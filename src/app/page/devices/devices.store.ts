@@ -31,6 +31,17 @@ export class DeviceStore {
         );
     }
 
+    @computed get lightUnits() {
+      let lightUnits = [];
+      this.devices.forEach((device, deviceIndex) =>
+      device.units.forEach(unit => {
+          if(unit.type == 'DIMMER') {
+            lightUnits.push(unit);
+          }
+        }));
+      return lightUnits;
+    }
+
     getMockedDevices() {
       return mockedDevices;
     }
