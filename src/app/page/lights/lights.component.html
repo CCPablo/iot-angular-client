@@ -1,7 +1,7 @@
 <div class="lights-container">
   <mat-card class="lights-card  mat-elevation-z4">
       <div class="row-item" *ngFor="let unit of getLightUnits()">
-        <app-unit-icon  [unitType]="unit.unitType"></app-unit-icon>
+        <app-unit-icon  [unitType]="unit.type"></app-unit-icon>
         {{unit.name}}
       </div>
   </mat-card>

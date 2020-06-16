@@ -8,42 +8,49 @@ import { Observable, Subscription } from 'rxjs';
 })
 export class EditableTextComponent implements OnInit {
 
-  editText = '';
+  editedText = '';
 
-  private endEditSubscription: Subscription;
+  editing: boolean = false;
 
-  @Input()
-  endEditEvent: Observable<boolean>;
+  /*
+  private beginEditSub: Subscription;
+  private resolveEditSub: Subscription;
+
+  @Input() resolveEdit: Observable<boolean>;
+  @Input() beginEdit: Observable<void>;
+  */
 
   @Output()
   onTextChanged = new EventEmitter<string>();
 
   @Input()
-  editing = false;
-
-  @Input()
   text: string = 'add text....';
-
   constructor() {}
 
   ngOnInit() {
-    this.editText = this.text;
-    this.endEditSubscription = this.endEditEvent.subscribe((save) => this.onResolution(save));
+    this.editedText = this.text;
+    /*
+    this.beginEditSub = this.beginEdit.subscribe((save) => this.onBeginEdit());
+    this.resolveEditSub = this.resolveEdit.subscribe((save) => this.onEditResolution(save));
+    */
   }
-
+/*
   ngOnDestroy() {
-    this.endEditSubscription.unsubscribe();
+    this.beginEditSub.unsubscribe();
+    this.resolveEditSub.unsubscribe();
   }
+  */
 
-  edit() {
+  onBeginEdit() {
     this.editing = true;
   }
 
-  onResolution(save: boolean) {
-    if(save == true && this.text !== this.editText) {
-      this.text = this.editText;
+  onEditResolution(save: boolean) {
+    if(save == true && this.text !== this.editedText) {
+      this.text = this.editedText;
       this.onTextChanged.emit(this.text);
     }
-    this.editText = this.text;
+    this.editedText = this.text;
+    this.editing = false;
   }
 }

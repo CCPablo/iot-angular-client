@@ -67,8 +67,7 @@ export class LoginComponent implements OnInit {
               },
               error => {
                   //this.canvas.reset();
-                  console.log(error);
-                  alert(this.httpErrorAlertMessages[error.status]);
+                  //alert(this.httpErrorAlertMessages[error.status]);
               });
   }
 

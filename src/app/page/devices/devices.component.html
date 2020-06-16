@@ -1,7 +1,7 @@
-<div>
-  <div  fxLayout.gt-xs="row wrap" fxLayout.xs="column" fxFill>
-    <div class="node-card-container" *ngFor="let device of getDevices()">
-      <app-node-item [device]="device"></app-node-item>
+<div [@listStagger]='getDevices().length'>
+    <div  fxLayout.gt-xs="row wrap" fxLayout.xs="column" fxFill>
+      <div class="node-card-container" *ngFor="let device of getDevices()">
+        <app-node-item [device]="device"></app-node-item>
+      </div>
     </div>
-  </div>
 </div>

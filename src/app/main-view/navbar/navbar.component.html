@@ -9,13 +9,31 @@
           <mat-icon matListIcon class="nav-list-icon">
             border_all
           </mat-icon>
-          Nodos
+          Nodos y unidades
         </a>
         <a mat-list-item routerLink="." (click)="sidenav.close()">
           <mat-icon matListIcon class="nav-list-icon">
-            border_all
+            flare
           </mat-icon>
-          Nodos
+          Luces
+        </a>
+        <a mat-list-item routerLink="." (click)="sidenav.close()">
+          Sensores
+        </a>
+        <h2 matSubheader>Configuración</h2>
+        <mat-divider></mat-divider>
+        <a mat-list-item routerLink="/" style="height: 0;"></a>
+        <a mat-list-item routerLink="." (click)="sidenav.close()">
+          <mat-icon matListIcon class="nav-list-icon">
+            library_books
+          </mat-icon>
+          Tareas programadas
+        </a>
+        <a mat-list-item routerLink="." (click)="sidenav.close()">
+          <mat-icon matListIcon class="nav-list-icon">
+            settings
+          </mat-icon>
+          Configuración de unidades
         </a>
       </ng-container>
     </mat-nav-list>

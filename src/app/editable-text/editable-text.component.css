@@ -1,0 +1,20 @@
+.edit-text-icon {
+  padding: 0 7px;
+  top: 3px;
+}
+
+.save-edit-icon {
+  padding: 0 7px;
+  font-size: 15px;
+  color: green;
+}
+
+.discard-edit-icon {
+  padding: 0 7px;
+  font-size: 15px;
+  color: red;
+}
+
+input {
+  font-size: inherit;
+}

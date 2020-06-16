@@ -24,3 +24,9 @@ $dark-grey: #545555;
 .navbar.fullscreen {
   top: 0;
 }
+
+@media (max-width: 600px) {
+  .navbar {
+    top: 54px;
+  }
+}

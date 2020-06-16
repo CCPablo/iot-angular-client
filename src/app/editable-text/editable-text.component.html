@@ -1,2 +1,7 @@
 <span *ngIf="!editing">{{text}}</span>
-<input [(ngModel)]="editText" *ngIf="editing" type="text">
+<input *ngIf="editing" [(ngModel)]="editedText" (keyup.enter)="onEditResolution(true)" type="text">
+<!--
+<i *ngIf="!editing" (click)="onBeginEdit()" class="edit-text-icon fas fa-edit"></i>
+<i *ngIf="editing" (click)="onEditResolution(true)" class="save-edit-icon fas fa-check"></i>
+<i *ngIf="editing" (click)="onEditResolution(false)"  class="discard-edit-icon fas fa-times"></i>
+-->

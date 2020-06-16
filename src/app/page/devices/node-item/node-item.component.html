@@ -2,26 +2,21 @@
   <mat-card-title [ngClass]="{undescripted: !device.description}">
   <app-editable-text
       [text]="device.name"
-      [editing]="editing"
-      [endEditEvent]="endEditing.asObservable()"
       (onTextChanged)="nameChanged($event)"></app-editable-text>
   </mat-card-title>
   <mat-card-subtitle>
     <app-editable-text
-    [text]="device.description"
-    [editing]="editing"
-    [endEditEvent]="endEditing.asObservable()"
-    (onTextChanged)="descriptionChanged($event)"></app-editable-text>
+        [text]="device.description"
+      (onTextChanged)="descriptionChanged($event)"></app-editable-text>
   </mat-card-subtitle>
   <mat-card-content>
     <div fxLayout="row wrap" fxLayoutAlign="space-evenly center">
       <div class="unit-card-container" *ngFor="let unit of device.units" >
-        <app-unit-item class="mat-elevation-z16" [item]=unit></app-unit-item>
+        <app-unit-item
+            class="mat-elevation-z16"
+            [item]=unit></app-unit-item>
       </div>
     </div>
   </mat-card-content>
-  <i (click)="edit()" class="settings-icon fas fa-edit"></i>
-  <i (click)="saveEdit()" class="fas fa-edit">save</i>
-  <i (click)="discardEdit()" class="fas fa-edit">discard</i>
 
 </mat-card>

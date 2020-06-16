@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
-import { HttpRequest, HttpHandler, HttpEvent, HttpInterceptor } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { HttpRequest, HttpHandler, HttpEvent, HttpInterceptor, HttpResponse } from '@angular/common/http';
+import { Observable, throwError } from 'rxjs';
 
 import { AuthenticationService } from '../service/authentication.service';
+import { map, catchError } from 'rxjs/operators';
 
 @Injectable()
 export class JwtInterceptor implements HttpInterceptor {
@@ -14,22 +15,51 @@ export class JwtInterceptor implements HttpInterceptor {
 
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         let currentSession = this.authenticationService.getCurrentSession();
+        if(request.url.startsWith('https://opendata.aemet.es')) {
+          request = request.clone({
+            setHeaders: {
+                'api_key': this.apiKey
+            }
+            });
+          }
         if (currentSession && currentSession.token) {
-          if(!request.url.startsWith('https://opendata.aemet.es')) {
             request = request.clone({
                 setHeaders: {
                     Authorization: `Bearer ${currentSession.token}`
-                }
-            });
-          } else {
-            request = request.clone({
-              setHeaders: {
-                  'api_key': this.apiKey
               }
           });
-          }
         }
+        return next.handle(request).pipe(
+          map((event: HttpEvent<any>) => {
+              if (event instanceof HttpResponse) {
+                  console.log('event--->>>', event);
+              }
+              return event;
+          }),catchError(err => {
+          if(request.url.startsWith('https://opendata.aemet.es')) {
+            return;
+          }
+          console.log('errorIntercepted:', err)
 
-        return next.handle(request);
+          if (err.status === 401) {
+              alert('no existe ese usuario y contraseña')
+
+          }
+          else if (err.status === 500) {
+            alert(err.error.message)
+            this.authenticationService.logout();
+            location.reload(true);
+          }
+
+
+          if (err.status === 0) {
+            //this.authenticationService.logout();
+            alert('servidor inactivo')
+            //location.reload(true);
+          }
+
+          const error = err.error.message || err.statusText;
+          return throwError(error);
+        }))
     }
 }

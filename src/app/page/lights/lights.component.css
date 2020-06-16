@@ -6,9 +6,19 @@
 }
 
 .row-item {
+padding: 1em 0;
+border-bottom: 1px solid grey;
+}
 
+mat-card>:first-child {
+  border-top: 1px solid grey;
 }
 
 app-unit-icon {
   display: inline-block;
+
+}
+
+mat-divider  {
+  padding-top: 10px;
 }

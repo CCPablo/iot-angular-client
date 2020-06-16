@@ -8,18 +8,10 @@ import { Subject } from 'rxjs';
 })
 export class NodeItemComponent implements OnInit {
 
-  endEditing: Subject<boolean> = new Subject<boolean>();
-
-  editing = false;
-
   @Input() device;
   constructor() { }
 
   ngOnInit(): void {
-  }
-
-  edit() {
-    this.editing = true;
   }
 
   nameChanged(text: string) {
@@ -28,15 +20,5 @@ export class NodeItemComponent implements OnInit {
 
   descriptionChanged(text: string) {
     console.log('description has changed to ', text);
-  }
-
-  saveEdit() {
-    this.endEditing.next(true);
-    this.editing = false;
-  }
-
-  discardEdit() {
-    this.endEditing.next(false);
-    this.editing = false;
   }
 }

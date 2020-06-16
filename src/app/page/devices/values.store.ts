@@ -1,75 +1,132 @@
 import { Injectable } from '@angular/core';
 import { observable, action, computed } from 'mobx-angular';
+import { ObservableMap } from 'mobx';
 
 @Injectable({
     providedIn: 'root'
   })
 export class ValuesStore {
 
-    @observable.shallow values = [];
+    @observable.shallow latestValues = new ObservableMap();
 
-    getAllValues() {
-      return this.values;
-    }
+    @observable.shallow arrayValues = new ObservableMap();
 
     @action setInitialValues(values) {
-      this.values = values;
+      values.forEach((value) => {
+        this.latestValues.set(this.getKey(value.nodeId, value.unitId),value.value)
+      })
     }
+
+    @action setValueArray(nodeId, unitId, values) {
+      this.arrayValues.set(this.getKey(nodeId, unitId), [values.values])
+    }
+
+    @action mockInit() {
+      mockedLatestValues.forEach((value) => {
+        this.latestValues.set(this.getKey(value.nodeId, value.unitId),value.value)
+      })
+    }
+
+    getArrayValue(nodeId, unitId) {
+      return this.arrayValues.get(this.getKey(nodeId, unitId));
+    }
+
+    getArrayValues() {
+      return this.arrayValues;
+    }
+
+    getLatestValue(nodeId, unitId) {
+      return this.latestValues.get(this.getKey(nodeId, unitId));
+    }
+
+    getLatestValues() {
+      return this.latestValues;
+    }
+
+    private getKey(nodeId: number, unitId: number) {
+      return `${nodeId}-${unitId}`;
+    }
+
+}
+export const mockedArrayValue = {
+  unitId: 2,
+  nodeId: 2,
+  values: [
+    {
+      value: 13,
+      time: 1591313313
+    },
+    {
+      value: 13,
+      time: 1591313250
+    },
+    {
+      value: 200,
+      time: 1591313100
+    },
+    {
+      value: 13,
+      time: 1591313000
+    },
+    {
+      value: 13,
+      time: 1591312970
+    },
+    {
+      value: 13,
+      time: 1591312900
+    },
+    {
+      value: 13,
+      time: 1591312800
+    },
+    {
+      value: 13,
+      time: 1591312700
+    },
+  ]
 }
 
-export const mockedValues = [
+
+export const mockedLatestValues = [
     {
-      name: 'Device1',
-      description: 'Lampara de la mesa negra',
-      deviceId: 1,
-      connectedSince: 1111122222,
-      units: [
-        {
-            unitId: 1,
-            name: 'Relé',
-            description: 'Relé de activación',
-            type: 'ACTUATOR'
-        }
-    ]
+      unitId: 1,
+      nodeId: 1,
+      value: {
+        value:2,
+        time: 1591313313
+      }
     },
     {
-      name: 'Device2',
-      description: 'Lampara de la mesa negra',
-      deviceId: 2,
-      connectedSince: 1111122222,
-      units: [
-        {
-            unitId: 2,
-            name: 'Actuador2',
-            description: 'Relé de activación2',
-            type: 'ACTUATOR'
-        },
-        {
-            unitId: 1,
-            name: 'Actuador1',
-            description: 'Rele de activación1',
-            type: 'ACTUADOR'
-        }
-    ]
+      unitId: 2,
+      nodeId: 1,
+      value: {
+        value:100,
+        time: 1591313313
+      }
     },
     {
-      name: 'Device3',
-      description: 'Lampara de la mesa negra',
-      deviceId: 3,
-      connectedSince: 1111122222,
-      units: [
-        {
-            unitId: 2,
-            name: 'Sensor2',
-            description: 'Sensor de humedad',
-            type: 'TEMPERATURE_SENSOR'
-        },
-        {
-            unitId: 1,
-            name: 'Sensor1',
-            description: 'Sensor de temperatura2',
-            type: 'SENSOR'
-        }
-    ]
+      unitId: 3,
+      nodeId: 1,
+      value: {
+        value:40,
+        time: 1591313313
+      }
+    },
+    {
+      unitId: 1,
+      nodeId: 2,
+      value: {
+        value:13,
+        time: 1591313313
+      }
+    },
+    {
+      unitId: 2,
+      nodeId: 2,
+      value: {
+        value:44,
+        time: 1591313313
+      }
     }
 ]

@@ -3,11 +3,17 @@
   <div class='flippable' [@flipCard]="flip">
     <mat-card class="unit-card front">
       <mat-card-title>
-        <app-unit-icon class="unit-icon" (click)="toggleFlip()" [color]="iconColor" [unitType]="unitData.type" >
+        <app-unit-icon class="unit-icon" (click)="toggleFlip()"
+        [intensity]="iconIntensity"
+        [maxColor]="iconMaxColor"
+        [minColor]="iconMinColor"
+        [unitType]="unitData.type" >
         </app-unit-icon>
       </mat-card-title>
       <mat-card-subtitle class="unit-name">
-        {{unitData.name}}
+        <app-editable-text
+        [text]="unitData.name"
+        (onTextChanged)="nameChanged($event)"></app-editable-text>
       </mat-card-subtitle>
       <!--
       <div class="flip-button"
@@ -27,8 +33,10 @@
     </mat-card>
     <mat-card class='unit-card back' (click)="toggleFlip()">
       <app-sensor-chart></app-sensor-chart>
+      <!--
       <mat-slider class="pop-up-slider" color=primary>
       </mat-slider>
+    -->
     </mat-card>
 
   </div>
