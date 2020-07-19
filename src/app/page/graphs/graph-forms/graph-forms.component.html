@@ -1,0 +1,11 @@
+<form class="graph-forms-container" [formGroup]="options">
+  <mat-form-field appearance="fill">
+    <mat-label>Color</mat-label>
+    <mat-select>
+      <mat-option *ngFor="let device of getDevices()">{{device.name}}</mat-option>
+      <mat-option value="primary">Primary</mat-option>
+      <mat-option value="accent">Accent</mat-option>
+      <mat-option value="warn">Warn</mat-option>
+    </mat-select>
+  </mat-form-field>
+</form>

@@ -20,16 +20,21 @@ export class ValuesService {
         this.setInitialValues(values);
       })
       */
-      timer(1000).subscribe(() => {
+      timer(1).subscribe(() => {
         this.valuesStore.mockInit();
+      });
+
+      timer(2000,1000).subscribe(() => {
+        this.valuesStore.mock();
+        this.valuesStore.setValueArray(1,1,20);
       });
     }
 
-    setInitialValues(values) {
-      this.valuesStore.setInitialValues(values);
+    getArrayValue(nodeId: number, unitId: number) {
+      return this.valuesStore.getArrayValue(nodeId, unitId);
     }
 
-    getUnitValues() {
+    getLatestValues() {
       return this.valuesStore.getLatestValues();
     }
 

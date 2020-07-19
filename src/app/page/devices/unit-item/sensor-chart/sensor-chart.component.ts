@@ -1,20 +1,35 @@
-import { Component, OnInit, ViewChild, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ChangeDetectorRef, Input, OnChanges, DoCheck, IterableDiffer, KeyValueDiffer, KeyValueDiffers, IterableDiffers, OnDestroy } from '@angular/core';
 import { BaseChartDirective, Label, Color } from 'ng2-charts';
 import { ChartDataSets, ChartOptions } from 'chart.js';
+import { ValuesService } from '../../values.service';
+import { IReactionDisposer, reaction } from 'mobx';
+
+interface UnitData {
+  name: string;
+  description: string;
+  type: string;
+  id: number,
+  nodeId: number
+}
 
 @Component({
   selector: 'app-sensor-chart',
   templateUrl: './sensor-chart.component.html',
   styleUrls: ['./sensor-chart.component.css']
 })
-export class SensorChartComponent implements OnInit {
+export class SensorChartComponent implements OnInit, OnDestroy {
   @ViewChild(BaseChartDirective, { static: true }) chart: BaseChartDirective;
 
-  public lineChartData: ChartDataSets[] = [
-    { data: [] }
+  @Input() unitData: UnitData;
+
+  valueArray = new Array<number>(40);
+  labelArray = new Array<string>(40);
+
+  lineChartData: ChartDataSets[] = [
+    { data: this.valueArray }
   ];
-  public lineChartLabels: Label[] = [];
-  public lineChartOptions: (ChartOptions & { annotation: any }) = {
+  lineChartLabels: Label[] = this.labelArray;
+  lineChartOptions: (ChartOptions & { annotation: any }) = {
     responsive: true,
     scales: {
       xAxes: [{
@@ -51,7 +66,7 @@ export class SensorChartComponent implements OnInit {
       ],
     },
   };
-  public lineChartColors: Color[] = [
+  lineChartColors: Color[] = [
     { // grey
       backgroundColor: 'rgba(148,159,177,0.2)',
       borderColor: 'rgba(148,159,177,1)',
@@ -69,12 +84,30 @@ export class SensorChartComponent implements OnInit {
       pointHoverBorderColor: 'rgba(77,83,96,1)'
     }
   ];
-  public lineChartLegend = false;
-  public lineChartType = 'line';
+  lineChartLegend = false;
+  lineChartType = 'line';
 
-  constructor(private changeDetector: ChangeDetectorRef) { }
+  disposers: IReactionDisposer[] = [];
+
+
+  constructor(private valueService: ValuesService,
+    private changeDetector: ChangeDetectorRef) {
+   }
 
   ngOnInit(): void {
+    this.disposers.push(reaction(
+      () => this.valueService.getArrayValue(this.unitData.nodeId, this.unitData.id),
+      (valueObj) => {
+        console.log('changed');
+        this.changeDetector.detectChanges()
+      }
+    ));
+  }
+
+  ngOnDestroy() {
+    this.disposers.forEach(disposer => {
+      disposer();
+    })
   }
 
   changeValues() {

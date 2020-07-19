@@ -35,6 +35,9 @@ import { MatAnimatedIconComponent } from './main-view/mat-animated-icon/mat-anim
 import { UnitIconComponent } from './unit-icon/unit-icon.component';
 import { EditableTextComponent } from './editable-text/editable-text.component';
 import { NodeItemComponent } from './page/devices/node-item/node-item.component';
+import { LSensorChartComponent } from './page/graphs/l-sensor-chart/l-sensor-chart.component';
+import { GraphsComponent } from './page/graphs/graphs.component';
+import { GraphFormsComponent } from './page/graphs/graph-forms/graph-forms.component';
 
 @NgModule({
   declarations: [
@@ -56,7 +59,10 @@ import { NodeItemComponent } from './page/devices/node-item/node-item.component'
     LightsComponent,
     UnitIconComponent,
     EditableTextComponent,
-    NodeItemComponent
+    NodeItemComponent,
+    GraphsComponent,
+    LSensorChartComponent,
+    GraphFormsComponent
   ],
   imports: [
     BrowserModule,

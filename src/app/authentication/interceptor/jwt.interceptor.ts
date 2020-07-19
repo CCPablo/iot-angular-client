@@ -37,22 +37,18 @@ export class JwtInterceptor implements HttpInterceptor {
               return event;
           }),catchError(err => {
           if(request.url.startsWith('https://opendata.aemet.es')) {
-            return;
+            console.log('errorIntercepted:', err);
           }
-          console.log('errorIntercepted:', err)
 
-          if (err.status === 401) {
+          else if (err.status === 401) {
               alert('no existe ese usuario y contraseña')
-
           }
           else if (err.status === 500) {
             alert(err.error.message)
             this.authenticationService.logout();
             location.reload(true);
           }
-
-
-          if (err.status === 0) {
+          else if (err.status === 0) {
             //this.authenticationService.logout();
             alert('servidor inactivo')
             //location.reload(true);

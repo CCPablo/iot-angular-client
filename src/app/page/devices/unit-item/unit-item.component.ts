@@ -1,8 +1,8 @@
-import { Component, OnInit, Input, ChangeDetectorRef, ChangeDetectionStrategy, NgZone, ViewChild, ElementRef, Renderer2 } from '@angular/core';
+import { Component, OnInit, Input, ChangeDetectorRef, ChangeDetectionStrategy, NgZone, ViewChild, ElementRef, Renderer2, OnDestroy } from '@angular/core';
 import { interval, Observable, Subscription, Subject, timer } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { ValuesService } from '../values.service';
-import { reaction, IReactionDisposer } from 'mobx';
+import { reaction, IReactionDisposer, autorun } from 'mobx';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import * as Color from 'color';
 
@@ -34,8 +34,7 @@ export interface UnitData {
     ])
   ]
 })
-export class UnitItemComponent implements OnInit {
-
+export class UnitItemComponent implements OnInit, OnDestroy {
 
   iconName: string;
   iconMaxColor: Color = Color('white');
@@ -44,7 +43,7 @@ export class UnitItemComponent implements OnInit {
 
   @Input('item') unitData: UnitData;
 
-  reactions: IReactionDisposer[] = [];
+  disposers: IReactionDisposer[] = [];
 
   flip: string = 'front';
 
@@ -54,7 +53,6 @@ export class UnitItemComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
     if(this.unitData.type=='SENSOR') {
       this.iconMaxColor = Color('red');
       this.iconMinColor = Color('blue');
@@ -63,15 +61,19 @@ export class UnitItemComponent implements OnInit {
       this.iconMinColor = Color('black')
     }
 
-    this.reactions.push(reaction(
+    this.disposers.push(reaction(
       () => this.valueService.getLatestValue(this.unitData.nodeId, this.unitData.id),
-      (value, reaction) => {
-          console.log(value);
-          this.iconIntensity = value.value;
-          this.changeDetector.detectChanges()
-          reaction.dispose();
+      (valueObj) => {
+        this.iconIntensity = valueObj.value;
+        this.changeDetector.detectChanges()
       }
     ));
+  }
+
+  ngOnDestroy(): void {
+    this.disposers.forEach(disposer => {
+      disposer();
+    });
   }
 
   toggleFlip() {
