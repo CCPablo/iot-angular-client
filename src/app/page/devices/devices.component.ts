@@ -37,6 +37,8 @@ export class DeviceComponent implements OnInit {
 
   breakpoint: number;
 
+  editing = false;
+
   constructor(
       private deviceService: DeviceService,
       private changeDetector: ChangeDetectorRef
@@ -47,8 +49,6 @@ export class DeviceComponent implements OnInit {
       this.changeDetector.detectChanges();
     });
   }
-
-  editing = false;
 
   editContent( ) {
     this.editing = !this.editing;

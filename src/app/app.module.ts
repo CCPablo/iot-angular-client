@@ -10,7 +10,6 @@ import { TemperatureComponent } from './page/temperature/temperature.component';
 import { LightsComponent } from './page/lights/lights.component'
 
 import { EngineComponent } from './renderers/threeJS/engine.component';
-import { Ng5SliderModule } from 'ng5-slider';
 import { FlexLayoutModule } from "@angular/flex-layout";
 import { ChartsModule } from 'ng2-charts';
 
@@ -19,7 +18,6 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AngularMaterialModule } from './angular-material.module'
 /* Angular Flex Layout */
 import { CanvasComponent } from './renderers/canvas/canvas.component';
-import { SidebarModule } from 'ng-sidebar';
 import { HomeComponent } from './page/home/home.component';
 import { ControlComponent } from './page/control/control.component'
 
@@ -38,6 +36,8 @@ import { NodeItemComponent } from './page/devices/node-item/node-item.component'
 import { LSensorChartComponent } from './page/graphs/l-sensor-chart/l-sensor-chart.component';
 import { GraphsComponent } from './page/graphs/graphs.component';
 import { GraphFormsComponent } from './page/graphs/graph-forms/graph-forms.component';
+import { InputTimeComponent } from './input-time/input-time.component';
+
 
 @NgModule({
   declarations: [
@@ -62,7 +62,8 @@ import { GraphFormsComponent } from './page/graphs/graph-forms/graph-forms.compo
     NodeItemComponent,
     GraphsComponent,
     LSensorChartComponent,
-    GraphFormsComponent
+    GraphFormsComponent,
+    InputTimeComponent
   ],
   imports: [
     BrowserModule,
@@ -71,11 +72,9 @@ import { GraphFormsComponent } from './page/graphs/graph-forms/graph-forms.compo
     FormsModule,
     ReactiveFormsModule,
     BrowserAnimationsModule,
-    SidebarModule,
-    Ng5SliderModule,
     AngularMaterialModule,
     FlexLayoutModule,
-    ChartsModule
+    ChartsModule,
    ],
   providers: [
     CanvasComponent,

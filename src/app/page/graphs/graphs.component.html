@@ -1,13 +1,9 @@
 
 
-<div *ngFor="let device of getDevices()" >
   <app-graph-forms></app-graph-forms>
 
-  <div class="graph-container" *ngFor="let unit of device.units" >
+  <div class="graph-container" >
     <app-l-sensor-chart
-        *ngIf="(unit.id==1 && unit.nodeId==1)"
-        class="mat-elevation-z16"
-        [unitData]=unit>
+        [unitData]=getDevices()[0].units>
       </app-l-sensor-chart>
   </div>
-</div>

@@ -25,10 +25,10 @@ interface Disposer {
   templateUrl: './l-sensor-chart.component.html',
   styleUrls: ['./l-sensor-chart.component.css']
 })
-export class LSensorChartComponent implements OnInit, OnDestroy {
+export class LSensorChartComponent implements OnInit, OnDestroy, OnChanges {
   @ViewChild(BaseChartDirective, { static: true }) chart: BaseChartDirective;
 
-  @Input() unitData: UnitData[];
+  @Input() unitData: UnitData[] = [];
 
   numberOfData;
   interval;
@@ -94,9 +94,9 @@ export class LSensorChartComponent implements OnInit, OnDestroy {
       pointHoverBorderColor: 'rgba(148,159,177,0.8)'
     },
     { // dark grey
-      backgroundColor: 'rgba(77,83,96,0.2)',
-      borderColor: 'rgba(77,83,96,1)',
-      pointBackgroundColor: 'rgba(77,83,96,1)',
+      backgroundColor: 'rgba(2,83,96,0.2)',
+      borderColor: 'rgba(2,83,96,1)',
+      pointBackgroundColor: 'rgba(2,83,96,1)',
       pointBorderColor: '#fff',
       pointHoverBackgroundColor: '#fff',
       pointHoverBorderColor: 'rgba(77,83,96,1)'
@@ -113,59 +113,47 @@ export class LSensorChartComponent implements OnInit, OnDestroy {
    }
 
   ngOnInit(): void {
-
-    this.addDataSet(this.unitData.nodeId, this.unitData.id);
+    this.init();
     /*
     timer(5444).subscribe(() => {
       this.unitData.id=2;
       this.reactTo(this.unitData.nodeId, this.unitData.id);
       this.sensorValuesService.requestArrayValues(this.unitData.nodeId, this.unitData.id);
     });
-
     */
-    timer(10444).subscribe(() => {
-      this.unitData.id=2;
-      this.addDataSet(this.unitData.nodeId, this.unitData.id);
-      console.log(this.lineChartData)
-    });
+  }
+
+  ngOnChanges() {
+    this.init();
   }
 
   ngOnDestroy() {
     this.disposers.forEach(disposer => {
       disposer.disposer();
     })
+    this.disposers.splice(0,this.disposers.length)
   }
 
-  /*
-  unReact(nodeId, unitId) {
-    this.disposers.forEach(disposer => {
-      if(disposer.nodeId == nodeId && disposer.unitId == unitId) {
-        disposer.disposer();
-      }
+  init() {
+    this.initDataSet();
+    this.initReactions();
+    this.initData();
+  }
+
+  initData() {
+    this.unitData.forEach((unitData) => {
+      this.sensorValuesService.requestArrayValues(unitData.nodeId, unitData.id);
     })
   }
-  */
 
-  addDataSet(nodeId, unitId) {
-    this.initDataSet(nodeId, unitId);
-    this.setReactions(nodeId, unitId, this.currentDataSets.length)
-    this.sensorValuesService.requestArrayValues(nodeId, unitId);
-  }
-
-  initDataSet(nodeId, unitId) {
+  initDataSet() {
     this.currentDataSets = this.unitData;
-    /*
-    this.currentDataSets.push( {
-      nodeId: nodeId,
-      unitId: unitId
-    });
-    */
-   if(this.unitData.length > 1) {
-    this.lineChartData.splice(1, this.unitData.length-1);
-   }
-    this.lineChartData.push({
-      data: []
-    })
+    if(this.unitData.length > 1) {
+      this.lineChartData.splice(1, this.unitData.length-1);
+      for(let i = 1; i < this.unitData.length; i++) {
+        this.lineChartData.push({data:[]})
+      }
+    }
   }
 
   /*
@@ -176,9 +164,14 @@ export class LSensorChartComponent implements OnInit, OnDestroy {
   }
   */
 
-  setReactions(nodeId, unitId, dataSetIndex = 0) {
-    this.disposers.push( this.reactionToDataChange(nodeId, unitId, dataSetIndex));
-    this.disposers.push( this.reactionToMeanChange(nodeId, unitId));
+ initReactions() {
+    this.disposers.forEach(disposer => {
+      disposer.disposer();
+    })
+    this.unitData.forEach((unitData, index) => {
+      this.disposers.push( this.reactionToDataChange(unitData.nodeId, unitData.id, index));
+      this.disposers.push( this.reactionToMeanChange(unitData.nodeId, unitData.id));
+    })
   }
 
   reactionToMeanChange (nodeId, unitId) { return {
@@ -198,7 +191,8 @@ export class LSensorChartComponent implements OnInit, OnDestroy {
         () => this.sensorValuesService.getArrayValues(nodeId, unitId),
         (valueObj) => {
           this.updateData(valueObj, dataSetIndex);
-          this.updateLabels(valueObj);
+          if(dataSetIndex == 0)
+            this.updateLabels(valueObj);
           (<any>this.chart).update();
           this.changeDetector.detectChanges()
         }),
@@ -207,14 +201,14 @@ export class LSensorChartComponent implements OnInit, OnDestroy {
     }
   }
 
-  private updateData( data, dataSetIndex) {
+  private updateData(data, dataSetIndex) {
     this.lineChartData[dataSetIndex].data = [];
     data.forEach(element => {
       this.lineChartData[dataSetIndex].data.push(element.value);
     });
   }
 
-  private updateLabels( data) {
+  private updateLabels(data) {
     this.lineChartLabels = []
     data.forEach(element => {
       this.lineChartLabels.push(element.time)

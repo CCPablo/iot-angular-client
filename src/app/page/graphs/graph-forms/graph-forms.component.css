@@ -1,3 +1,17 @@
 .graph-forms-container {
   padding: 10px;
+  display: block;
+}
+
+.time-field {
+  width: 60px;
+  text-align: center;
+}
+
+.room-chip {
+  background-color: red;
+}
+
+.kitchen-chip {
+  background-color: aqua;
 }

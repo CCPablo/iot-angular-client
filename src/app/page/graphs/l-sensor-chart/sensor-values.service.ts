@@ -2,8 +2,7 @@
 import { Injectable, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
-import { timer } from 'rxjs/internal/observable/timer';
-import { Subject } from 'rxjs';
+import { Subject, timer } from 'rxjs';
 import { SensorValuesStore, mockedSensorValuesGet } from './sensor-values.store';
 
 @Injectable({
@@ -31,6 +30,10 @@ export class SensorValuesService {
           time: 400
         });
         this.sensorValuesStore.setNewValue(1,2, {
+          value: this.generateNumber(),
+          time: 400
+        });
+        this.sensorValuesStore.setNewValue(2,2, {
           value: this.generateNumber(),
           time: 400
         });

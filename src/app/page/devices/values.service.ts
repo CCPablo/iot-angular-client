@@ -3,8 +3,7 @@ import { ValuesStore } from './values.store'
 import { Injectable, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
-import { timer } from 'rxjs/internal/observable/timer';
-import { Subject } from 'rxjs';
+import { Subject, timer } from 'rxjs';
 
 @Injectable({
     providedIn: 'root'

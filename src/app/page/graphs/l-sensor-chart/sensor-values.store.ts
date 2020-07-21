@@ -29,7 +29,6 @@ export class SensorValuesStore {
     @action mockInit(nodeId, unitId) {
       mockedSensorValuesGet.forEach((unit) => {
         if(nodeId == unit.nodeId && unitId == unit.unitId) {
-          console.log('mock init for ', nodeId, unitId)
           this.sensorArrayValues.set(this.getKey(unit.nodeId, unit.unitId), unit.values);
         }
       })
@@ -42,11 +41,8 @@ export class SensorValuesStore {
     }
 
     @action setNewValue(nodeId, unitId, value) {
-      console.log('attepnting to add values for:',nodeId, unitId, '. Current array data length: ',
-              this.sensorArrayValues.get(this.getKey(nodeId,unitId)) ? this.sensorArrayValues.get(this.getKey(nodeId,unitId)).length : 'undefined');
       if(!this.sensorArrayValues.get(this.getKey(nodeId,unitId))) {
         this.sensorArrayValues.set(this.getKey(nodeId,unitId),[{value:0, time:0}]);
-        console.log('initializing value for ', nodeId, unitId);
         return;
       }
       const currentArray = this.sensorArrayValues.get(this.getKey(nodeId, unitId)).toJS();
@@ -54,7 +50,6 @@ export class SensorValuesStore {
       currentArray.push(value);
 
       this.sensorArrayValues.set(this.getKey(nodeId, unitId), currentArray);
-      console.log('adding new value for ', nodeId, unitId);
     }
 
     getArrayValue(nodeId, unitId) {
