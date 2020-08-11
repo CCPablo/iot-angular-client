@@ -30,15 +30,18 @@ export class LSensorChartComponent implements OnInit, OnDestroy, OnChanges {
 
   @Input() unitData: UnitData[] = [];
 
-  numberOfData;
-  interval;
-  meanValue;
+  @Input() interval;
 
-  lineChartData: ChartDataSets[] = [{
-    data: []
+  @Input() numberOfValues;
+
+  @Input() legendVisible = true;
+
+  datasets: ChartDataSets[] = [{
+    data: [],
+    label: ''
   }];
-  lineChartLabels: Label[] = [];
-  lineChartOptions: (ChartOptions & { annotation: any }) = {
+  labels: Label[] = [];
+  options: (ChartOptions & { annotation: any }) = {
     responsive: true,
     scales: {
       xAxes: [{
@@ -84,7 +87,7 @@ export class LSensorChartComponent implements OnInit, OnDestroy, OnChanges {
       ],
     },
   };
-  lineChartColors: Color[] = [
+  colors: Color[] = [
     { // grey
       backgroundColor: 'rgba(148,159,177,0.2)',
       borderColor: 'rgba(148,159,177,1)',
@@ -102,15 +105,14 @@ export class LSensorChartComponent implements OnInit, OnDestroy, OnChanges {
       pointHoverBorderColor: 'rgba(77,83,96,1)'
     }
   ];
-  lineChartLegend = false;
-  lineChartType = 'line';
+  chartType = 'line';
+  legend = false;
 
   disposers: Disposer[] = [];
-  currentDataSets = [];
 
   constructor(private sensorValuesService: SensorValuesService,
     private changeDetector: ChangeDetectorRef) {
-   }
+  }
 
   ngOnInit(): void {
     this.init();
@@ -131,59 +133,47 @@ export class LSensorChartComponent implements OnInit, OnDestroy, OnChanges {
     this.disposers.forEach(disposer => {
       disposer.disposer();
     })
-    this.disposers.splice(0,this.disposers.length)
+    this.disposers = [];
   }
 
   init() {
     this.initDataSet();
     this.initReactions();
-    this.initData();
+    this.requestData();
   }
 
-  initData() {
+  initDataSet() {
+    if(this.unitData.length == 0) {
+      this.datasets = [{
+        data: []
+      }];
+      this.legend = false;
+    } else {
+      this.datasets = [];
+      this.legend = this.legendVisible;
+    }
+    this.unitData.forEach(unit => {
+      this.datasets.push({
+        data:[],
+        label:unit.name
+      });
+    })
+  }
+
+  requestData() {
     this.unitData.forEach((unitData) => {
       this.sensorValuesService.requestArrayValues(unitData.nodeId, unitData.id);
     })
   }
 
-  initDataSet() {
-    this.currentDataSets = this.unitData;
-    if(this.unitData.length > 1) {
-      this.lineChartData.splice(1, this.unitData.length-1);
-      for(let i = 1; i < this.unitData.length; i++) {
-        this.lineChartData.push({data:[]})
-      }
-    }
-  }
-
-  /*
-  private getDataSetIndex(nodeId, unitId) {
-    return this.currentDataSets.findIndex((dataset) => {
-      dataset.nodeId == nodeId && dataset.unitId == unitId
-    })
-  }
-  */
-
  initReactions() {
     this.disposers.forEach(disposer => {
       disposer.disposer();
     })
+    this.disposers = [];
     this.unitData.forEach((unitData, index) => {
       this.disposers.push( this.reactionToDataChange(unitData.nodeId, unitData.id, index));
-      this.disposers.push( this.reactionToMeanChange(unitData.nodeId, unitData.id));
     })
-  }
-
-  reactionToMeanChange (nodeId, unitId) { return {
-      disposer:reaction(
-        () => this.sensorValuesService.getMeanValue(nodeId, unitId),
-        (value) => {
-          this.meanValue = value;
-          this.changeDetector.detectChanges()
-        }),
-      nodeId: nodeId,
-      unitId: unitId
-    }
   }
 
   reactionToDataChange (nodeId, unitId, dataSetIndex) { return {
@@ -202,20 +192,16 @@ export class LSensorChartComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   private updateData(data, dataSetIndex) {
-    this.lineChartData[dataSetIndex].data = [];
+    this.datasets[dataSetIndex].data = [];
     data.forEach(element => {
-      this.lineChartData[dataSetIndex].data.push(element.value);
+      this.datasets[dataSetIndex].data.push(element.value);
     });
   }
 
   private updateLabels(data) {
-    this.lineChartLabels = []
+    this.labels = []
     data.forEach(element => {
-      this.lineChartLabels.push(element.time)
+      this.labels.push(element.time)
     });
-  }
-
-  private generateNumber(i: number) {
-    return Math.floor((Math.random() * (i < 2 ? 100 : 1000)) + 1);
   }
 }

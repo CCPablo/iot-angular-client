@@ -17,6 +17,17 @@ export class InputTime {
   providers: [{provide: MatFormFieldControl, useExisting: InputTimeComponent}],
 })
 export class InputTimeComponent implements OnDestroy,MatFormFieldControl<InputTime>,ControlValueAccessor {
+
+
+  hourFocused = false;
+  minutesFocused = false;
+  secondsFocused = false;
+  millisecondsFocused = false;
+
+
+
+
+
   parts: FormGroup;
 
   stateChanges = new Subject<void>();

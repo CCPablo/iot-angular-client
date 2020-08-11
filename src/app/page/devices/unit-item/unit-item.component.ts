@@ -1,8 +1,6 @@
 import { Component, OnInit, Input, ChangeDetectorRef, ChangeDetectionStrategy, NgZone, ViewChild, ElementRef, Renderer2, OnDestroy } from '@angular/core';
-import { interval, Observable, Subscription, Subject, timer } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
 import { ValuesService } from '../values.service';
-import { reaction, IReactionDisposer, autorun } from 'mobx';
+import { reaction, IReactionDisposer } from 'mobx';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import * as Color from 'color';
 

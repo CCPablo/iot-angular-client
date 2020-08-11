@@ -27,7 +27,6 @@ import { NavbarComponent } from './main-view/navbar/navbar.component';
 import { AemetComponent } from './page/aemet/aemet.component';
 import { ProfileSheetComponent } from './main-view/toolbar/profile-sheet.component';
 import { UnitItemComponent } from './page/devices/unit-item/unit-item.component';
-import { SensorChartComponent } from './page/devices/unit-item/sensor-chart/sensor-chart.component'
 
 import { MatAnimatedIconComponent } from './main-view/mat-animated-icon/mat-animated-icon.component';
 import { UnitIconComponent } from './unit-icon/unit-icon.component';
@@ -56,7 +55,6 @@ import { UnitImageUploadComponent } from './page/devices/unit-image-upload/unit-
     ProfileSheetComponent,
     UnitItemComponent,
     MatAnimatedIconComponent,
-    SensorChartComponent,
     LightsComponent,
     UnitIconComponent,
     EditableTextComponent,

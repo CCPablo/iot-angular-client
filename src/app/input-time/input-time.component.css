@@ -8,10 +8,15 @@ input {
   padding: 0;
   outline: none;
   font: inherit;
+  width: 20px;
   text-align: center;
 }
 
-span {
+input.milliseconds {
+  width: 30px;
+}
+
+.colon {
   opacity: 0;
   transition: opacity 200ms;
 }
@@ -19,3 +24,76 @@ span {
 :host.floating span {
   opacity: 1;
 }
+
+input.hours-input:focus ~ .floating-label,
+input.hours-input:not(:focus):valid ~ .floating-label{
+  top: 8px;
+  bottom: 0px;
+  left: 30px;
+  font-size: 11px;
+  opacity: 1;
+}
+
+.floating-label {
+  position: absolute;
+  pointer-events: none;
+  left: 30px;
+  top: 18px;
+  transition: 0.2s ease all;
+}
+
+
+
+.my-input__wrapper {
+  position: relative;
+}
+
+.my-input__label {
+  left: 5px;
+  z-index: -1;
+  opacity: 0.5;
+  position: absolute;
+  transition: all 0.3s ease-in-out;
+}
+
+.my-input__input {
+  border: none;
+  transition: border-color 180ms linear;
+}
+
+.state-my-input--active.my-input {
+  margin-right: 10px;
+  cursor: default;
+  transition: all 0.3s ease-in-out;
+}
+
+.state-my-input--active.my-input.minutes {
+  margin-right: 13px;
+  cursor: default;
+  transition: all 0.3s ease-in-out;
+}
+
+.my-input {
+  margin-right: 0;
+  cursor: default;
+  transition: all 0.3s ease-in-out;
+}
+
+.state-my-input--active .my-input__wrapper .my-input__label {
+  transform: translate(15px, 2px) scale(0.8, 0.8);
+  opacity: 1;
+  cursor: default;
+}
+
+.state-my-input--active .my-input__wrapper .my-input__label.minutes {
+  transform: translate(13px, 2px) scale(0.8, 0.8);
+  opacity: 1;
+  cursor: default;
+}
+
+.state-my-input--active .my-input__wrapper .my-input__label.milliseconds {
+  transform: translate(25px, 2px) scale(0.8, 0.8);
+  opacity: 1;
+  cursor: default;
+}
+

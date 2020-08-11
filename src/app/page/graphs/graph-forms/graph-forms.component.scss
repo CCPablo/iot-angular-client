@@ -17,11 +17,30 @@ $accent: map-get($app-theme, accent);
 
 .graph-forms-container {
   padding: 10px;
-  display: block;
+  display: inline;
+
+  button {
+    float: right;
+    vertical-align: middle;
+  }
+
+}
+
+mat-form-field + mat-form-field {
+  margin-left: 20px;
+}
+
+.units-selector-field {
+  width: 30%;
+  min-width: 200px;
 }
 
 .time-field {
   width: 160px;
+}
+
+.nvalues-field {
+  width: 100px;
 }
 
 .room-chip {
@@ -32,10 +51,6 @@ $accent: map-get($app-theme, accent);
   background-color: aqua;
 }
 
- ::ng-deep  .mat-form-field-label .interval-time-label {
+::ng-deep  .mat-form-field-label .interval-time-label {
     display: none;
- }
-
-::ng-deep .mat-focused .mat-form-field-label .interval-time-label {
-  color: mat-color($primary);
  }

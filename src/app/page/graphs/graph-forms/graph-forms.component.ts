@@ -1,5 +1,5 @@
-import { Component, OnInit, ViewChildren, QueryList, ViewChild } from '@angular/core';
-import { FormControl, Validators } from '@angular/forms';
+import { Component, OnInit, ViewChildren, QueryList, ViewChild, EventEmitter, Output } from '@angular/core';
+import { FormControl, Validators, FormGroup } from '@angular/forms';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { DeviceService } from '../../devices/devices.service';
 import { autorun } from 'mobx';
@@ -24,13 +24,20 @@ export interface Device {
 })
 export class GraphFormsComponent implements OnInit {
 
-  timeControl = new FormControl(null,Validators.required);
-
+  intervalControl = new FormControl({hours:'1',minutes:'',seconds:'',milliseconds:''},Validators.required);
   unitControl = new FormControl([]);
+  nValuesControl = new FormControl(24);
+
+  submitForm = new FormGroup({
+    intervalControl: this.intervalControl,
+    unitControl: this.unitControl,
+    nValuesControl: this.nValuesControl
+  });
 
   devices: Device[] = [];
-
   allUnits: Unit[] = [];
+
+  @Output() private onFormGroupChange = new EventEmitter<any>();
 
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];
 
@@ -59,5 +66,9 @@ export class GraphFormsComponent implements OnInit {
     if (index !== -1) {
       array.splice(index, 1);
     }
+  }
+
+  submit() {
+    this.onFormGroupChange.emit(this.submitForm)
   }
 }

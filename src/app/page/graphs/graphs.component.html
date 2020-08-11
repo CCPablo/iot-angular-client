@@ -1,9 +1,9 @@
 
 
-  <app-graph-forms></app-graph-forms>
+  <app-graph-forms (onFormGroupChange)="onFormChange($event)"></app-graph-forms>
 
   <div class="graph-container" >
     <app-l-sensor-chart
-        [unitData]=getDevices()[0].units>
+        [unitData]="unitData">
       </app-l-sensor-chart>
   </div>
