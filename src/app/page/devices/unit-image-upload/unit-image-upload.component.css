@@ -1,0 +1,16 @@
+input, input:focus {
+    outline: none;
+    border: 0;
+    cursor: default;
+}
+
+.image-name {
+  position: relative;
+  top: -12px;
+}
+
+.attach-button {
+  position: relative;
+  top: -5px;
+  z-index: 1;
+}

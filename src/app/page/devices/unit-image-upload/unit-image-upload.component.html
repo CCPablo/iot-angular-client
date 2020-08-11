@@ -1,0 +1,31 @@
+<h2>Subir imagen de unidad</h2>
+
+<input #imgInput hidden="true" type="file" onclick="this.value=null" (change)="onImageOnChange($event)" accept="image/*">
+<mat-hint>Lámpara encendida </mat-hint>
+<button class="attach-button" mat-mini-fab color="primary" (click)="imgInput.click()">
+<mat-icon>attach_file</mat-icon>
+</button>
+<input class="image-name" type="text" [(ngModel)]="imageNameOn">
+
+<img [src]="imgOnURL" height="50" *ngIf="imgOnURL">
+
+<mat-divider></mat-divider>
+
+<input #imgInput2 hidden="true" type="file" onclick="this.value=null" (change)="onImageOffChange($event)" accept="image/*">
+<mat-hint>Lámpara apagada </mat-hint>
+<button class="attach-button" mat-mini-fab color="primary" (click)="imgInput2.click()">
+<mat-icon>attach_file</mat-icon>
+</button>
+<input class="image-name" type="text" [(ngModel)]="imageNameOff">
+
+<img [src]="imgOffURL" height="50" *ngIf="imgOffURL">
+
+<mat-divider></mat-divider>
+
+<button [disabled]="uploading || !imageOn || !imageOff" mat-stroke-button color="primary" (click)="onUploadClicked()">
+  Subir
+  <mat-icon>send</mat-icon>
+</button>
+
+<mat-icon @inOut *ngIf="uploaded">done_all</mat-icon>
+

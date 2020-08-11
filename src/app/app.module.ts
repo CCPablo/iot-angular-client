@@ -37,6 +37,7 @@ import { LSensorChartComponent } from './page/graphs/l-sensor-chart/l-sensor-cha
 import { GraphsComponent } from './page/graphs/graphs.component';
 import { GraphFormsComponent } from './page/graphs/graph-forms/graph-forms.component';
 import { InputTimeComponent } from './input-time/input-time.component';
+import { UnitImageUploadComponent } from './page/devices/unit-image-upload/unit-image-upload.component';
 
 
 @NgModule({
@@ -63,7 +64,8 @@ import { InputTimeComponent } from './input-time/input-time.component';
     GraphsComponent,
     LSensorChartComponent,
     GraphFormsComponent,
-    InputTimeComponent
+    InputTimeComponent,
+    UnitImageUploadComponent
   ],
   imports: [
     BrowserModule,
@@ -74,7 +76,7 @@ import { InputTimeComponent } from './input-time/input-time.component';
     BrowserAnimationsModule,
     AngularMaterialModule,
     FlexLayoutModule,
-    ChartsModule,
+    ChartsModule
    ],
   providers: [
     CanvasComponent,

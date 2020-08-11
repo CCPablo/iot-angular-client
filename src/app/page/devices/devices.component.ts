@@ -2,6 +2,8 @@ import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef } from '@
 import { DeviceService } from './devices.service';
 import { autorun } from 'mobx';
 import { trigger, transition, query, style, stagger, animate } from '@angular/animations';
+import { MatDialog } from '@angular/material/dialog';
+import { UnitImageUploadComponent } from './unit-image-upload/unit-image-upload.component';
 
 @Component({
     changeDetection: ChangeDetectionStrategy.OnPush,
@@ -41,12 +43,22 @@ export class DeviceComponent implements OnInit {
 
   constructor(
       private deviceService: DeviceService,
-      private changeDetector: ChangeDetectorRef
+      private changeDetector: ChangeDetectorRef,
+      private profileSheet: MatDialog
   ) { }
 
   ngOnInit() {
     autorun(() => {
       this.changeDetector.detectChanges();
+    });
+  }
+
+  openProfileSheet() {
+    const dialogRef = this.profileSheet.open(UnitImageUploadComponent, {
+      width: '350px'
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
     });
   }
 

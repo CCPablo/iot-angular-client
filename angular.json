@@ -13,6 +13,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
+            "allowedCommonJsDependencies": ["chart.js", "color", "color-string", "color-convert"],
             "outputPath": "dist/iot-angular",
             "index": "src/index.html",
             "main": "src/main.ts",
@@ -24,7 +25,7 @@
               "src/assets"
             ],
             "styles": [
-              "./src/themes/custom-theme.scss",
+              "src/themes/custom-theme.scss",
               "./node_modules/@fortawesome/fontawesome-free/css/all.min.css",
               "src/styles.scss"
             ],

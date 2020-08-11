@@ -1,23 +1,22 @@
-import { Component, Input, OnDestroy, HostBinding, Self, Optional, ElementRef } from '@angular/core';
-import { FormGroup, FormBuilder, NgControl } from '@angular/forms';
+import { Component, Input, OnDestroy, HostBinding, Self, Optional, ElementRef, Injectable } from '@angular/core';
+import { FormGroup, FormBuilder, NgControl, ControlValueAccessor } from '@angular/forms';
 import { MatFormFieldControl } from '@angular/material/form-field';
 import { FocusMonitor } from '@angular/cdk/a11y';
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
 import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
-
-class TimeInput {
-  constructor(public hours: string, public minutes: string, public seconds: string, public milliseconds: string) {
-  }
+export class InputTime {
+  constructor( public hours: string = '', public minutes: string = '', public seconds: string = '', public milliseconds: string = '') {}
 }
 
 @Component({
   selector: 'app-input-time',
   templateUrl: './input-time.component.html',
   styleUrls: ['./input-time.component.css'],
-  providers: [{provide: MatFormFieldControl, useExisting: TimeInput}],
+  providers: [{provide: MatFormFieldControl, useExisting: InputTimeComponent}],
 })
-export class InputTimeComponent implements OnDestroy,MatFormFieldControl<TimeInput> {
+export class InputTimeComponent implements OnDestroy,MatFormFieldControl<InputTime>,ControlValueAccessor {
   parts: FormGroup;
 
   stateChanges = new Subject<void>();
@@ -38,8 +37,8 @@ export class InputTimeComponent implements OnDestroy,MatFormFieldControl<TimeInp
   focused = false;
 
   get empty() {
-    let n = this.parts.value;
-    return !n.area && !n.exchange && !n.subscriber;
+    let time = this.parts.value;
+    return !(time.hours.length || time.minutes.length || time.seconds.length || time.milliseconds.length);
   }
 
   @Input()
@@ -83,21 +82,21 @@ export class InputTimeComponent implements OnDestroy,MatFormFieldControl<TimeInp
   }
 
   @Input()
-  get value(): TimeInput | null {
+  get value(): InputTime | null {
     let time = this.parts.value;
     if (time.hours.length || time.minutes.length || time.seconds.length || time.milliseconds.length ) {
-      return new TimeInput(time.hours, time.minutes, time.seconds, time.milliseconds);
+      return new InputTime(time.hours, time.minutes, time.seconds, time.milliseconds);
     }
     return null;
   }
 
-  set value(time: TimeInput | null) {
-    time = time || new TimeInput('', '', '','');
+  set value(time: InputTime | null) {
+    time = time || new InputTime();
     this.parts.setValue({hours: time.hours, minutes: time.minutes, seconds: time.seconds, milliseconds: time.milliseconds});
     this.stateChanges.next();
   }
 
-  constructor(fb: FormBuilder, @Optional() @Self() public ngControl: NgControl, private fm: FocusMonitor, private elRef: ElementRef<HTMLElement>) {
+  constructor(fb: FormBuilder, @Optional() @Self() public ngControl: NgControl | null, private fm: FocusMonitor, private elRef: ElementRef<HTMLElement>) {
       this.parts =  fb.group({
       'hours': '',
       'minutes': '',
@@ -108,20 +107,47 @@ export class InputTimeComponent implements OnDestroy,MatFormFieldControl<TimeInp
       this.focused = !!origin;
       this.stateChanges.next();
     });
-    /*
-      // Replace the provider from above with this.
-      if (this.ngControl != null) {
-        // Setting the value accessor directly (instead of using
-        // the providers) to avoid running into a circular import.
-        this.ngControl.valueAccessor = this;
-      }
+    if (ngControl) {
+      // Set the value accessor directly (instead of providing
+      // NG_VALUE_ACCESSOR) to avoid running into a circular import
+      this.ngControl.valueAccessor = this;
+      ngControl.valueAccessor = this;
     }
-    */
   }
 
   ngOnDestroy(): void {
     this.stateChanges.complete();
     this.fm.stopMonitoring(this.elRef.nativeElement);
+  }
+
+  onTouched(): void {}
+
+  private destroy: Subject<void> = new Subject();
+
+  registerOnChange(onChange: (value: InputTime | null) => void): void {
+    this.parts.valueChanges.pipe(
+      takeUntil(this.destroy),
+    ).subscribe(onChange);
+  }
+
+  registerOnTouched(onTouched: () => void): void {
+    this.onTouched = onTouched;
+  }
+
+  setDisabledState(shouldDisable: boolean): void {
+    if (shouldDisable) {
+      this.parts.disable();
+    } else {
+      this.parts.enable();
+    }
+
+    this.disabled = shouldDisable;
+  }
+
+  writeValue(value: InputTime | null): void {
+    value = value || new InputTime();
+
+    this.parts.setValue(value, { emitEvent: false });
   }
 
 

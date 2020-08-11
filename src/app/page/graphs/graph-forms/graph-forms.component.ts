@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChildren, QueryList, ViewChild } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
-import {COMMA, ENTER} from '@angular/cdk/keycodes';
+import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { DeviceService } from '../../devices/devices.service';
 import { autorun } from 'mobx';
 import { MatOptionSelectionChange, MatOption } from '@angular/material/core';
@@ -20,7 +20,7 @@ export interface Device {
 @Component({
   selector: 'app-graph-forms',
   templateUrl: './graph-forms.component.html',
-  styleUrls: ['./graph-forms.component.css']
+  styleUrls: ['./graph-forms.component.scss']
 })
 export class GraphFormsComponent implements OnInit {
 
