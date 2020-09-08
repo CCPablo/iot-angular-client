@@ -1,16 +1,19 @@
-import { Component, OnInit, ViewChild, ChangeDetectorRef, Input, OnChanges, DoCheck, IterableDiffer, KeyValueDiffer, KeyValueDiffers, IterableDiffers, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
-import { BaseChartDirective, Label, Color } from 'ng2-charts';
+import { Component, OnInit, ViewChild, ChangeDetectorRef, Input, OnChanges, DoCheck, IterableDiffer, KeyValueDiffer, KeyValueDiffers, IterableDiffers, OnDestroy, ChangeDetectionStrategy, ElementRef } from '@angular/core';
+import { BaseChartDirective, Label } from 'ng2-charts';
 import { ChartDataSets, ChartOptions } from 'chart.js';
 import { ValuesService } from '../../devices/values.service';
 import { reaction, IReactionDisposer } from 'mobx';
 import { SensorValuesService } from './sensor-values.service';
 import { Observable, timer } from 'rxjs';
+import * as Color from 'color';
 
 interface UnitData {
   name: string;
   description: string;
   id: number,
-  nodeId: number
+  nodeId: number,
+  graphColor: string,
+  type: string;
 }
 
 interface Disposer {
@@ -25,7 +28,7 @@ interface Disposer {
   templateUrl: './l-sensor-chart.component.html',
   styleUrls: ['./l-sensor-chart.component.css']
 })
-export class LSensorChartComponent implements OnInit, OnDestroy, OnChanges {
+export class LSensorChartComponent implements OnDestroy, OnChanges {
   @ViewChild(BaseChartDirective, { static: true }) chart: BaseChartDirective;
 
   @Input() unitData: UnitData[] = [];
@@ -36,6 +39,19 @@ export class LSensorChartComponent implements OnInit, OnDestroy, OnChanges {
 
   @Input() legendVisible = true;
 
+  toTimeFormat(millis) {
+    let valueDate = new Date(millis);
+    let now = new Date();
+    if(valueDate.getTime() > (now.getTime() - 5)) {
+
+    }
+
+    let hour = Math.floor(valueDate.getHours());
+    let minute = Math.floor(valueDate.getMinutes())
+
+    return ((hour < 10) ? "0"+hour : hour) + ":" + ((minute < 10) ? "0"+minute : minute);
+  }
+
   datasets: ChartDataSets[] = [{
     data: [],
     label: ''
@@ -43,6 +59,19 @@ export class LSensorChartComponent implements OnInit, OnDestroy, OnChanges {
   labels: Label[] = [];
   options: (ChartOptions & { annotation: any }) = {
     responsive: true,
+    responsiveAnimationDuration:5000,
+    tooltips: {
+      callbacks: {
+        label: function(item, data) {
+          var datasetLabel = data.datasets[item.datasetIndex].label || "";
+          var dataPoint = item.yLabel;
+          if(data.datasets[item.datasetIndex].yAxisID=="temperature") {
+            return datasetLabel + ": " + dataPoint + " ºC";
+          }
+          return datasetLabel + ": " + dataPoint + " %";
+        }
+      }
+    },
     scales: {
       xAxes: [{
         id: 'x-axis-0',
@@ -50,24 +79,41 @@ export class LSensorChartComponent implements OnInit, OnDestroy, OnChanges {
           color: "rgba(0, 0, 0, 0)",
         },
         ticks: {
+          callback: (millis) => this.toTimeFormat(millis),
           suggestedMin: 0,
           suggestedMax: 50
         }
       }],
       yAxes: [
         {
-          id: 'y-axis-0',
+          id: 'temperature',
           position: 'left',
           gridLines: {
             color: "rgba(0, 0, 0, 0)",
           },
           ticks: {
+            callback: function(item) {
+              return item + ' ºC';
+            },
             suggestedMin: 0,
-            suggestedMax: 88
+            suggestedMax: 50,
+          }
+        },
+        {
+          id: 'humidity',
+          position: 'right',
+          gridLines: {
+            color: "rgba(0, 0, 0, 0)",
+          },
+          ticks: {
+            callback: function(item) {
+              return item + ' %';
+            },
+            suggestedMin: 0,
+            suggestedMax: 100
           }
         }
-
-      ]
+      ],
     },
     annotation: {
       annotations: [
@@ -87,24 +133,6 @@ export class LSensorChartComponent implements OnInit, OnDestroy, OnChanges {
       ],
     },
   };
-  colors: Color[] = [
-    { // grey
-      backgroundColor: 'rgba(148,159,177,0.2)',
-      borderColor: 'rgba(148,159,177,1)',
-      pointBackgroundColor: 'rgba(148,159,177,1)',
-      pointBorderColor: '#fff',
-      pointHoverBackgroundColor: '#fff',
-      pointHoverBorderColor: 'rgba(148,159,177,0.8)'
-    },
-    { // dark grey
-      backgroundColor: 'rgba(2,83,96,0.2)',
-      borderColor: 'rgba(2,83,96,1)',
-      pointBackgroundColor: 'rgba(2,83,96,1)',
-      pointBorderColor: '#fff',
-      pointHoverBackgroundColor: '#fff',
-      pointHoverBorderColor: 'rgba(77,83,96,1)'
-    }
-  ];
   chartType = 'line';
   legend = false;
 
@@ -112,17 +140,6 @@ export class LSensorChartComponent implements OnInit, OnDestroy, OnChanges {
 
   constructor(private sensorValuesService: SensorValuesService,
     private changeDetector: ChangeDetectorRef) {
-  }
-
-  ngOnInit(): void {
-    this.init();
-    /*
-    timer(5444).subscribe(() => {
-      this.unitData.id=2;
-      this.reactTo(this.unitData.nodeId, this.unitData.id);
-      this.sensorValuesService.requestArrayValues(this.unitData.nodeId, this.unitData.id);
-    });
-    */
   }
 
   ngOnChanges() {
@@ -137,12 +154,19 @@ export class LSensorChartComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   init() {
-    this.initDataSet();
-    this.initReactions();
-    this.requestData();
+    this.resetDataSets();
+    this.resetReactions();
+    this.requestInitialData(this.interval, this.numberOfValues);
+    this.requestNewValues(this.interval)
   }
 
-  initDataSet() {
+  requestNewValues(interval) {
+    this.unitData.forEach((unitData) => {
+      this.sensorValuesService.requestArrayValues(unitData.nodeId, unitData.id, interval);
+    })
+  }
+
+  resetDataSets() {
     if(this.unitData.length == 0) {
       this.datasets = [{
         data: []
@@ -152,21 +176,28 @@ export class LSensorChartComponent implements OnInit, OnDestroy, OnChanges {
       this.datasets = [];
       this.legend = this.legendVisible;
     }
-    this.unitData.forEach(unit => {
+    this.unitData.forEach((unit, index) => {
       this.datasets.push({
         data:[],
-        label:unit.name
+        yAxisID:index==0 ? 'temperature' : 'humidity',
+        label:unit.name,
+        backgroundColor: Color(unit.graphColor!=null? unit.graphColor : 'black').alpha(0.2).toString(),
+        borderColor: Color(unit.graphColor!=null? unit.graphColor : 'black').alpha(0.5).toString(),
+        pointBackgroundColor: Color(unit.graphColor!=null? unit.graphColor : 'black').toString(),
+        pointBorderColor: '#fff',
+        pointHoverBackgroundColor: '#fff',
+        pointHoverBorderColor: Color(unit.graphColor).alpha(0.8).toString()
       });
     })
   }
 
-  requestData() {
+  requestInitialData(interval, numberOfValues) {
     this.unitData.forEach((unitData) => {
-      this.sensorValuesService.requestArrayValues(unitData.nodeId, unitData.id);
+      this.sensorValuesService.requestArrayValues(unitData.nodeId, unitData.id, interval, numberOfValues);
     })
   }
 
- initReactions() {
+  resetReactions() {
     this.disposers.forEach(disposer => {
       disposer.disposer();
     })

@@ -1,8 +1,15 @@
-.node-card-container {
-  padding: 10px;
-}
 
 .undescripted {
   min-height: 48px;
   margin-bottom: 8px;
+}
+
+.grid-container {
+  display: grid;
+  grid-column-gap: 20px;
+  grid-template: fit-content(100px) / fit-content(100px) fit-content(100px);
+}
+
+.node-card-container {
+  padding: 10px;
 }

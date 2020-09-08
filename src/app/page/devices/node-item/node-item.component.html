@@ -1,8 +1,8 @@
-<mat-card class="node-card mat-elevation-z4" fxFlex="120">
+<mat-card class="node-card mat-elevation-z4">
   <mat-card-title [ngClass]="{undescripted: !device.description}">
-  <app-editable-text
-      [text]="device.name"
-      (onTextChanged)="nameChanged($event)"></app-editable-text>
+    <app-editable-text
+        [text]="device.name"
+        (onTextChanged)="nameChanged($event)"></app-editable-text>
   </mat-card-title>
   <mat-card-subtitle>
     <app-editable-text
@@ -10,7 +10,7 @@
       (onTextChanged)="descriptionChanged($event)"></app-editable-text>
   </mat-card-subtitle>
   <mat-card-content>
-    <div fxLayout="row wrap" fxLayoutAlign="space-evenly center">
+    <div class="grid-container">
       <div class="unit-card-container" *ngFor="let unit of device.units" >
         <app-unit-item
             class="mat-elevation-z16"

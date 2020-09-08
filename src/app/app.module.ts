@@ -10,7 +10,6 @@ import { TemperatureComponent } from './page/temperature/temperature.component';
 import { LightsComponent } from './page/lights/lights.component'
 
 import { EngineComponent } from './renderers/threeJS/engine.component';
-import { FlexLayoutModule } from "@angular/flex-layout";
 import { ChartsModule } from 'ng2-charts';
 
 /* Angular Material */
@@ -24,7 +23,7 @@ import { ControlComponent } from './page/control/control.component'
 import { JwtInterceptor } from './authentication/interceptor/jwt.interceptor';
 import { ToolbarComponent } from './main-view/toolbar/toolbar.component';
 import { NavbarComponent } from './main-view/navbar/navbar.component';
-import { AemetComponent } from './page/aemet/aemet.component';
+import { AemetComponent } from './aemet/aemet.component'
 import { ProfileSheetComponent } from './main-view/toolbar/profile-sheet.component';
 import { UnitItemComponent } from './page/devices/unit-item/unit-item.component';
 
@@ -37,6 +36,7 @@ import { GraphsComponent } from './page/graphs/graphs.component';
 import { GraphFormsComponent } from './page/graphs/graph-forms/graph-forms.component';
 import { InputTimeComponent } from './input-time/input-time.component';
 import { UnitImageUploadComponent } from './page/devices/unit-image-upload/unit-image-upload.component';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 
 @NgModule({
@@ -73,8 +73,8 @@ import { UnitImageUploadComponent } from './page/devices/unit-image-upload/unit-
     ReactiveFormsModule,
     BrowserAnimationsModule,
     AngularMaterialModule,
-    FlexLayoutModule,
-    ChartsModule
+    ChartsModule,
+    MatProgressSpinnerModule
    ],
   providers: [
     CanvasComponent,

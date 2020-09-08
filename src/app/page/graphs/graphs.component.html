@@ -2,8 +2,9 @@
 
   <app-graph-forms (onFormGroupChange)="onFormChange($event)"></app-graph-forms>
 
-  <div class="graph-container" >
+  <div class="chart-container" >
     <app-l-sensor-chart
+    *ngIf="unitData.length>0"
         [unitData]="unitData">
       </app-l-sensor-chart>
   </div>

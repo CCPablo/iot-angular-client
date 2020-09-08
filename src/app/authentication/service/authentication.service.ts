@@ -1,8 +1,5 @@
-import { Injectable, OnDestroy, OnInit } from "@angular/core";
-import { HttpClient, HttpParams } from "@angular/common/http";
-import { LoginObject } from "../model/login-object.model";
-import { map } from 'rxjs/operators';
-import { environment } from '../../../environments/environment';
+import { Injectable, OnDestroy } from "@angular/core";
+import { HttpClient } from "@angular/common/http";
 import { Session } from "../model/session.model";
 import { Router } from '@angular/router';
 import { ToolbarService } from 'src/app/main-view/toolbar/toolbar.service';

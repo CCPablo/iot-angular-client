@@ -4,6 +4,7 @@ import { autorun } from 'mobx';
 import { trigger, transition, query, style, stagger, animate } from '@angular/animations';
 import { MatDialog } from '@angular/material/dialog';
 import { UnitImageUploadComponent } from './unit-image-upload/unit-image-upload.component';
+import { FormControl } from '@angular/forms';
 
 @Component({
     changeDetection: ChangeDetectionStrategy.OnPush,
@@ -31,7 +32,16 @@ import { UnitImageUploadComponent } from './unit-image-upload/unit-image-upload.
             optional: true
           })
         ])
-      ])
+      ]),
+      trigger('inOut', [
+        transition(':enter', [
+          style({ opacity: 0 }),
+          animate('100ms', style({ opacity: 1 })),
+        ]),
+        transition(':leave', [
+          animate('100ms', style({ opacity: 0 }))
+        ])
+      ]),
     ]
 
 })
@@ -40,6 +50,8 @@ export class DeviceComponent implements OnInit {
   breakpoint: number;
 
   editing = false;
+
+  cardsSet = new FormControl();
 
   constructor(
       private deviceService: DeviceService,

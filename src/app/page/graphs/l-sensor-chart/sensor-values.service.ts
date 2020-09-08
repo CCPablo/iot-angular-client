@@ -14,16 +14,6 @@ export class SensorValuesService {
       private sensorValuesStore: SensorValuesStore,
       private http: HttpClient
     ) {
-      /*
-      this.http.get(`${environment.apiUrl}/values`).subscribe(values => {
-        this.setInitialValues(values);
-      })
-      */
-     /*
-     timer(1000).subscribe(() => {
-      this.sensorValuesStore.mockInitAll();
-      });
-      */
       timer(2000,3000).subscribe(() => {
         this.sensorValuesStore.setNewValue(1,1, {
           value: this.generateNumber(),
@@ -37,13 +27,6 @@ export class SensorValuesService {
           value: this.generateNumber(),
           time: 400
         });
-      });
-    }
-
-    setNewValue(nodeId, unitId) {
-      this.sensorValuesStore.setNewValue(nodeId,unitId, {
-        value: this.generateNumber(),
-        time: 400
       });
     }
 

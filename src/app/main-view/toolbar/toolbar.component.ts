@@ -3,6 +3,7 @@ import { AuthenticationService } from '../../authentication/service/authenticati
 import { ToolbarService } from './toolbar.service';
 import { ProfileSheetComponent } from './profile-sheet.component';
 import { MatDialog } from '@angular/material/dialog';
+import { SidenavService } from '../navbar/side-navbar.service';
 
 @Component({
   selector: 'app-toolbar',
@@ -18,9 +19,14 @@ export class ToolbarComponent implements OnInit {
   constructor(
     private toolbarService: ToolbarService,
     private authenticationService: AuthenticationService,
-    private profileSheet: MatDialog) {  }
+    private profileSheet: MatDialog,
+    private sidenavService: SidenavService) {}
 
   ngOnInit(): void {
+    this.sidenavService.sideBarClosed$.subscribe(()=>{
+      console.log("eee")
+      this.opened = false;
+    })
   }
 
   logout(): void {

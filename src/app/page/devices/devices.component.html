@@ -1,9 +1,15 @@
-<div [@listStagger]='getDevices().length'>
-    <div  fxLayout.gt-xs="row wrap" fxLayout.xs="column" fxFill>
-      <div class="node-card-container" *ngFor="let device of getDevices()">
-        <app-node-item [device]="device"></app-node-item>
-      </div>
-    </div>
+<mat-spinner  @inOut *ngIf="getDevices().length==0"></mat-spinner>
+
+  <mat-form-field appearance="fill">
+    <mat-label>Mostrar</mat-label>
+    <mat-select [formControl]="cardsSet">
+      <mat-option value="nodos">Por nodos</mat-option>
+      <mat-option value="localizacion">Por localización</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+<div *ngIf="getDevices().length!=0" [@listStagger]='getDevices().length' class="grid-container">
+  <app-node-item class="node-card-container" *ngFor="let device of getDevices()" [device]="device"></app-node-item>
 </div>
 
 <button mat-stroke-button (click)="openProfileSheet()">rrr</button>

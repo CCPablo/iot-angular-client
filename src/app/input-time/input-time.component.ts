@@ -7,26 +7,30 @@ import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 export class InputTime {
-  constructor( public hours: string = '', public minutes: string = '', public seconds: string = '', public milliseconds: string = '') {}
+  constructor( public days: Number = null, public hours: Number = null, public minutes: Number = null, public seconds: Number = null) {}
 }
 
 @Component({
   selector: 'app-input-time',
   templateUrl: './input-time.component.html',
-  styleUrls: ['./input-time.component.css'],
+  styleUrls: ['./input-time.component.scss'],
   providers: [{provide: MatFormFieldControl, useExisting: InputTimeComponent}],
 })
 export class InputTimeComponent implements OnDestroy,MatFormFieldControl<InputTime>,ControlValueAccessor {
 
-
+  daysFocused = false;
   hourFocused = false;
   minutesFocused = false;
   secondsFocused = false;
-  millisecondsFocused = false;
 
 
+  changed(ay) {
+    console.log(ay)
+  }
 
-
+  resetForm() {
+    this.parts.reset();
+  }
 
   parts: FormGroup;
 
@@ -49,7 +53,7 @@ export class InputTimeComponent implements OnDestroy,MatFormFieldControl<InputTi
 
   get empty() {
     let time = this.parts.value;
-    return !(time.hours.length || time.minutes.length || time.seconds.length || time.milliseconds.length);
+    return !(time.days || time.hours || time.minutes || time.seconds);
   }
 
   @Input()
@@ -95,24 +99,24 @@ export class InputTimeComponent implements OnDestroy,MatFormFieldControl<InputTi
   @Input()
   get value(): InputTime | null {
     let time = this.parts.value;
-    if (time.hours.length || time.minutes.length || time.seconds.length || time.milliseconds.length ) {
-      return new InputTime(time.hours, time.minutes, time.seconds, time.milliseconds);
+    if ( time.days || time.hours || time.minutes || time.seconds) {
+      return new InputTime(time.days, time.hours, time.minutes, time.seconds);
     }
     return null;
   }
 
   set value(time: InputTime | null) {
     time = time || new InputTime();
-    this.parts.setValue({hours: time.hours, minutes: time.minutes, seconds: time.seconds, milliseconds: time.milliseconds});
+    this.parts.setValue({ days: time.days, hours: time.hours, minutes: time.minutes, seconds: time.seconds});
     this.stateChanges.next();
   }
 
   constructor(fb: FormBuilder, @Optional() @Self() public ngControl: NgControl | null, private fm: FocusMonitor, private elRef: ElementRef<HTMLElement>) {
       this.parts =  fb.group({
+      'days': '',
       'hours': '',
       'minutes': '',
-      'seconds': '',
-      'milliseconds': ''
+      'seconds': ''
     });
     fm.monitor(elRef.nativeElement, true).subscribe(origin => {
       this.focused = !!origin;

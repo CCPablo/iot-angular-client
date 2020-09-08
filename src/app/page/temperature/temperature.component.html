@@ -1,6 +1,5 @@
-<div fxLayout="row wrap" fxLayout.xs="column" fxLayoutAlign="space-around center" fxLayoutGap="25px">
-  {{ count() }}
-  <div *ngFor="let device of getTemperatureDevices()"fxFlex="calc(33%-25px)" fxFlex.sm="calc(50%-25px)">
+<div>
+  <div *ngFor="let device of getTemperatureDevices()">
     <mat-card>
       <mat-card-header>
       {{device.name}}
@@ -9,7 +8,7 @@
         {{device.description}}
       </mat-card-subtitle>
       <mat-card-content>
-        <div *ngFor="let unit of device.units "fxFlex="calc(33%-25px)" fxFlex.sm="calc(50%-25px)">
+        <div *ngFor="let unit of device.units">
           {{unit.name}}
           {{unit.description}}
         </div>

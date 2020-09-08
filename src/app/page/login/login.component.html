@@ -1,32 +1,34 @@
-<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
 
-<div class="login">
-    <div class="login-content">
-        <form [formGroup]="loginForm" >
-            <h2 class="title">IoH</h2>
-            <div class="input">
-                <i class="icon fa fa-user"></i>
-                <mat-form-field appearance="outline" class="div">
-                    <mat-label>Nombre de usuario</mat-label>
-                    <input matInput type="text" formControlName="username">
-                </mat-form-field>
-            </div>
-            <div class="input">
-                <i class="icon fa fa-lock"></i>
-                <mat-form-field appearance="outline"  class="div">
-                    <mat-label>Contraseña</mat-label>
-                    <input matInput type="password" formControlName="password" required>
-                    <mat-hint *ngIf="submitted && formControls.password.errors" class="help-block">
-                        Introduce la contraseña
-                    </mat-hint>
-                </mat-form-field>
-            </div>
-            <a href="#">Olvidaste contraseña?</a>
-            <!--
-            <button [ngClass]="{ 'disabled': formControls.password.invalid }"
-            (click)="submitLogin()" class="btn">Login</button>
-            -->
-            <button (keyup.enter)="submitLogin()" (click)="submitLogin()" mat-stroked-button color="primary">Login</button>
-        </form>
+<div class="login-container">
+  <form [formGroup]="loginForm" >
+
+    <h2 class="title">IoH</h2>
+
+    <div class="input">
+      <i class="icon fa fa-user"></i>
+      <mat-form-field appearance="outline" class="div">
+        <mat-label>Nombre de usuario</mat-label>
+        <input matInput type="text" formControlName="username">
+      </mat-form-field>
     </div>
+
+    <div class="input">
+      <i class="icon fa fa-lock"></i>
+      <mat-form-field appearance="outline"  class="div">
+        <mat-label>Contraseña</mat-label>
+        <input matInput type="password" formControlName="password" required>
+        <mat-hint>
+          <p><a href="#">Olvidaste contraseña?</a></p>
+        </mat-hint>
+      </mat-form-field>
+    </div>
+
+
+
+      <!--
+      <button [ngClass]="{ 'disabled': formControls.password.invalid }"
+      (click)="submitLogin()" class="btn">Login</button>
+      -->
+    <button (keyup.enter)="submitLogin()" (click)="submitLogin()" mat-stroked-button color="primary">Login</button>
+  </form>
 </div>

@@ -62,7 +62,8 @@ export const mockedDevices = [
             unitId: 1,
             name: 'Relé',
             description: 'Relé de activación',
-            type: 'ACTUATOR'
+            type: 'ACTUATOR',
+            graphColor: 'red'
         }
     ]
     },
@@ -76,13 +77,15 @@ export const mockedDevices = [
             unitId: 2,
             name: 'Actuador2',
             description: 'Relé de activación2',
-            type: 'ACTUATOR'
+            type: 'ACTUATOR',
+            graphColor: 'green'
         },
         {
             unitId: 1,
             name: 'Actuador1',
             description: 'Rele de activación1',
-            type: 'ACTUADOR'
+            type: 'ACTUADOR',
+            graphColor: 'yellow'
         }
     ]
     },

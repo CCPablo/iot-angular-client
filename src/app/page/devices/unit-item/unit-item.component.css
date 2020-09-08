@@ -5,7 +5,6 @@
 
 .flippable {
   position: relative;
-  width: '120px';
   transform-style: preserve-3d;
   transition: transform 1s;
 }

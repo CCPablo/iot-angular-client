@@ -17,3 +17,8 @@
   background: #ffffff;
   position: absolute;
 }
+
+.grid-container{
+  display: grid;
+  grid-template: auto / auto auto;
+}

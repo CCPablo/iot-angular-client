@@ -1,52 +1,57 @@
-<div [formGroup]="parts">
+<div class="container" [formGroup]="parts">
 
-  <div class="my-input" [ngClass]="{'state-my-input--active': hourFocused || parts.value.hours}">
-    <div class="my-input__wrapper">
-      <label class="my-input__label">h</label>
+  <div class="input-container" [ngClass]="{'active': daysFocused || parts.value.days != null}">
+    <label class="label days">d</label>
+    <input
+      type="number" class="input days"
+      (blur)="daysFocused = false"
+      (focus)="daysFocused = true"
+      min="0"
+      max="10"
+      formControlName="days" size=2>
+  </div>
+
+
+  <div >
+    <div class="input-container" [ngClass]="{'active': hourFocused || parts.value.hours != null}">
+      <label class="label">h</label>
       <input
-        type="number" class="my-input__input"
+        type="number" class="input"
         (blur)="hourFocused = false"
         (focus)="hourFocused = true"
-        formControlName="hours" size=2>
+        formControlName="hours"
+        min="0"
+        max="24"
+        size=2>
     </div>
   </div>
 
-  <span>&#44;</span>
 
-  <div class="my-input minutes" [ngClass]="{'state-my-input--active': minutesFocused || parts.value.minutes}">
-    <div class="my-input__wrapper">
-      <label class="my-input__label minutes">m</label>
+    <div class="input-container minutes" [ngClass]="{'active': minutesFocused || parts.value.minutes != null}">
+      <label class="label minutes">m</label>
       <input
-        type="text" class="my-input__input"
+        type="number" class="input"
         (blur)="minutesFocused = false"
         (focus)="minutesFocused = true"
+        min="0"
+        max="60"
         formControlName="minutes" size=2>
     </div>
-  </div>
 
-  <span>&#44;</span>
 
-  <div class="my-input" [ngClass]="{'state-my-input--active': secondsFocused || parts.value.seconds}">
-    <div class="my-input__wrapper">
-      <label class="my-input__label seconds">s</label>
+    <div class="input-container" [ngClass]="{'active': secondsFocused || parts.value.seconds != null}">
+      <label class="label seconds">s</label>
       <input
-        type="text" class="my-input__input"
+        type="number" class="input"
         (blur)="secondsFocused = false"
         (focus)="secondsFocused = true"
+        min="0"
+        max="60"
         formControlName="seconds" size=2>
     </div>
-  </div>
 
-  <span>&#44;</span>
+    <button mat-icon-button (click)="resetForm()">
+      <mat-icon>clear</mat-icon>
+    </button>
 
-  <div class="my-input" [ngClass]="{'state-my-input--active': millisecondsFocused || parts.value.milliseconds}">
-    <div class="my-input__wrapper">
-      <label class="my-input__label milliseconds">ms</label>
-      <input
-        type="text" class="my-input__input milliseconds"
-        (blur)="millisecondsFocused = false"
-        (focus)="millisecondsFocused = true"
-        formControlName="milliseconds" size=2>
-    </div>
-  </div>
 </div>

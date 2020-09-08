@@ -11,7 +11,20 @@ import { FormGroup } from '@angular/forms';
 })
 export class GraphsComponent implements OnInit {
 
-  unitData = [];
+  unitData = [   {
+    name: "oaquot",
+    description: "me daigual",
+    id: 1,
+    nodeId: 1,
+    graphColor: "red"
+  },
+  {
+    name: "oaquot",
+    description: "me daigual",
+    id: 2,
+    nodeId: 1,
+    graphColor: "green"
+  }];
 
   constructor(private deviceService: DeviceService, private changeDetector: ChangeDetectorRef) { }
 
@@ -26,8 +39,6 @@ export class GraphsComponent implements OnInit {
   }
 
   onFormChange(event : FormGroup) {
-    console.log(event);
-    console.log(event.value.unitControl);
     this.changeDetector.detectChanges();
   }
 }

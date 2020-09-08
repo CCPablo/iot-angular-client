@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { AuthenticationService } from '../../authentication/service/authentication.service';
+import { AuthenticationService } from '../authentication/service/authentication.service';
 import { AemetResponse } from './response.model';
 
 @Component({

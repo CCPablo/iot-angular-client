@@ -1,13 +1,16 @@
 <form [formGroup]="submitForm" class="graph-forms-container">
   <mat-form-field class="units-selector-field">
     <mat-label>Unidades a graficar</mat-label>
-    <mat-select [formControl]="unitControl" #unitSelect multiple>
+    <mat-select
+    [formControl]="unitControl"
+    multiple>
 
       <mat-select-trigger>
         <mat-chip-list [selectable]="false">
           <mat-chip
+              #matChip
               *ngFor="let unit of unitControl.value"
-              [ngClass]="{'room-chip': unit.id==2, 'kitchen-chip': unit.id==1}"
+              class="chip"
               selectable=false
               selected=false
               [removable]=true
@@ -31,15 +34,15 @@
     <mat-label class="interval-time-label">Tiempo de intervalo</mat-label>
     <app-input-time matInput [formControl]="intervalControl"></app-input-time>
     <mat-hint >Tiempo de intervalo</mat-hint>
-    <mat-error *ngIf="intervalControl.invalid">Formato: [HH:MM:SS:]MS</mat-error>
   </mat-form-field>
 
   <mat-form-field class="nvalues-field">
     <input matInput type=number [formControl]="nValuesControl">
     <mat-hint >Numero de valores</mat-hint>
-    <mat-error *ngIf="nValuesControl.invalid">Formato: Número</mat-error>
   </mat-form-field>
 
-  <button mat-flat-button (click)="submit()"> Graficar</button>
+  <button mat-stroke-button (click)="submit()">
+    <mat-icon>show_chart</mat-icon>
+  </button>
 </form>
 

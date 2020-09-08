@@ -21,6 +21,9 @@ export class NavbarComponent implements OnInit, AfterViewInit {
     })
   }
 
+  closedStart() {
+    this.sidenavService.close();
+  }
 
   ngAfterViewInit(): void {
     this.sidenavService.setSidenav(this.sidenav);

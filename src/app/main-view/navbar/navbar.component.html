@@ -1,5 +1,10 @@
 <mat-sidenav-container class="container" autosize>
-  <mat-sidenav #sidenav role="navigation" mode="over" (keydown.escape)="sidenav.close()" >
+  <mat-sidenav
+    #sidenav role="navigation"
+    mode="over"
+    (keydown.escape)="sidenav.close()"
+    (closedStart)="closedStart()"
+    >
     <mat-nav-list>
       <ng-container>
         <h2 matSubheader>Nodos y dispositivos</h2>

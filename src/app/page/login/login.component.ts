@@ -13,14 +13,12 @@ import { environment } from 'src/environments/environment';
 import { Observable } from 'rxjs';
 
 
-
 @Component({
   selector: 'app-login',
   templateUrl: 'login.component.html' ,
   styleUrls: ['login.component.css']})
 export class LoginComponent implements OnInit {
   loginForm: FormGroup;
-  submitted = false;
 
   httpErrorAlertMessages = {
     0: 'Sin respuesta de servidor',
@@ -51,7 +49,6 @@ export class LoginComponent implements OnInit {
 
   submitLogin() {
       //this.engine.updateCubeSize({x:1, y:1, z:1});
-      this.submitted = true;
 
       const loginFormCopy = this.loginForm.getRawValue();
 
