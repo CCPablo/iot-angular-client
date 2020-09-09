@@ -4,37 +4,53 @@ import { observable, action, computed } from 'mobx-angular';
 @Injectable({
     providedIn: 'root'
   })
-export class DeviceStore {
+export class NodeStore {
 
-    @observable.shallow devices = [];
+    @observable.shallow nodes = [];
 
-    getDevices() {
-      return this.devices;
+    getNodes() {
+      return this.nodes;
     }
 
-    @action setDevices(devices) {
-      this.devices = devices;
+    @action setNodes(nodes) {
+      this.nodes = nodes;
     }
 
-    @computed get temperatureDevices() {
-      let auxDevices = this.devices;
-      auxDevices.forEach((device, deviceIndex) => device.units.forEach(
+    @computed get temperatureNodes() {
+      let auxNodes = this.nodes;
+      auxNodes.forEach((node, nodeIndex) => node.units.forEach(
         (unit, unitIndex) => {
           if(unit.type != 'TEMPERATURE_SENSOR') {
-            auxDevices[deviceIndex].units.splice(unitIndex, 1);
+            auxNodes[nodeIndex].units.splice(unitIndex, 1);
           }
         }));
 
-      return auxDevices.filter(
-        device =>
-          device.units.length != 0
+      return auxNodes.filter(
+        node =>
+          node.units.length != 0
+        );
+    }
+
+    @computed get locations() {
+      let locations = [];
+      let auxNodes = this.nodes;
+      auxNodes.forEach((node, nodeIndex) => {
+        node.units.forEach(
+        (unit, unitIndex) => {
+
+        })
+      });
+
+      return auxNodes.filter(
+        node =>
+          node.units.length != 0
         );
     }
 
     @computed get lightUnits() {
       let lightUnits = [];
-      this.devices.forEach((device, deviceIndex) =>
-      device.units.forEach(unit => {
+      this.nodes.forEach((node, nodeIndex) =>
+      node.units.forEach(unit => {
           if(unit.type == 'DIMMER') {
             lightUnits.push(unit);
           }
@@ -42,20 +58,20 @@ export class DeviceStore {
       return lightUnits;
     }
 
-    getMockedDevices() {
-      return mockedDevices;
+    getMockedNodes() {
+      return mockedNodes;
     }
 
-    getDeviceWithId(deviceId) {
-      return this.devices[deviceId];
+    getNodeWithId(nodeId) {
+      return this.nodes[nodeId];
     }
 }
 
-export const mockedDevices = [
+export const mockedNodes = [
     {
-      name: 'Device1',
+      name: 'Node1',
       description: 'Lampara de la mesa negra',
-      deviceId: 1,
+      nodeId: 1,
       connectedSince: 1111122222,
       units: [
         {
@@ -68,9 +84,9 @@ export const mockedDevices = [
     ]
     },
     {
-      name: 'Device2',
+      name: 'Node2',
       description: 'Lampara de la mesa negra',
-      deviceId: 2,
+      nodeId: 2,
       connectedSince: 1111122222,
       units: [
         {
@@ -90,9 +106,9 @@ export const mockedDevices = [
     ]
     },
     {
-      name: 'Device3',
+      name: 'Node3',
       description: 'Lampara de la mesa negra',
-      deviceId: 3,
+      nodeId: 3,
       connectedSince: 1111122222,
       units: [
         {

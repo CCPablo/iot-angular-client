@@ -1,5 +1,4 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-node-item',
@@ -8,7 +7,7 @@ import { Subject } from 'rxjs';
 })
 export class NodeItemComponent implements OnInit {
 
-  @Input() device;
+  @Input() node;
   constructor() { }
 
   ngOnInit(): void {

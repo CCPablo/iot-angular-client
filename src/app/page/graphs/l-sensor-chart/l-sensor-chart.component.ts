@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, ChangeDetectorRef, Input, OnChanges, DoCheck, IterableDiffer, KeyValueDiffer, KeyValueDiffers, IterableDiffers, OnDestroy, ChangeDetectionStrategy, ElementRef } from '@angular/core';
 import { BaseChartDirective, Label } from 'ng2-charts';
 import { ChartDataSets, ChartOptions } from 'chart.js';
-import { ValuesService } from '../../devices/values.service';
+import { ValuesService } from '../../nodes/values.service';
 import { reaction, IReactionDisposer } from 'mobx';
 import { SensorValuesService } from './sensor-values.service';
 import { Observable, timer } from 'rxjs';
@@ -59,7 +59,11 @@ export class LSensorChartComponent implements OnDestroy, OnChanges {
   labels: Label[] = [];
   options: (ChartOptions & { annotation: any }) = {
     responsive: true,
-    responsiveAnimationDuration:5000,
+    responsiveAnimationDuration:4000,
+    animation: {
+      duration: 1500,
+      easing: 'linear'
+    },
     tooltips: {
       callbacks: {
         label: function(item, data) {
@@ -179,6 +183,7 @@ export class LSensorChartComponent implements OnDestroy, OnChanges {
     this.unitData.forEach((unit, index) => {
       this.datasets.push({
         data:[],
+        radius: 0,
         yAxisID:index==0 ? 'temperature' : 'humidity',
         label:unit.name,
         backgroundColor: Color(unit.graphColor!=null? unit.graphColor : 'black').alpha(0.2).toString(),

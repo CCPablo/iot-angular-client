@@ -21,8 +21,8 @@
         </mat-chip-list>
       </mat-select-trigger>
 
-      <mat-optgroup *ngFor="let device of devices" [label]="device.name">
-        <mat-option *ngFor="let unit of device.units" #unitOptions
+      <mat-optgroup *ngFor="let node of nodes" [label]="node.name">
+        <mat-option *ngFor="let unit of node.units" #unitOptions
         [value]="unit">
         {{unit.name}}
         </mat-option>

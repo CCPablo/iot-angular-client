@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChildren, QueryList, ViewChild, EventEmitter, Output, ElementRef, AfterViewInit, Renderer2, RendererStyleFlags2 } from '@angular/core';
 import { FormControl, Validators, FormGroup } from '@angular/forms';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
-import { DeviceService } from '../../devices/devices.service';
+import { NodeService } from '../../nodes/nodes.service';
 import { autorun } from 'mobx';
 import { MatOptionSelectionChange, MatOption } from '@angular/material/core';
 import { MatChip } from '@angular/material/chips';
@@ -13,7 +13,7 @@ export interface Unit {
   graphColor: string;
 }
 
-export interface Device {
+export interface Node {
   name: string;
   units: Unit[];
   location: string;
@@ -38,20 +38,20 @@ export class GraphFormsComponent implements OnInit, AfterViewInit {
     nValuesControl: this.nValuesControl
   });
 
-  devices: Device[] = [];
+  nodes: Node[] = [];
   allUnits: Unit[] = [];
 
   @Output() private onFormGroupChange = new EventEmitter<any>();
 
-  constructor(private deviceService: DeviceService,
+  constructor(private nodeService: NodeService,
       private renderer: Renderer2) { }
 
   ngOnInit(): void {
     autorun(() => {
-      this.devices = this.deviceService.getDevices();
-      console.log('devices', this.devices);
-      this.devices.forEach(device => {
-        device.units.forEach(unit => {
+      this.nodes = this.nodeService.getNodes();
+      console.log('nodes', this.nodes);
+      this.nodes.forEach(node => {
+        node.units.forEach(unit => {
           this.allUnits.push(unit);
         });
       })

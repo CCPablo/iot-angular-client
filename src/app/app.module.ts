@@ -4,7 +4,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { DeviceComponent } from './page/devices/devices.component';
+import { NodeComponent } from './page/nodes/nodes.component';
 import { LoginComponent } from './page/login/login.component';
 import { TemperatureComponent } from './page/temperature/temperature.component';
 import { LightsComponent } from './page/lights/lights.component'
@@ -25,24 +25,24 @@ import { ToolbarComponent } from './main-view/toolbar/toolbar.component';
 import { NavbarComponent } from './main-view/navbar/navbar.component';
 import { AemetComponent } from './aemet/aemet.component'
 import { ProfileSheetComponent } from './main-view/toolbar/profile-sheet.component';
-import { UnitItemComponent } from './page/devices/unit-item/unit-item.component';
+import { UnitItemComponent } from './page/nodes/unit-item/unit-item.component';
 
 import { MatAnimatedIconComponent } from './main-view/mat-animated-icon/mat-animated-icon.component';
 import { UnitIconComponent } from './unit-icon/unit-icon.component';
 import { EditableTextComponent } from './editable-text/editable-text.component';
-import { NodeItemComponent } from './page/devices/node-item/node-item.component';
+import { NodeItemComponent } from './page/nodes/node-item/node-item.component';
 import { LSensorChartComponent } from './page/graphs/l-sensor-chart/l-sensor-chart.component';
 import { GraphsComponent } from './page/graphs/graphs.component';
 import { GraphFormsComponent } from './page/graphs/graph-forms/graph-forms.component';
 import { InputTimeComponent } from './input-time/input-time.component';
-import { UnitImageUploadComponent } from './page/devices/unit-image-upload/unit-image-upload.component';
+import { UnitImageUploadComponent } from './page/nodes/unit-image-upload/unit-image-upload.component';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 
 @NgModule({
   declarations: [
     AppComponent,
-    DeviceComponent,
+    NodeComponent,
     EngineComponent,
     HomeComponent,
     LoginComponent,

@@ -1,7 +1,8 @@
 import { Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
-import { DeviceService } from '../devices/devices.service';
+import { NodeService } from '../nodes/nodes.service';
 import { autorun } from 'mobx';
 import { FormGroup } from '@angular/forms';
+import { timer } from 'rxjs';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -11,31 +12,34 @@ import { FormGroup } from '@angular/forms';
 })
 export class GraphsComponent implements OnInit {
 
-  unitData = [   {
-    name: "oaquot",
-    description: "me daigual",
-    id: 1,
-    nodeId: 1,
-    graphColor: "red"
-  },
-  {
-    name: "oaquot",
-    description: "me daigual",
-    id: 2,
-    nodeId: 1,
-    graphColor: "green"
-  }];
+  unitData = [];
 
-  constructor(private deviceService: DeviceService, private changeDetector: ChangeDetectorRef) { }
+  constructor(private nodeService: NodeService, private changeDetector: ChangeDetectorRef) { }
 
   ngOnInit(): void {
     autorun(() => {
       this.changeDetector.detectChanges();
     });
+    timer(1000).subscribe(() => {
+      this.unitData = [{
+        name: "oaquot",
+        description: "me daigual",
+        id: 1,
+        nodeId: 1,
+        graphColor: "red"
+      },
+      {
+        name: "oaquot",
+        description: "me daigual",
+        id: 2,
+        nodeId: 1,
+        graphColor: "green"
+      }];
+      });
   }
 
-  getDevices() {
-    return this.deviceService.getDevices();
+  getNodes() {
+    return this.nodeService.getNodes();
   }
 
   onFormChange(event : FormGroup) {

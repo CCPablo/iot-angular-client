@@ -46,9 +46,18 @@ export class SensorValuesStore {
         return;
       }
       const currentArray = this.sensorArrayValues.get(this.getKey(nodeId, unitId)).toJS();
-      currentArray.shift();
       currentArray.push(value);
 
+      this.sensorArrayValues.set(this.getKey(nodeId, unitId), currentArray);
+    }
+
+    @action removeFirstValue(nodeId, unitId) {
+      if(!this.sensorArrayValues.get(this.getKey(nodeId,unitId))) {
+        this.sensorArrayValues.set(this.getKey(nodeId,unitId),[{value:0, time:0}]);
+        return;
+      }
+      const currentArray = this.sensorArrayValues.get(this.getKey(nodeId, unitId)).toJS();
+      currentArray.shift();
       this.sensorArrayValues.set(this.getKey(nodeId, unitId), currentArray);
     }
 

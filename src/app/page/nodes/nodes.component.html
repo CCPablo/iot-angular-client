@@ -1,4 +1,4 @@
-<mat-spinner  @inOut *ngIf="getDevices().length==0"></mat-spinner>
+<mat-spinner  @inOut *ngIf="getNodes().length==0"></mat-spinner>
 
   <mat-form-field appearance="fill">
     <mat-label>Mostrar</mat-label>
@@ -8,8 +8,8 @@
     </mat-select>
   </mat-form-field>
 
-<div *ngIf="getDevices().length!=0" [@listStagger]='getDevices().length' class="grid-container">
-  <app-node-item class="node-card-container" *ngFor="let device of getDevices()" [device]="device"></app-node-item>
+<div *ngIf="getNodes().length!=0" [@listStagger]='getNodes().length' class="grid-container">
+  <app-node-item class="node-card-container" *ngFor="let node of getNodes()" [node]="node"></app-node-item>
 </div>
 
 <button mat-stroke-button (click)="openProfileSheet()">rrr</button>

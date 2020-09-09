@@ -14,7 +14,7 @@ export class SensorValuesService {
       private sensorValuesStore: SensorValuesStore,
       private http: HttpClient
     ) {
-      timer(2000,3000).subscribe(() => {
+      setInterval(() => {
         this.sensorValuesStore.setNewValue(1,1, {
           value: this.generateNumber(),
           time: 400
@@ -26,9 +26,15 @@ export class SensorValuesService {
         this.sensorValuesStore.setNewValue(2,2, {
           value: this.generateNumber(),
           time: 400
-        });
-      });
+        })
+        timer(1500).subscribe(() => {
+          this.sensorValuesStore.removeFirstValue(1,1);
+          this.sensorValuesStore.removeFirstValue(1,2);
+          this.sensorValuesStore.removeFirstValue(2,2);
+        })
+        },3000)
     }
+
 
     requestArrayValues(nodeId, unitId, period = 50, arrayLength = 50){
         timer(300).subscribe(() => {

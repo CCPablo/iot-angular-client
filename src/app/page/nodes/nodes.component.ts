@@ -1,5 +1,5 @@
 import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
-import { DeviceService } from './devices.service';
+import { NodeService } from './nodes.service';
 import { autorun } from 'mobx';
 import { trigger, transition, query, style, stagger, animate } from '@angular/animations';
 import { MatDialog } from '@angular/material/dialog';
@@ -8,9 +8,9 @@ import { FormControl } from '@angular/forms';
 
 @Component({
     changeDetection: ChangeDetectionStrategy.OnPush,
-    selector: 'app-devices',
-    templateUrl: './devices.component.html',
-    styleUrls: ['./devices.component.css'],
+    selector: 'app-nodes',
+    templateUrl: './nodes.component.html',
+    styleUrls: ['./nodes.component.css'],
     animations: [
       trigger('listStagger', [
         transition('* <=> *', [
@@ -45,7 +45,7 @@ import { FormControl } from '@angular/forms';
     ]
 
 })
-export class DeviceComponent implements OnInit {
+export class NodeComponent implements OnInit {
 
   breakpoint: number;
 
@@ -54,7 +54,7 @@ export class DeviceComponent implements OnInit {
   cardsSet = new FormControl();
 
   constructor(
-      private deviceService: DeviceService,
+      private nodeService: NodeService,
       private changeDetector: ChangeDetectorRef,
       private profileSheet: MatDialog
   ) { }
@@ -78,8 +78,8 @@ export class DeviceComponent implements OnInit {
     this.editing = !this.editing;
   }
 
-  getDevices() {
-    return this.deviceService.getDevices();
+  getNodes() {
+    return this.nodeService.getNodes();
   }
 
   count() {

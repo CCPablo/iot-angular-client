@@ -1,14 +1,14 @@
 <div>
-  <div *ngFor="let device of getTemperatureDevices()">
+  <div *ngFor="let node of getTemperatureNodes()">
     <mat-card>
       <mat-card-header>
-      {{device.name}}
+      {{node.name}}
       </mat-card-header>
       <mat-card-subtitle>
-        {{device.description}}
+        {{node.description}}
       </mat-card-subtitle>
       <mat-card-content>
-        <div *ngFor="let unit of device.units">
+        <div *ngFor="let unit of node.units">
           {{unit.name}}
           {{unit.description}}
         </div>

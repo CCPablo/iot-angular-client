@@ -1,5 +1,5 @@
 import { Component, OnInit, ChangeDetectorRef, AfterViewChecked, ChangeDetectionStrategy } from '@angular/core';
-import { DeviceService } from '../devices/devices.service';
+import { NodeService } from '../nodes/nodes.service';
 import { autorun } from 'mobx';
 
 @Component({
@@ -12,7 +12,7 @@ export class LightsComponent implements OnInit {
 
   constructor(
     private changeDetector: ChangeDetectorRef,
-    private deviceService: DeviceService,
+    private nodeService: NodeService,
   ) { }
 
   ngOnInit() {
@@ -22,7 +22,7 @@ export class LightsComponent implements OnInit {
   }
 
   getLightUnits() {
-    return this.deviceService.getLightUnits();
+    return this.nodeService.getLightUnits();
   }
 
   count() {

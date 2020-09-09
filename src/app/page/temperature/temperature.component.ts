@@ -1,5 +1,5 @@
 import { Component, OnInit, ChangeDetectorRef, AfterViewChecked, ChangeDetectionStrategy } from '@angular/core';
-import { DeviceService } from './../devices/devices.service';
+import { NodeService } from './../nodes/nodes.service';
 import { autorun } from 'mobx';
 
 @Component({
@@ -12,7 +12,7 @@ export class TemperatureComponent implements OnInit {
 
   constructor(
     private changeDetector: ChangeDetectorRef,
-    private deviceService: DeviceService,
+    private nodeService: NodeService,
   ) { }
 
   ngOnInit() {
@@ -21,8 +21,8 @@ export class TemperatureComponent implements OnInit {
     });
   }
 
-  getTemperatureDevices() {
-    return this.deviceService.getTemperatureDevices();
+  getTemperatureNodes() {
+    return this.nodeService.getTemperatureNodes();
   }
 
   count() {

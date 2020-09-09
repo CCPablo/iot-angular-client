@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
-import { DeviceService } from '../devices/devices.service';
+import { NodeService } from '../nodes/nodes.service';
 import { SseService } from 'src/app/sse/sse.service';
 import { Subscription } from 'rxjs';
 
