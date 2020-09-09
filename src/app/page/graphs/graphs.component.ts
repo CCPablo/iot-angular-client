@@ -12,7 +12,7 @@ import { timer } from 'rxjs';
 })
 export class GraphsComponent implements OnInit {
 
-  unitData = [];
+  unitsToPlot = [];
 
   constructor(private nodeService: NodeService, private changeDetector: ChangeDetectorRef) { }
 
@@ -21,7 +21,7 @@ export class GraphsComponent implements OnInit {
       this.changeDetector.detectChanges();
     });
     timer(1000).subscribe(() => {
-      this.unitData = [{
+      this.unitsToPlot = [{
         name: "oaquot",
         description: "me daigual",
         id: 1,
@@ -35,7 +35,8 @@ export class GraphsComponent implements OnInit {
         nodeId: 1,
         graphColor: "green"
       }];
-      });
+      this.changeDetector.detectChanges();
+    });
   }
 
   getNodes() {

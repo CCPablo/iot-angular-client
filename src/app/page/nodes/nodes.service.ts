@@ -34,6 +34,10 @@ export class NodeService implements OnInit{
       return this.nodeStore.getNodes();
     }
 
+    getUnitsByLocation() {
+      return this.nodeStore.locations;
+    }
+
     getLightUnits() {
       return this.nodeStore.lightUnits;
     }

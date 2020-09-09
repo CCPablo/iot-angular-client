@@ -24,6 +24,8 @@
     "@angular/router": "~10.0.4",
     "@types/color": "^3.0.1",
     "chart.js": "^2.9.3",
+    "chartjs-plugin-streaming": "^1.8.0",
+    "chartjs-plugin-zoom": "^0.7.7",
     "material-design-icons": "^3.0.1",
     "mobx": "^5.15.6",
     "mobx-angular": "^4.1.0",

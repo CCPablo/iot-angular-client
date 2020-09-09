@@ -9,43 +9,38 @@ import { SensorValuesStore, mockedSensorValuesGet } from './sensor-values.store'
     providedIn: 'root'
   })
 export class SensorValuesService {
+    valuesUrl: any = "/values";
 
     constructor(
       private sensorValuesStore: SensorValuesStore,
       private http: HttpClient
-    ) {
-      setInterval(() => {
-        this.sensorValuesStore.setNewValue(1,1, {
-          value: this.generateNumber(),
-          time: 400
-        });
-        this.sensorValuesStore.setNewValue(1,2, {
-          value: this.generateNumber(),
-          time: 400
-        });
-        this.sensorValuesStore.setNewValue(2,2, {
-          value: this.generateNumber(),
-          time: 400
-        })
-        timer(1500).subscribe(() => {
-          this.sensorValuesStore.removeFirstValue(1,1);
-          this.sensorValuesStore.removeFirstValue(1,2);
-          this.sensorValuesStore.removeFirstValue(2,2);
-        })
-        },3000)
+    ) { }
+
+    requestArrayValues(nodeId, unitId, period = 3600000, arrayLength = 24) {
+      return this.http.get<any>(`${environment.apiUrl}${this.valuesUrl}`, {
+        params: {
+          nodeId: nodeId,
+          unitId: unitId,
+          intervalDuration: period.toString(),
+          numberOfValues: arrayLength.toString()
+        },
+        observe: 'response'
+      })
     }
 
-
-    requestArrayValues(nodeId, unitId, period = 50, arrayLength = 50){
-        timer(300).subscribe(() => {
-          this.sensorValuesStore.mockInit(nodeId, unitId);
-          /*
-          this.sensorValuesStore.setNewValue(nodeId,unitId, {
-            value: this.generateNumber(),
-            time: 400
-          });
-          */
-        });
+    requestArraysValues(unitsToPlot, period = 3600000, arrayLength = 24) {
+      let requestedUnitKeys = [];
+      unitsToPlot.forEach(unit => {
+        requestedUnitKeys.push(`${unit.nodeId}:${unit.id}`);
+      });
+      return this.http.get<any>(`${environment.apiUrl}${this.valuesUrl}/units`, {
+        params: {
+          unitKeys: requestedUnitKeys,
+          intervalDuration: period.toString(),
+          numberOfValues: arrayLength.toString()
+        },
+        observe: 'response'
+      })
     }
 
     getArrayValues(nodeId, unitId) {
@@ -55,9 +50,4 @@ export class SensorValuesService {
     getMeanValue(nodeId, unitId) {
       return this.sensorValuesStore.getMeanOfUnit(nodeId, unitId);
     }
-
-    private generateNumber() {
-      return Math.floor((Math.random() *10) + 1);
-    }
-
 }

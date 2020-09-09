@@ -79,7 +79,7 @@ export class NodeComponent implements OnInit {
   }
 
   getNodes() {
-    return this.nodeService.getNodes();
+    return this.nodeService.getUnitsByLocation();
   }
 
   count() {

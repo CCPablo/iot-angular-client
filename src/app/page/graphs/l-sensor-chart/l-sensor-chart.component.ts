@@ -1,10 +1,8 @@
-import { Component, OnInit, ViewChild, ChangeDetectorRef, Input, OnChanges, DoCheck, IterableDiffer, KeyValueDiffer, KeyValueDiffers, IterableDiffers, OnDestroy, ChangeDetectionStrategy, ElementRef } from '@angular/core';
+import { Component, ViewChild, ChangeDetectorRef, Input, OnChanges, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
 import { BaseChartDirective, Label } from 'ng2-charts';
-import { ChartDataSets, ChartOptions } from 'chart.js';
-import { ValuesService } from '../../nodes/values.service';
-import { reaction, IReactionDisposer } from 'mobx';
+import { ChartDataSets, ChartLineOptions, ChartPointOptions, ChartOptions } from 'chart.js';
+import { reaction, IReactionDisposer, values } from 'mobx';
 import { SensorValuesService } from './sensor-values.service';
-import { Observable, timer } from 'rxjs';
 import * as Color from 'color';
 
 interface UnitData {
@@ -31,25 +29,84 @@ interface Disposer {
 export class LSensorChartComponent implements OnDestroy, OnChanges {
   @ViewChild(BaseChartDirective, { static: true }) chart: BaseChartDirective;
 
-  @Input() unitData: UnitData[] = [];
+  @Input() unitsToPlot: UnitData[] = [];
 
-  @Input() interval;
+  @Input() interval = 14800000;
 
-  @Input() numberOfValues;
+  @Input() numberOfValues = 50;
 
   @Input() legendVisible = true;
 
-  toTimeFormat(millis) {
-    let valueDate = new Date(millis);
-    let now = new Date();
-    if(valueDate.getTime() > (now.getTime() - 5)) {
+  readonly MONTH_TO_MS = 2592000000;
 
+  readonly WEEK_TO_MS = 604800000;
+
+  readonly DAY_TO_MS = 86400000;
+
+  readonly HOUR_TO_MS = 3600000;
+
+  getDateWithInWeek(valueMillis) {
+    let valueDate = new Date(valueMillis);
+    let now = new Date();
+
+    let dayOfWeek = valueDate.getDay();
+    let dayOfMonth = valueDate.getDate();
+    let hour = valueDate.getHours();
+    let minute = valueDate.getMinutes();
+
+    if(dayOfMonth != now.getDate()) {
+      return `${((hour < 10) ? "0"+hour : hour)}:${((minute < 10) ? "0"+minute : minute)} (${this.getDayOfWeek(dayOfWeek)})`
     }
 
-    let hour = Math.floor(valueDate.getHours());
-    let minute = Math.floor(valueDate.getMinutes())
-
     return ((hour < 10) ? "0"+hour : hour) + ":" + ((minute < 10) ? "0"+minute : minute);
+  }
+
+  getDateWithInMonth(valueMillis) {
+    let valueDate = new Date(valueMillis);
+    let now = new Date();
+
+    let dayOfWeek = valueDate.getDay();
+    let dayOfMonth = valueDate.getDate();
+    let month = valueDate.getMonth();
+    let hour = valueDate.getHours();
+    let minute = valueDate.getMinutes();
+
+    if(now.getTime() - valueMillis > this.WEEK_TO_MS) {
+      return `${((hour < 10) ? "0"+hour : hour)}:${((minute < 10) ? "0"+minute : minute)} (${dayOfMonth} de ${this.getMonth(month)})`
+    } else if (dayOfMonth != now.getDate()) {
+      return `${((hour < 10) ? "0"+hour : hour)}:${((minute < 10) ? "0"+minute : minute)} (${this.getDayOfWeek(dayOfWeek)} ${dayOfMonth})`
+    } else {
+      return `${((hour < 10) ? "0"+hour : hour)}:${((minute < 10) ? "0"+minute : minute)}`
+    }
+  }
+
+  getDayOfWeek(dayNumber: number) {
+    switch(dayNumber) {
+      case 0: return 'Domingo';
+      case 1: return 'Lunes';
+      case 2: return 'Martes';
+      case 3: return 'Miércoles';
+      case 4: return 'Jueves';
+      case 5: return 'Viernes';
+      case 6: return 'Sábado';
+    }
+  }
+
+  getMonth(monthNumber: number) {
+    switch(monthNumber) {
+      case 0: return 'Enero';
+      case 1: return 'Febrero';
+      case 2: return 'Marzo';
+      case 3: return 'Abril';
+      case 4: return 'Mayo';
+      case 5: return 'Junio';
+      case 6: return 'Julio';
+      case 7: return 'Agosto';
+      case 8: return 'Septiembre';
+      case 9: return 'Octubre';
+      case 10: return 'Noviembre';
+      case 11: return 'Diciembre';
+    }
   }
 
   datasets: ChartDataSets[] = [{
@@ -59,9 +116,9 @@ export class LSensorChartComponent implements OnDestroy, OnChanges {
   labels: Label[] = [];
   options: (ChartOptions & { annotation: any }) = {
     responsive: true,
-    responsiveAnimationDuration:4000,
+    responsiveAnimationDuration:500,
     animation: {
-      duration: 1500,
+      duration: 200,
       easing: 'linear'
     },
     tooltips: {
@@ -83,8 +140,7 @@ export class LSensorChartComponent implements OnDestroy, OnChanges {
           color: "rgba(0, 0, 0, 0)",
         },
         ticks: {
-          callback: (millis) => this.toTimeFormat(millis),
-          suggestedMin: 0,
+          suggestedMin: 5,
           suggestedMax: 50
         }
       }],
@@ -140,7 +196,10 @@ export class LSensorChartComponent implements OnDestroy, OnChanges {
   chartType = 'line';
   legend = false;
 
-  disposers: Disposer[] = [];
+  auxDatasets: ChartDataSets[] = [{
+    data: [],
+    label: ''
+  }];;
 
   constructor(private sensorValuesService: SensorValuesService,
     private changeDetector: ChangeDetectorRef) {
@@ -151,87 +210,114 @@ export class LSensorChartComponent implements OnDestroy, OnChanges {
   }
 
   ngOnDestroy() {
-    this.disposers.forEach(disposer => {
-      disposer.disposer();
-    })
-    this.disposers = [];
   }
+
 
   init() {
     this.resetDataSets();
-    this.resetReactions();
-    this.requestInitialData(this.interval, this.numberOfValues);
-    this.requestNewValues(this.interval)
-  }
-
-  requestNewValues(interval) {
-    this.unitData.forEach((unitData) => {
-      this.sensorValuesService.requestArrayValues(unitData.nodeId, unitData.id, interval);
+    this.resetChartConfigurations();
+    this.requestInitialData();
+    /*
+    this.unitsToPlot.forEach((unit, index) => {
+      this.reactionToDataChange(unit.nodeId, unit.id, index);
     })
+    */
+    setInterval(() => {
+      this.auxDatasets.forEach((dataset,index) => {
+        this.datasets[index].data.push(Math.random()*4-2 + <number>this.datasets[index].data[this.numberOfValues-1]);
+        this.datasets[index].data.shift();
+      })
+      let currentMillis = new Date().getMilliseconds().toString();
+      this.labels.push(currentMillis);
+      this.labels.shift();
+      (<any>this.chart).update();
+      this.changeDetector.detectChanges()
+
+    },this.interval);
   }
 
   resetDataSets() {
-    if(this.unitData.length == 0) {
+    if(this.unitsToPlot.length == 0) {
       this.datasets = [{
         data: []
       }];
       this.legend = false;
     } else {
       this.datasets = [];
+      this.unitsToPlot.forEach((unit, index) => {
+        this.datasets.push({
+          data:[],
+          radius: 0,
+          yAxisID:index==0 ? 'temperature' : 'humidity',
+          label: `${unit.name} (${unit.nodeId}-${unit.id})`,
+          backgroundColor: Color(unit.graphColor!=null? unit.graphColor : 'black').alpha(0.2).toString(),
+          borderColor: Color(unit.graphColor!=null? unit.graphColor : 'black').alpha(0.5).toString(),
+          pointBackgroundColor: Color(unit.graphColor!=null? unit.graphColor : 'black').toString(),
+          pointBorderColor: '#fff',
+          pointHoverBackgroundColor: '#fff',
+          pointHoverBorderColor: Color(unit.graphColor).alpha(0.8).toString()
+        });
+      })
       this.legend = this.legendVisible;
     }
-    this.unitData.forEach((unit, index) => {
-      this.datasets.push({
-        data:[],
-        radius: 0,
-        yAxisID:index==0 ? 'temperature' : 'humidity',
-        label:unit.name,
-        backgroundColor: Color(unit.graphColor!=null? unit.graphColor : 'black').alpha(0.2).toString(),
-        borderColor: Color(unit.graphColor!=null? unit.graphColor : 'black').alpha(0.5).toString(),
-        pointBackgroundColor: Color(unit.graphColor!=null? unit.graphColor : 'black').toString(),
-        pointBorderColor: '#fff',
-        pointHoverBackgroundColor: '#fff',
-        pointHoverBorderColor: Color(unit.graphColor).alpha(0.8).toString()
-      });
-    })
+    this.auxDatasets = this.datasets;
   }
 
-  requestInitialData(interval, numberOfValues) {
-    this.unitData.forEach((unitData) => {
-      this.sensorValuesService.requestArrayValues(unitData.nodeId, unitData.id, interval, numberOfValues);
-    })
-  }
-
-  resetReactions() {
-    this.disposers.forEach(disposer => {
-      disposer.disposer();
-    })
-    this.disposers = [];
-    this.unitData.forEach((unitData, index) => {
-      this.disposers.push( this.reactionToDataChange(unitData.nodeId, unitData.id, index));
-    })
-  }
-
-  reactionToDataChange (nodeId, unitId, dataSetIndex) { return {
-      disposer:reaction(
-        () => this.sensorValuesService.getArrayValues(nodeId, unitId),
-        (valueObj) => {
-          this.updateData(valueObj, dataSetIndex);
-          if(dataSetIndex == 0)
-            this.updateLabels(valueObj);
-          (<any>this.chart).update();
-          this.changeDetector.detectChanges()
-        }),
-      nodeId: nodeId,
-      unitId: unitId
+  resetChartConfigurations() {
+    if(this.interval*this.numberOfValues < this.WEEK_TO_MS) {
+      this.options.scales.xAxes[0].ticks.callback = (valueMillis) => this.getDateWithInWeek(valueMillis);
+    } else if(this.interval*this.numberOfValues < this.MONTH_TO_MS) {
+      this.options.scales.xAxes[0].ticks.callback = (valueMillis) => this.getDateWithInMonth(valueMillis);
+    } else {
+      this.options.scales.xAxes[0].ticks.callback = (valueMillis) => this.getDateWithInMonth(valueMillis);
     }
+  }
+
+  requestInitialData() {
+    this.sensorValuesService.requestArraysValues(this.unitsToPlot, this.interval, this.numberOfValues)
+    .subscribe((response) => {
+      console.log(response);
+      response.body.forEach((unitData, index) => {
+        unitData.forEach(element => {
+          this.datasets[index].data.push(element.second)
+          if(index == 0) {
+            this.labels.push(element.first)
+          }
+        });
+      });
+      (<any>this.chart).update();
+      this.changeDetector.detectChanges()
+    });
+  }
+
+  getDatasetIndex(name, nodeId, unitId) {
+    let index1;
+    this.datasets.forEach((dataset, index) => {
+      if(dataset.label == `${name} (${nodeId}-${unitId})`) {
+        index1 = index;
+      }
+    })
+    return index1;
+  }
+
+  reactionToDataChange (nodeId, unitId, dataSetIndex) {
+    return reaction(
+        () => this.sensorValuesService.getArrayValues(nodeId, unitId),
+        (valueObj, reaction) => {
+          this.updateData(valueObj, dataSetIndex);
+          if(dataSetIndex == 0) {
+            this.updateLabels(valueObj);
+          }
+          this.changeDetector.detectChanges();
+        })
   }
 
   private updateData(data, dataSetIndex) {
-    this.datasets[dataSetIndex].data = [];
+    this.auxDatasets[dataSetIndex].data = [];
     data.forEach(element => {
-      this.datasets[dataSetIndex].data.push(element.value);
+      this.auxDatasets[dataSetIndex].data.push(element.value);
     });
+
   }
 
   private updateLabels(data) {

@@ -35,16 +35,34 @@ export class NodeStore {
       let locations = [];
       let auxNodes = this.nodes;
       auxNodes.forEach((node, nodeIndex) => {
-        node.units.forEach(
-        (unit, unitIndex) => {
-
-        })
+        if(node.location==null) {
+          node.location = '--';
+        }
+          let indexOfLocation = this.indexOfLocation(node.location, locations);
+          console.log('index:', indexOfLocation)
+          if(indexOfLocation != -1) {
+            locations[indexOfLocation].units = locations[indexOfLocation].units.concat(node.units)
+          } else {
+            locations.push({
+              name: node.location,
+              units: node.units
+            })
+          }
       });
 
-      return auxNodes.filter(
-        node =>
-          node.units.length != 0
-        );
+      console.log(locations)
+
+      return locations;
+    }
+
+    private indexOfLocation(location: string, array) {
+      let indexAux = -1;
+      array.forEach((value, index) => {
+        if(location == value.name) {
+          indexAux = index;
+        }
+      })
+      return indexAux;
     }
 
     @computed get lightUnits() {
