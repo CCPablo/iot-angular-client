@@ -1,10 +1,14 @@
 
 
-  <app-graph-forms (onFormGroupChange)="onFormChange($event)"></app-graph-forms>
+  <app-graph-forms (onFormGroupSubmit)="onFormSubmit($event)"></app-graph-forms>
 
-  <div class="chart-container" >
+  <div class="chart-container"
+    [@slideInOut]="loaded ? 'loaded' : 'notLoaded'"
+    *ngIf="unitsToPlot.length>0">
     <app-l-sensor-chart
-    *ngIf="unitsToPlot.length>0"
-        [unitsToPlot]="unitsToPlot">
-      </app-l-sensor-chart>
+    (firstDataReceived)="chartLoaded($event)"
+    [unitsToPlot]="unitsToPlot"
+    [interval]="interval"
+    [numberOfValues]="numberOfValues"
+    [realTime]="realTime"></app-l-sensor-chart>
   </div>

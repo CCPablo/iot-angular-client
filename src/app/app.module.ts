@@ -9,14 +9,13 @@ import { LoginComponent } from './page/login/login.component';
 import { TemperatureComponent } from './page/temperature/temperature.component';
 import { LightsComponent } from './page/lights/lights.component'
 
-import { EngineComponent } from './renderers/threeJS/engine.component';
+//import { EngineComponent } from './renderers/threeJS/engine.component';
 import { ChartsModule } from 'ng2-charts';
 
 /* Angular Material */
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AngularMaterialModule } from './angular-material.module'
 /* Angular Flex Layout */
-import { CanvasComponent } from './renderers/canvas/canvas.component';
 import { HomeComponent } from './page/home/home.component';
 import { ControlComponent } from './page/control/control.component'
 
@@ -37,16 +36,17 @@ import { GraphFormsComponent } from './page/graphs/graph-forms/graph-forms.compo
 import { InputTimeComponent } from './input-time/input-time.component';
 import { UnitImageUploadComponent } from './page/nodes/unit-image-upload/unit-image-upload.component';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { CustomSpinnerComponent } from './custom-spinner/custom-spinner.component';
+import { ClimacellComponent } from './climacell/climacell.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
     NodeComponent,
-    EngineComponent,
+    //EngineComponent,
     HomeComponent,
     LoginComponent,
-    CanvasComponent,
     ControlComponent,
     ToolbarComponent,
     NavbarComponent,
@@ -63,7 +63,9 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     LSensorChartComponent,
     GraphFormsComponent,
     InputTimeComponent,
-    UnitImageUploadComponent
+    UnitImageUploadComponent,
+    CustomSpinnerComponent,
+    ClimacellComponent
   ],
   imports: [
     BrowserModule,
@@ -77,7 +79,6 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     MatProgressSpinnerModule
    ],
   providers: [
-    CanvasComponent,
     [{
       provide: HTTP_INTERCEPTORS,
       useClass: JwtInterceptor,

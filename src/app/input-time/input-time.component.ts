@@ -23,11 +23,6 @@ export class InputTimeComponent implements OnDestroy,MatFormFieldControl<InputTi
   minutesFocused = false;
   secondsFocused = false;
 
-
-  changed(ay) {
-    console.log(ay)
-  }
-
   resetForm() {
     this.parts.reset();
   }

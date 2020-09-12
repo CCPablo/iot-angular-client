@@ -24,7 +24,6 @@ export class ToolbarComponent implements OnInit {
 
   ngOnInit(): void {
     this.sidenavService.sideBarClosed$.subscribe(()=>{
-      console.log("eee")
       this.opened = false;
     })
   }

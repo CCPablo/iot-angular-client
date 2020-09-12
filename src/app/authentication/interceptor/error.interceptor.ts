@@ -13,26 +13,18 @@ export class ErrorInterceptor implements HttpInterceptor {
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         return next.handle(request).pipe(
           map((event: HttpEvent<any>) => {
-            console.log('event--->>>', event);
               if (event instanceof HttpResponse) {
-                  console.log('event--->>>', event);
               }
               return event;
           }),catchError(err => {
-          console.log('eeee:', err)
-          console.log('errorIntercepted:', err)
-
             if (err.status === 401) {
-                this.authenticationService.logout();
-                alert('no permitido')
-                location.reload(true);
+              alert('no permitido')
+            } else if (err.status === 0) {
+              alert('servidor no da respuesta')
             }
 
-            if (err.status === 0) {
-              this.authenticationService.logout();
-              alert('servidor no da respuesta')
-              location.reload(true);
-          }
+            this.authenticationService.logout();
+            location.reload(true);
 
             const error = err.error.message || err.statusText;
             return throwError(error);

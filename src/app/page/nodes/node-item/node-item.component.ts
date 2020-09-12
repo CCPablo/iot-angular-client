@@ -12,12 +12,4 @@ export class NodeItemComponent implements OnInit {
 
   ngOnInit(): void {
   }
-
-  nameChanged(text: string) {
-    console.log('title has changed to ', text);
-  }
-
-  descriptionChanged(text: string) {
-    console.log('description has changed to ', text);
-  }
 }

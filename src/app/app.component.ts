@@ -17,10 +17,6 @@ export class AppComponent {
   ngOnInit(): void {
   }
 
-  count() {
-    console.count('approot')
-  }
-
   public isAuthenticated() {
     return this.authService.isAuthenticated();
   }

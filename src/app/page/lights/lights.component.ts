@@ -24,8 +24,4 @@ export class LightsComponent implements OnInit {
   getLightUnits() {
     return this.nodeService.getLightUnits();
   }
-
-  count() {
-    console.count('HTML LIGHTSD: change in html')
-  }
 }

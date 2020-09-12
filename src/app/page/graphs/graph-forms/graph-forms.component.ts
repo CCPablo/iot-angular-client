@@ -3,8 +3,10 @@ import { FormControl, Validators, FormGroup } from '@angular/forms';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { NodeService } from '../../nodes/nodes.service';
 import { autorun } from 'mobx';
-import { MatOptionSelectionChange, MatOption } from '@angular/material/core';
+import { MatOptionSelectionChange, MatOption, MatOptgroup } from '@angular/material/core';
 import { MatChip } from '@angular/material/chips';
+import { Observable } from 'rxjs';
+import { startWith, map } from 'rxjs/operators';
 
 export interface Unit {
   name: string;
@@ -27,58 +29,53 @@ export interface Node {
 export class GraphFormsComponent implements OnInit, AfterViewInit {
 
   @ViewChildren(MatChip) chips: QueryList<MatChip>;
+  @ViewChildren(MatOption) options: QueryList<MatOption>;
 
-  intervalControl = new FormControl({days:null, hours:1, minutes:null,seconds:null},Validators.required);
-  unitControl = new FormControl([]);
-  nValuesControl = new FormControl(24);
+  intervalControl = new FormControl({days:null, hours:1, minutes:null, seconds:null},Validators.required);
+  unitsSelectedControl = new FormControl([]);
+  numberOfValuesControl = new FormControl(24);
+  realTimeControl = new FormControl(true);
 
   submitForm = new FormGroup({
-    intervalControl: this.intervalControl,
-    unitControl: this.unitControl,
-    nValuesControl: this.nValuesControl
+    interval: this.intervalControl,
+    unitsSelected: this.unitsSelectedControl,
+    numberOfValues: this.numberOfValuesControl,
+    realTime: this.realTimeControl
   });
 
   nodes: Node[] = [];
-  allUnits: Unit[] = [];
 
-  @Output() private onFormGroupChange = new EventEmitter<any>();
+  @Output() private onFormGroupSubmit = new EventEmitter<any>();
 
-  constructor(private nodeService: NodeService,
-      private renderer: Renderer2) { }
+  constructor(
+    private nodeService: NodeService,
+    private renderer: Renderer2) { }
 
   ngOnInit(): void {
     autorun(() => {
       this.nodes = this.nodeService.getNodes();
-      console.log('nodes', this.nodes);
-      this.nodes.forEach(node => {
-        node.units.forEach(unit => {
-          this.allUnits.push(unit);
-        });
-      })
+
     });
   }
 
   ngAfterViewInit() {
     this.chips.changes.subscribe(_ => {
       this.chips.toArray().forEach((chip,index) => {
-        console.log(chip._elementRef.nativeElement)
-        console.log( this.unitControl.value[index])
-        this.renderer.setStyle(chip._elementRef.nativeElement, "background-color", this.unitControl.value[index].graphColor, RendererStyleFlags2.DashCase | RendererStyleFlags2.Important);
+        this.renderer.setStyle(chip._elementRef.nativeElement, "background-color", this.unitsSelectedControl.value[index].graphColor, RendererStyleFlags2.DashCase | RendererStyleFlags2.Important);
       })
     });
   }
 
-  onChipListChanged(unitsSelected : Unit[]) {
-    this.chips.toArray().forEach((chip,index) => {
-      console.log(chip._elementRef.nativeElement)
-      this.renderer.setStyle(chip._elementRef.nativeElement, "background-color", "blue", RendererStyleFlags2.DashCase | RendererStyleFlags2.Important);
-    })
-  }
+  public onRemoveUnit(event, unit) {
+    const selectedUnits = this.unitsSelectedControl.value;
+    this.removeFirst(selectedUnits, unit);
+    this.unitsSelectedControl.setValue(selectedUnits);
 
-  public onRemoveUnit(unit: string) {
-    const units = this.unitControl.value as string[];
-    this.removeFirst(units, unit);
-    this.unitControl.setValue(units);
+    this.options.forEach((option) => {
+      if (option.value === unit) {
+        option.deselect();
+      }
+    });
   }
 
   private removeFirst<T>(array: T[], toRemove: T): void {
@@ -89,6 +86,6 @@ export class GraphFormsComponent implements OnInit, AfterViewInit {
   }
 
   submit() {
-    this.onFormGroupChange.emit(this.submitForm)
+    this.onFormGroupSubmit.emit(this.submitForm)
   }
 }

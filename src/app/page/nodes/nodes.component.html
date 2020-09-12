@@ -1,15 +1,17 @@
-<mat-spinner  @inOut *ngIf="getNodes().length==0"></mat-spinner>
+<div *ngIf="getNodes().length!=0">
 
-  <mat-form-field appearance="fill">
+  <mat-form-field class="disposal-selector">
     <mat-label>Mostrar</mat-label>
-    <mat-select [formControl]="cardsSet">
-      <mat-option value="nodos">Por nodos</mat-option>
+    <mat-select [(value)]="cardsDisposalControl" (selectedValueChange)="selectionChanged()" placeholder="Mostrar">
       <mat-option value="localizacion">Por localización</mat-option>
+      <mat-option value="nodos">Por nodos</mat-option>
     </mat-select>
   </mat-form-field>
 
-<div *ngIf="getNodes().length!=0" [@listStagger]='getNodes().length' class="grid-container">
-  <app-node-item class="node-card-container" *ngFor="let node of getNodes()" [node]="node"></app-node-item>
-</div>
+  <div class="grid-container" >
+    <app-node-item [node]="node" [@listStagger]='getNodes().length' class="node-card-container"
+      *ngFor="let node of (cardsDisposalControl == 'nodos' ? getNodes() : getUnitsByLocation())"></app-node-item>
+  </div>
 
-<button mat-stroke-button (click)="openProfileSheet()">rrr</button>
+  <button disabled=true mat-stroke-button (click)="openProfileSheet()">rrr</button>
+</div>

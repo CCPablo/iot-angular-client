@@ -1,6 +1,6 @@
-import { Component, ViewChild, ChangeDetectorRef, Input, OnChanges, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
-import { BaseChartDirective, Label } from 'ng2-charts';
-import { ChartDataSets, ChartLineOptions, ChartPointOptions, ChartOptions } from 'chart.js';
+import { Component, ViewChild, ChangeDetectorRef, Input, OnChanges, OnDestroy, ChangeDetectionStrategy, Output, EventEmitter, OnInit } from '@angular/core';
+import { BaseChartDirective, Label, PluginServiceGlobalRegistrationAndOptions } from 'ng2-charts';
+import { Chart, ChartDataSets, ChartLineOptions, ChartPointOptions, ChartOptions, PluginServiceGlobalRegistration } from 'chart.js';
 import { reaction, IReactionDisposer, values } from 'mobx';
 import { SensorValuesService } from './sensor-values.service';
 import * as Color from 'color';
@@ -26,16 +26,7 @@ interface Disposer {
   templateUrl: './l-sensor-chart.component.html',
   styleUrls: ['./l-sensor-chart.component.css']
 })
-export class LSensorChartComponent implements OnDestroy, OnChanges {
-  @ViewChild(BaseChartDirective, { static: true }) chart: BaseChartDirective;
-
-  @Input() unitsToPlot: UnitData[] = [];
-
-  @Input() interval = 14800000;
-
-  @Input() numberOfValues = 50;
-
-  @Input() legendVisible = true;
+export class LSensorChartComponent implements OnChanges, OnInit {
 
   readonly MONTH_TO_MS = 2592000000;
 
@@ -44,6 +35,20 @@ export class LSensorChartComponent implements OnDestroy, OnChanges {
   readonly DAY_TO_MS = 86400000;
 
   readonly HOUR_TO_MS = 3600000;
+
+  @ViewChild(BaseChartDirective, { static: true }) chart: BaseChartDirective;
+
+  @Input() unitsToPlot: UnitData[] = [];
+
+  @Input() interval = this.HOUR_TO_MS;
+
+  @Input() numberOfValues = 50;
+
+  @Input() realTime = false;
+
+  @Input() legendVisible = true;
+
+  @Output() firstDataReceived = new EventEmitter<boolean>();
 
   getDateWithInWeek(valueMillis) {
     let valueDate = new Date(valueMillis);
@@ -54,7 +59,7 @@ export class LSensorChartComponent implements OnDestroy, OnChanges {
     let hour = valueDate.getHours();
     let minute = valueDate.getMinutes();
 
-    if(dayOfMonth != now.getDate()) {
+    if(dayOfMonth != now.getDate() && dayOfWeek != now.getDay()) {
       return `${((hour < 10) ? "0"+hour : hour)}:${((minute < 10) ? "0"+minute : minute)} (${this.getDayOfWeek(dayOfWeek)})`
     }
 
@@ -113,15 +118,35 @@ export class LSensorChartComponent implements OnDestroy, OnChanges {
     data: [],
     label: ''
   }];
+  rtPlugin: PluginServiceGlobalRegistrationAndOptions = {
+    id: 'rtplugin',
+    afterDatasetsUpdate:(chart : any) => {
+      chart.data.datasets.forEach((dataset) => {
+        let offset = -20; //set that suits the best
+        for (let i = 0; i < dataset.data.length; i++) {
+            let model = dataset._meta[chart.id].data[i]._model;
+            model.x += offset;
+            model.controlPointNextX += offset;
+            model.controlPointPreviousX += offset;
+        }
+      })
+    }
+  };
   labels: Label[] = [];
   options: (ChartOptions & { annotation: any }) = {
     responsive: true,
     responsiveAnimationDuration:500,
     animation: {
-      duration: 200,
       easing: 'linear'
     },
+    hover: {
+      mode: 'nearest',
+      intersect: false
+    },
     tooltips: {
+      enabled: true,
+      mode: 'point',
+      intersect: false,
       callbacks: {
         label: function(item, data) {
           var datasetLabel = data.datasets[item.datasetIndex].label || "";
@@ -139,9 +164,15 @@ export class LSensorChartComponent implements OnDestroy, OnChanges {
         gridLines: {
           color: "rgba(0, 0, 0, 0)",
         },
+        scaleLabel: {
+          fontSize: 18,
+          padding: 30
+        },
         ticks: {
+          padding: -5,
           suggestedMin: 5,
-          suggestedMax: 50
+          suggestedMax: 50,
+          source: 'auto'
         }
       }],
       yAxes: [
@@ -155,7 +186,7 @@ export class LSensorChartComponent implements OnDestroy, OnChanges {
             callback: function(item) {
               return item + ' ºC';
             },
-            suggestedMin: 0,
+            suggestedMin: -10,
             suggestedMax: 50,
           }
         },
@@ -169,7 +200,7 @@ export class LSensorChartComponent implements OnDestroy, OnChanges {
             callback: function(item) {
               return item + ' %';
             },
-            suggestedMin: 0,
+            suggestedMin: -10,
             suggestedMax: 100
           }
         }
@@ -204,36 +235,42 @@ export class LSensorChartComponent implements OnDestroy, OnChanges {
   constructor(private sensorValuesService: SensorValuesService,
     private changeDetector: ChangeDetectorRef) {
   }
+  ngOnInit(): void {
+    //Chart.pluginService.register(this.rtPlugin);
+  }
 
   ngOnChanges() {
     this.init();
   }
 
-  ngOnDestroy() {
-  }
-
+  intervalTimer;
 
   init() {
+    console.log('init')
     this.resetDataSets();
+    this.labels = [];
+    clearInterval(this.intervalTimer);
     this.resetChartConfigurations();
+    this.firstDataReceived.emit(false);
     this.requestInitialData();
+
     /*
     this.unitsToPlot.forEach((unit, index) => {
       this.reactionToDataChange(unit.nodeId, unit.id, index);
     })
     */
-    setInterval(() => {
-      this.auxDatasets.forEach((dataset,index) => {
-        this.datasets[index].data.push(Math.random()*4-2 + <number>this.datasets[index].data[this.numberOfValues-1]);
-        this.datasets[index].data.shift();
-      })
-      let currentMillis = new Date().getMilliseconds().toString();
-      this.labels.push(currentMillis);
-      this.labels.shift();
-      (<any>this.chart).update();
-      this.changeDetector.detectChanges()
-
-    },this.interval);
+   if(this.realTime) {
+      this.intervalTimer = setInterval(() => {
+        this.datasets.forEach((dataset,index) => {
+          dataset.data.push(Math.random()*4-2 + <number>this.datasets[index].data[this.numberOfValues-1]);
+          dataset.data.shift();
+        })
+        let currentMillis = new Date().toString();
+        this.labels.push(currentMillis);
+        this.labels.shift();
+        (<any>this.chart).update();
+      },this.interval);
+    }
   }
 
   resetDataSets() {
@@ -247,7 +284,8 @@ export class LSensorChartComponent implements OnDestroy, OnChanges {
       this.unitsToPlot.forEach((unit, index) => {
         this.datasets.push({
           data:[],
-          radius: 0,
+          radius: 3,
+          fill: false,
           yAxisID:index==0 ? 'temperature' : 'humidity',
           label: `${unit.name} (${unit.nodeId}-${unit.id})`,
           backgroundColor: Color(unit.graphColor!=null? unit.graphColor : 'black').alpha(0.2).toString(),
@@ -271,59 +309,32 @@ export class LSensorChartComponent implements OnDestroy, OnChanges {
     } else {
       this.options.scales.xAxes[0].ticks.callback = (valueMillis) => this.getDateWithInMonth(valueMillis);
     }
+    if(this.realTime) {
+      this.options.animation.duration = this.interval;
+      this.options.tooltips.enabled = false;
+      this.options.hover.mode = 'single';
+    } else {
+      this.options.animation.duration = 100;
+      this.options.tooltips.enabled = true;
+      this.options.hover.mode = 'point';
+    }
+    (<any>this.chart).refresh();
+    (<any>this.chart).update();
   }
 
   requestInitialData() {
     this.sensorValuesService.requestArraysValues(this.unitsToPlot, this.interval, this.numberOfValues)
     .subscribe((response) => {
-      console.log(response);
       response.body.forEach((unitData, index) => {
         unitData.forEach(element => {
           this.datasets[index].data.push(element.second)
           if(index == 0) {
-            this.labels.push(element.first)
+            this.labels.push(new Date(element.first).toString())
           }
         });
       });
+      this.firstDataReceived.emit(true);
       (<any>this.chart).update();
-      this.changeDetector.detectChanges()
-    });
-  }
-
-  getDatasetIndex(name, nodeId, unitId) {
-    let index1;
-    this.datasets.forEach((dataset, index) => {
-      if(dataset.label == `${name} (${nodeId}-${unitId})`) {
-        index1 = index;
-      }
-    })
-    return index1;
-  }
-
-  reactionToDataChange (nodeId, unitId, dataSetIndex) {
-    return reaction(
-        () => this.sensorValuesService.getArrayValues(nodeId, unitId),
-        (valueObj, reaction) => {
-          this.updateData(valueObj, dataSetIndex);
-          if(dataSetIndex == 0) {
-            this.updateLabels(valueObj);
-          }
-          this.changeDetector.detectChanges();
-        })
-  }
-
-  private updateData(data, dataSetIndex) {
-    this.auxDatasets[dataSetIndex].data = [];
-    data.forEach(element => {
-      this.auxDatasets[dataSetIndex].data.push(element.value);
-    });
-
-  }
-
-  private updateLabels(data) {
-    this.labels = []
-    data.forEach(element => {
-      this.labels.push(element.time)
     });
   }
 }

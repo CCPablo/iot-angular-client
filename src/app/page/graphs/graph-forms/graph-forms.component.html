@@ -2,27 +2,24 @@
   <mat-form-field class="units-selector-field">
     <mat-label>Unidades a graficar</mat-label>
     <mat-select
-    [formControl]="unitControl"
+    [formControl]="unitsSelectedControl"
     multiple>
 
       <mat-select-trigger>
         <mat-chip-list [selectable]="false">
           <mat-chip
-              #matChip
-              *ngFor="let unit of unitControl.value"
+              *ngFor="let unit of unitsSelectedControl.value"
               class="chip"
-              selectable=false
-              selected=false
-              [removable]=true
-              (removed)="onRemoveUnit(unit)">
-              {{unit.name}}
+              removable=true
+              (removed)="onRemoveUnit($event, unit)">
+              {{unit.name + unit.nodeId}}
               <mat-icon matChipRemove>cancel</mat-icon>
           </mat-chip>
         </mat-chip-list>
       </mat-select-trigger>
 
-      <mat-optgroup *ngFor="let node of nodes" [label]="node.name">
-        <mat-option *ngFor="let unit of node.units" #unitOptions
+      <mat-optgroup *ngFor="let node of nodes" [label]="node.name" >
+        <mat-option *ngFor="let unit of node.units"
         [value]="unit">
         {{unit.name}}
         </mat-option>
@@ -37,12 +34,15 @@
   </mat-form-field>
 
   <mat-form-field class="nvalues-field">
-    <input matInput type=number [formControl]="nValuesControl">
+    <input matInput type=number [formControl]="numberOfValuesControl">
     <mat-hint >Numero de valores</mat-hint>
   </mat-form-field>
 
   <button mat-stroke-button (click)="submit()">
     <mat-icon>show_chart</mat-icon>
   </button>
+
+  <mat-checkbox color="primary" [formControl]="realTimeControl">En tiempo real</mat-checkbox>
+
 </form>
 

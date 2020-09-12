@@ -7,6 +7,11 @@
   padding: 3px;
 }
 
+mat-card-title {
+  overflow-wrap: anywhere;
+  font-size: 1.5rem;
+}
+
 .settings-icon {
   right: 0;
   top: -10px;
@@ -19,6 +24,27 @@
 }
 
 .grid-container{
-  display: grid;
+  display: flex;
+  flex-wrap: wrap;
   grid-template: auto / auto auto;
+}
+
+@media screen and (max-width: 600px) {
+  .plottable {
+    flex: 1 0 100%;
+  }
+
+  .no-plottable {
+    flex: 1 0 calc(45% - 10px);
+  }
+}
+
+@media screen and (min-width: 600px) {
+  .plottable {
+    flex: 1 0 calc(45% - 1px);
+  }
+
+  .no-plottable {
+    flex: 1 0 calc(31% - 1px);
+  }
 }

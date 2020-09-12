@@ -13,6 +13,10 @@ export class NodeStore {
     }
 
     @action setNodes(nodes) {
+      nodes.sort(this.compareByAmountOfUnits);
+      nodes.forEach(node => {
+        node.units.sort(this.compareByUnitType);
+      });
       this.nodes = nodes;
     }
 
@@ -31,38 +35,55 @@ export class NodeStore {
         );
     }
 
-    @computed get locations() {
-      let locations = [];
-      let auxNodes = this.nodes;
-      auxNodes.forEach((node, nodeIndex) => {
+    @computed get unitsByLocation() {
+      let unitsByLocation = [];
+      this.nodes.forEach((node) => {
         if(node.location==null) {
           node.location = '--';
         }
-          let indexOfLocation = this.indexOfLocation(node.location, locations);
-          console.log('index:', indexOfLocation)
-          if(indexOfLocation != -1) {
-            locations[indexOfLocation].units = locations[indexOfLocation].units.concat(node.units)
-          } else {
-            locations.push({
-              name: node.location,
-              units: node.units
-            })
-          }
+        let indexOfLocation = this.indexOfLocation(node.location, unitsByLocation);
+        if(indexOfLocation != -1) {
+          unitsByLocation[indexOfLocation].units = unitsByLocation[indexOfLocation].units.concat(node.units)
+        } else {
+          unitsByLocation.push({
+            name: node.location,
+            units: node.units
+          })
+        }
       });
+      unitsByLocation.forEach((unitsInLocation) => {
+        unitsInLocation.units.sort(this.compareByUnitType);
+      })
+      unitsByLocation.sort(this.compareByAmountOfUnits);
+      return unitsByLocation;
+    }
 
-      console.log(locations)
+    private compareByAmountOfUnits( nodeA, nodeB ) {
+      if (nodeA.units.length > nodeB.units.length ){
+        return -1;
+      }
+      if (nodeA.units.length < nodeB.units.length ){
+        return 1;
+      }
+      return 0;
+    }
 
-      return locations;
+    private compareByUnitType( unitA, unitB ) {
+      if (unitA.type=='SENSOR') {
+        return -1;
+      }
+      return 0;
     }
 
     private indexOfLocation(location: string, array) {
-      let indexAux = -1;
+      let auxIndex = -1;
       array.forEach((value, index) => {
         if(location == value.name) {
-          indexAux = index;
+          auxIndex = index;
+          return;
         }
       })
-      return indexAux;
+      return auxIndex;
     }
 
     @computed get lightUnits() {

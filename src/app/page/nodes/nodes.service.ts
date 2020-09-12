@@ -15,7 +15,6 @@ export class NodeService implements OnInit{
     ) {
       this.http.get(`${environment.apiUrl}/nodes`).subscribe(nodes => {
         this.setNodes(nodes);
-        console.log('received Nodes:', nodes)
       })
     }
 
@@ -35,7 +34,7 @@ export class NodeService implements OnInit{
     }
 
     getUnitsByLocation() {
-      return this.nodeStore.locations;
+      return this.nodeStore.unitsByLocation;
     }
 
     getLightUnits() {

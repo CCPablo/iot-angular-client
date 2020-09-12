@@ -17,6 +17,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   constructor(
     private sseService: SseService,
+    private nodeService: NodeService,
     private changeDetector: ChangeDetectorRef
     ) {
   }
@@ -26,6 +27,10 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.sseData = JSON.parse(serverEvent.data).integer;
       this.changeDetector.detectChanges();
     });
+  }
+
+  getNodes() {
+    return this.nodeService.getNodes();
   }
 
   ngOnDestroy(): void {

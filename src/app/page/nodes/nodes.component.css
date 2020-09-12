@@ -4,12 +4,23 @@
   margin-bottom: 8px;
 }
 
+.disposal-selector {
+  width: 100%;
+}
+
 .grid-container {
-  display: grid;
+  display: flex;
+  flex-wrap: wrap;
   grid-column-gap: 20px;
-  grid-template: fit-content(100px) / fit-content(100px) fit-content(100px);
 }
 
 .node-card-container {
   padding: 10px;
+  flex: 1 auto;
+}
+
+@media screen and (max-width: 600px) {
+  .grid-container {
+    grid-template: 1fr / 1fr;
+  }
 }

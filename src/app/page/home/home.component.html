@@ -1,3 +1,4 @@
 <div class="nodes-container">
-<app-nodes></app-nodes>
+  <app-custom-spinner width='10%' *ngIf="getNodes().length==0"></app-custom-spinner>
+  <app-nodes></app-nodes>
 </div>

@@ -4,6 +4,7 @@ import { Observable, throwError } from 'rxjs';
 
 import { AuthenticationService } from '../service/authentication.service';
 import { map, catchError } from 'rxjs/operators';
+import { environment } from 'src/environments/environment';
 
 @Injectable()
 export class JwtInterceptor implements HttpInterceptor {
@@ -18,30 +19,29 @@ export class JwtInterceptor implements HttpInterceptor {
         if(request.url.startsWith('https://opendata.aemet.es')) {
           request = request.clone({
             setHeaders: {
-                'api_key': this.apiKey
+                'api_key': this.apiKey,
+                'cache-control': 'no-cache'
             }
             });
           }
-        if (currentSession && currentSession.token) {
+        if (currentSession && currentSession.token && request.url.startsWith(environment.apiUrl)) {
             request = request.clone({
                 setHeaders: {
-                    Authorization: `Bearer ${currentSession.token}`
+                    Authorization: `${currentSession.token}`
               }
           });
         }
         return next.handle(request).pipe(
           map((event: HttpEvent<any>) => {
               if (event instanceof HttpResponse) {
-                  console.log('event--->>>', event);
               }
               return event;
           }),catchError(err => {
           if(request.url.startsWith('https://opendata.aemet.es')) {
-            console.log('errorIntercepted:', err);
           }
 
           else if (err.status === 401) {
-              alert('no existe ese usuario y contraseña')
+            alert('no existe ese usuario y contraseña')
           }
           else if (err.status === 500) {
             alert(err.error.message)

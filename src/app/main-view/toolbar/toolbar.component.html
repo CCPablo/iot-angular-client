@@ -14,10 +14,10 @@
         </mat-nav-list>
       </li>
       <li>
-        <button mat-icon-button [matMenuTriggerFor]="auth">
+        <button class="profile-menu-button" mat-icon-button [matMenuTriggerFor]="auth">
           <mat-icon>person_outline</mat-icon>
         </button>
-        <mat-menu #auth="matMenu">
+        <mat-menu  #auth="matMenu">
           <button mat-menu-item (click)="openProfileSheet()">
             <mat-icon>person_outline</mat-icon>
             <span>Profile</span>

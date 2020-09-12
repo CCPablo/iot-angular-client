@@ -1,20 +1,31 @@
 .graph-forms-container {
-  padding: 10px;
-  display: inline;
+  padding: 20px;
+  width: 100%;
+  display: inline-flex;
+}
 
-  button {
-    margin-left: 20px;
-    vertical-align: middle;
-  }
+.units-selector-field {
+  min-width: 200px;
+  max-width: 50%;
+  flex: auto;
 }
 
 mat-form-field + mat-form-field {
   margin-left: 20px;
 }
 
-.units-selector-field {
-  width: 30%;
-  min-width: 200px;
+:host ::ng-deep {
+  .units-selector-field { // add my-custom-component-small class to your mat-form-field element
+    .mat-form-field-flex > .mat-form-field-infix { padding: 0.4em 0 !important;}
+    .mat-form-field-label-wrapper { top: -1.5em; }
+
+    &.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-label {
+      transform: translateY(-1.1em) scale(.75);
+    }
+  }
+}
+.units-selector {
+  min-height: 200px;
 }
 
 .time-field {
@@ -25,7 +36,13 @@ mat-form-field + mat-form-field {
   width: 50px;
 }
 
+button {
+  margin-left: 20px;
+  vertical-align: middle;
+}
+
 .chip {
+  height: 5px;
   background-color: rgb(204, 10, 10) !important;
 }
 

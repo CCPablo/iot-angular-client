@@ -6,8 +6,8 @@ import { LoginObject } from '../../authentication/model/login-object.model';
 
 import { AuthenticationService } from '../../authentication/service/authentication.service';
 import { FormControl } from '@angular/forms';
-import { CanvasComponent } from '../../renderers/canvas/canvas.component'
-import { EngineService } from '../../renderers/threeJS/engine.service'
+//import { CanvasComponent } from '../../renderers/canvas/canvas.component'
+//import { EngineService } from '../../renderers/threeJS/engine.service'
 import { HttpParams, HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { Observable } from 'rxjs';
@@ -29,8 +29,9 @@ export class LoginComponent implements OnInit {
       private router: Router,
       private http: HttpClient,
       private authenticationService: AuthenticationService,
-      private canvas: CanvasComponent,
-      private engine: EngineService) {
+      //private canvas: CanvasComponent,
+      //private engine: EngineService
+      ) {
   }
 
   ngOnInit() {

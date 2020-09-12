@@ -20,12 +20,10 @@ export interface UnitData {
   animations: [
     trigger('flipCard', [
       state('back', style({
-        transform: 'rotateY(180deg)',
-        width: '200px'
+        transform: 'rotateY(180deg)'
       })),
       state('front', style({
-        transform: 'rotateY(0)',
-        width: '120px'
+        transform: 'rotateY(0)'
       })),
       transition('back => front', animate('500ms ease-out')),
       transition('front => back', animate('500ms ease-in'))
@@ -76,14 +74,6 @@ export class UnitItemComponent implements OnInit, OnDestroy {
 
   toggleFlip() {
     this.flip = (this.flip == 'front') ? 'back' : 'front';
-  }
-
-  nameChanged(text) {
-    console.log('unit name changed to ', text)
-  }
-
-  count() {
-    console.count('unit');
   }
 
   /*

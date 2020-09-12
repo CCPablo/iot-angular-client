@@ -19,7 +19,7 @@ import { FormControl } from '@angular/forms';
             [
               style({ opacity: 0, transform: 'translateY(-20px)' }),
               stagger(
-                '200ms',
+                '100ms',
                 animate(
                   '550ms ease-out',
                   style({ opacity: 1, transform: 'translateY(0px)' })
@@ -28,20 +28,11 @@ import { FormControl } from '@angular/forms';
             ],
             { optional: true }
           ),
-          query(':leave', animate('500ms', style({ opacity: 0 })), {
+          query(':leave', animate('100ms', style({ opacity: 0 })), {
             optional: true
           })
         ])
-      ]),
-      trigger('inOut', [
-        transition(':enter', [
-          style({ opacity: 0 }),
-          animate('100ms', style({ opacity: 1 })),
-        ]),
-        transition(':leave', [
-          animate('100ms', style({ opacity: 0 }))
-        ])
-      ]),
+      ])
     ]
 
 })
@@ -51,13 +42,14 @@ export class NodeComponent implements OnInit {
 
   editing = false;
 
-  cardsSet = new FormControl();
+  cardsDisposalControl = 'localizacion';
 
   constructor(
       private nodeService: NodeService,
       private changeDetector: ChangeDetectorRef,
       private profileSheet: MatDialog
-  ) { }
+  ) {
+  }
 
   ngOnInit() {
     autorun(() => {
@@ -78,11 +70,15 @@ export class NodeComponent implements OnInit {
     this.editing = !this.editing;
   }
 
-  getNodes() {
-    return this.nodeService.getUnitsByLocation();
+  selectionChanged() {
+
   }
 
-  count() {
-    console.count('HTML DEV: change in html')
+  getNodes() {
+    return this.nodeService.getNodes();
+  }
+
+  getUnitsByLocation() {
+    return this.nodeService.getUnitsByLocation();
   }
 }

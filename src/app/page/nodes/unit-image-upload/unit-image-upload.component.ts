@@ -65,7 +65,6 @@ export class UnitImageUploadComponent implements OnInit {
     formData.append('nodeId', '1');
     formData.append('unitId', '1');
 
-    console.log('formDATA: ', formData.getAll('imageOn'));
 
     this.uploading = true;
 
@@ -98,7 +97,6 @@ export class UnitImageUploadComponent implements OnInit {
     reader.readAsDataURL(file);
     reader.onload = (_event) => {
       this.imgOnURL = reader.result;
-      console.log(this.imgOnURL);
     }
   }
 
@@ -113,7 +111,6 @@ export class UnitImageUploadComponent implements OnInit {
     reader.readAsDataURL(file);
     reader.onload = (_event) => {
       this.imgOffURL = reader.result;
-      console.log(this.imgOffURL);
     }
   }
 }

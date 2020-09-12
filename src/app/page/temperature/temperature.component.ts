@@ -24,8 +24,4 @@ export class TemperatureComponent implements OnInit {
   getTemperatureNodes() {
     return this.nodeService.getTemperatureNodes();
   }
-
-  count() {
-    console.count('HTML TEMP: change in html')
-  }
 }
