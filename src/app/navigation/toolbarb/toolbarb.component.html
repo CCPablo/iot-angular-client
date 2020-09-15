@@ -1,0 +1,29 @@
+  <div class="toolbar-items">
+    <button mat-icon-button (click)="toggle()">
+      <mat-animated-icon start="menu" end="chevron_left" colorStart="none" colorEnd="none"
+      [animate]="opened"></mat-animated-icon>
+    </button>
+
+    <ul *ngIf="opened" [@listStagger]="getMenuItems().length">
+      <li class="router-items" *ngFor="let item of getMenuItems()">
+        <button mat-button [routerLink]="item.routerLink">{{item.name}}</button>
+      </li>
+    </ul>
+
+    <li class="profile-menu-button">
+      <button mat-icon-button [matMenuTriggerFor]="auth">
+        <mat-icon>person_outline</mat-icon>
+      </button>
+      <mat-menu  #auth="matMenu">
+        <button mat-menu-item (click)="openProfileSheet()">
+          <mat-icon>person_outline</mat-icon>
+          <span>Profile</span>
+        </button>
+        <mat-divider></mat-divider>
+        <button mat-menu-item (click)="logout()">
+          <mat-icon>exit_to_app</mat-icon>
+          <span>Sign out</span>
+        </button>
+      </mat-menu>
+    </li>
+  </div>

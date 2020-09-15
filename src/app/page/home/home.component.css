@@ -1,20 +1,9 @@
-.nodes-container {
-  padding: 5% 5%;
-  margin: 10px 10px;
-  border-style: groove;
-  width: auto;
-  border-radius: 27px 27px 27px 27px;
-  position: relative;
+.units-display-container {
+  margin: 20px;
 }
 
-@media screen and (min-width: 600px) {
-  .nodes-container {
-    padding: 2% 2%;
-  }
-}
-
-@media screen and (min-width: 1024px) {
-  .nodes-container {
+@media screen and (min-width: 1025px) {
+  .units-display-container {
     width: 33%;
   }
 }

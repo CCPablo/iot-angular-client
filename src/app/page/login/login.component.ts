@@ -4,7 +4,7 @@ import { FormGroup, Validators } from '@angular/forms';
 import { first, map } from 'rxjs/operators';
 import { LoginObject } from '../../authentication/model/login-object.model';
 
-import { AuthenticationService } from '../../authentication/service/authentication.service';
+import { AuthenticationService } from '../../service/authentication.service';
 import { FormControl } from '@angular/forms';
 //import { CanvasComponent } from '../../renderers/canvas/canvas.component'
 //import { EngineService } from '../../renderers/threeJS/engine.service'

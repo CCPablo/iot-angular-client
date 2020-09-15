@@ -1,0 +1,55 @@
+
+mat-card {
+  border-radius: 27px 27px 27px 27px;
+  min-width: 120px;
+}
+
+.package-name {
+  cursor: pointer;
+}
+
+mat-card-title {
+  overflow-wrap: anywhere;
+  font-size: 1.5rem;
+}
+
+.unit-cards-container {
+  display: flex;
+  flex-wrap: wrap;
+  grid-template: auto / auto auto;
+}
+
+app-unit-card {
+  padding: 3px;
+}
+
+.settings-icon {
+  right: 0;
+  top: -10px;
+  color: #1f1f1f;
+  cursor: pointer;
+  font-size: 23px;
+  text-align: center;
+  background: #ffffff;
+  position: absolute;
+}
+
+@media screen and (max-width: 600px) {
+  .plottable {
+    flex: 1 0 100%;
+  }
+
+  .no-plottable {
+    flex: 1 0 calc(47% - 1px);
+  }
+}
+
+@media screen and (min-width: 600px) {
+  .plottable {
+    flex: 0 0 47%;
+  }
+
+  .no-plottable {
+    flex: 0 0 31%;
+  }
+}

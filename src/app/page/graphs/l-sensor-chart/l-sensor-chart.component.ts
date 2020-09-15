@@ -1,8 +1,8 @@
-import { Component, ViewChild, ChangeDetectorRef, Input, OnChanges, OnDestroy, ChangeDetectionStrategy, Output, EventEmitter, OnInit } from '@angular/core';
+import { Component, ViewChild, ChangeDetectorRef, Input, OnChanges, OnDestroy, ChangeDetectionStrategy, Output, EventEmitter, OnInit, RendererStyleFlags2, Renderer2 } from '@angular/core';
 import { BaseChartDirective, Label, PluginServiceGlobalRegistrationAndOptions } from 'ng2-charts';
 import { Chart, ChartDataSets, ChartLineOptions, ChartPointOptions, ChartOptions, PluginServiceGlobalRegistration } from 'chart.js';
 import { reaction, IReactionDisposer, values } from 'mobx';
-import { SensorValuesService } from './sensor-values.service';
+import { SensorValuesService } from '../../../service/sensor-values.service';
 import * as Color from 'color';
 
 interface UnitData {
@@ -47,6 +47,12 @@ export class LSensorChartComponent implements OnChanges, OnInit {
   @Input() realTime = false;
 
   @Input() legendVisible = true;
+
+  @Input() labelsVisible = true;
+
+  @Input() width = '100%';
+
+  @Input() height = '100%';
 
   @Output() firstDataReceived = new EventEmitter<boolean>();
 
@@ -135,6 +141,7 @@ export class LSensorChartComponent implements OnChanges, OnInit {
   labels: Label[] = [];
   options: (ChartOptions & { annotation: any }) = {
     responsive: true,
+    maintainAspectRatio: false,
     responsiveAnimationDuration:500,
     animation: {
       easing: 'linear'
@@ -233,10 +240,13 @@ export class LSensorChartComponent implements OnChanges, OnInit {
   }];;
 
   constructor(private sensorValuesService: SensorValuesService,
-    private changeDetector: ChangeDetectorRef) {
+    private changeDetector: ChangeDetectorRef,
+    private valueService: SensorValuesService) {
   }
   ngOnInit(): void {
     //Chart.pluginService.register(this.rtPlugin);
+
+    //this.renderer.setStyle(this.chart, "width", '100px', RendererStyleFlags2.DashCase | RendererStyleFlags2.Important);
   }
 
   ngOnChanges() {
@@ -245,8 +255,11 @@ export class LSensorChartComponent implements OnChanges, OnInit {
 
   intervalTimer;
 
+  disposers = [];
+
+  latestValue = [];
+
   init() {
-    console.log('init')
     this.resetDataSets();
     this.labels = [];
     clearInterval(this.intervalTimer);
@@ -262,7 +275,7 @@ export class LSensorChartComponent implements OnChanges, OnInit {
    if(this.realTime) {
       this.intervalTimer = setInterval(() => {
         this.datasets.forEach((dataset,index) => {
-          dataset.data.push(Math.random()*4-2 + <number>this.datasets[index].data[this.numberOfValues-1]);
+          dataset.data.push(this.latestValue[index].value);
           dataset.data.shift();
         })
         let currentMillis = new Date().toString();
@@ -271,6 +284,15 @@ export class LSensorChartComponent implements OnChanges, OnInit {
         (<any>this.chart).update();
       },this.interval);
     }
+
+    this.unitsToPlot.forEach((unit, index) => {
+      this.disposers.push(reaction(
+        () => this.valueService.getLatestValue(unit.nodeId, unit.id),
+        (value) => {
+          this.latestValue[index] = value;
+        }
+      ));
+    })
   }
 
   resetDataSets() {
@@ -318,6 +340,7 @@ export class LSensorChartComponent implements OnChanges, OnInit {
       this.options.tooltips.enabled = true;
       this.options.hover.mode = 'point';
     }
+    this.options.scales.xAxes.forEach((axe) => axe.display=this.labelsVisible);
     (<any>this.chart).refresh();
     (<any>this.chart).update();
   }

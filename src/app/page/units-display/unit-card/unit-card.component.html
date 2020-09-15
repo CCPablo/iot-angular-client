@@ -1,0 +1,47 @@
+
+<div class="card-container flippable" [ngClass]="{plottable: unitData.type=='SENSOR'}"  [@flipCard]="flip">
+    <mat-card class="unit-card front">
+      <mat-card-title>
+          <div class="unit-icon-container">
+            <app-unit-icon class="unit-icon" (click)="toggleFlip()"
+            [intensity]="iconIntensity"
+            [maxColor]="iconMaxColor"
+            [minColor]="iconMinColor"
+            [unitType]="unitData.type">
+            </app-unit-icon>
+            <span *ngIf="reversable" class="temperature-display">{{value}} ºC</span>
+          </div>
+      </mat-card-title>
+      <mat-card-subtitle class="unit-name">
+        <app-editable-text
+        [text]="unitData.name"></app-editable-text>
+      </mat-card-subtitle>
+
+
+      <mat-icon class="unit-menu-button"
+      [matMenuTriggerFor]="options">expand_more</mat-icon>
+      <mat-menu #options overlapTrigger=true>
+        <button mat-menu-item (click)="toggleEdit()">
+          <mat-icon>person_outline</mat-icon>
+          <span>Profile</span>
+        </button>
+        <mat-divider></mat-divider>
+        <button mat-menu-item (click)="toggleEdit()">
+          <mat-icon>exit_to_app</mat-icon>
+          <span>Sign out</span>
+        </button>
+        <div mat-menu-item>
+          Configurar las unidades
+          <i class="flip-icon far fa-eye"></i>
+        </div>
+        <div mat-menu-item (click)="toggleEdit()">
+          <i class="edit-icon fas fa-edit"></i>
+        </div>
+      </mat-menu>
+
+    </mat-card>
+    <mat-card class='unit-card back' (click)="toggleFlip()">
+      <app-l-sensor-chart width='100%' height='50px' [interval]=1000 [realTime]=true [legendVisible]=false [numberOfValues]=24 [unitsToPlot]="[unitData]" [labelsVisible]=false></app-l-sensor-chart>
+    </mat-card>
+
+</div>

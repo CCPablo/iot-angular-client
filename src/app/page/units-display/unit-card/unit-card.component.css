@@ -1,0 +1,106 @@
+
+.card-container {
+  -webkit-perspective: 500px;
+  -moz-perspective: 500px;
+  -ms-perspective: 500px;
+  perspective: 500px;
+}
+
+.temperature-display {
+  font-size: 1rem;
+}
+
+.plottable {
+  width: 100%;
+}
+
+.flippable {
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 1s;
+}
+
+.unit-card {
+  backface-visibility: hidden;
+  box-shadow: 1px 1px 1px 0px rgb(164, 164, 164);
+  border-radius: 22px 22px 22px 22px;
+  min-height: 52px;
+  min-width: 60px;
+}
+
+.unit-card.front {
+  transform: rotateY(0deg);
+}
+
+.unit-card.back {
+  position: absolute;
+  width: 90%;
+  top: 0;
+  background: #f0f0f0;
+  transform: rotateY( 180deg );
+}
+
+.unit-icon-container {
+  display: flex;
+  justify-content: center;
+}
+
+.unit-icon {
+  cursor: pointer;
+}
+
+.pop-up-slider {
+  display: block;
+  position: absolute;
+  float: right;
+  left: 40px;
+  min-width: 0;
+  width: 50px;
+  top: 0;
+}
+
+.unit-name {
+  margin-bottom: 0;
+}
+
+.unit-menu-button {
+  position: absolute;
+  right: 4%;
+  top: 1%;
+  opacity: 0.5;
+  cursor: pointer;
+  font-size: large;
+}
+
+.flip-icon {
+    padding: 5px 0;
+}
+
+.edit-button {
+  height: 30px;
+  border-radius: 15px 15px 15px 15px;
+  width: 30px;
+  left: 0;
+  top: 0;
+  cursor: pointer;
+  font-size: large;
+  text-align: center;
+  background: #ffffff;
+  position: absolute;
+  border-width: 2px;
+}
+
+.edit-icon {
+  padding: 5px 0;
+}
+
+::ng-deep.mat-menu-panel {
+  min-width: 0 !important;
+  padding: 5px 8px !important;
+}
+
+.edit-text-icon {
+  padding: 0 7px;
+  font-size: 15px;
+  top: 3px;
+}

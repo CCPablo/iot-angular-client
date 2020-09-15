@@ -4,10 +4,9 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { NodeComponent } from './page/nodes/nodes.component';
+import { UnitsDisplayComponent } from './page/units-display/units-display.component';
 import { LoginComponent } from './page/login/login.component';
-import { TemperatureComponent } from './page/temperature/temperature.component';
-import { LightsComponent } from './page/lights/lights.component'
+import { LightsComponent } from './components/lights/lights.component'
 
 //import { EngineComponent } from './renderers/threeJS/engine.component';
 import { ChartsModule } from 'ng2-charts';
@@ -17,55 +16,53 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AngularMaterialModule } from './angular-material.module'
 /* Angular Flex Layout */
 import { HomeComponent } from './page/home/home.component';
-import { ControlComponent } from './page/control/control.component'
+import { ControlComponent } from './components/control/control.component'
 
 import { JwtInterceptor } from './authentication/interceptor/jwt.interceptor';
-import { ToolbarComponent } from './main-view/toolbar/toolbar.component';
-import { NavbarComponent } from './main-view/navbar/navbar.component';
-import { AemetComponent } from './aemet/aemet.component'
-import { ProfileSheetComponent } from './main-view/toolbar/profile-sheet.component';
-import { UnitItemComponent } from './page/nodes/unit-item/unit-item.component';
+import { AemetComponent } from './components/aemet/aemet.component'
+import { UniCardComponent } from './page/units-display/unit-card/unit-card.component';
 
-import { MatAnimatedIconComponent } from './main-view/mat-animated-icon/mat-animated-icon.component';
-import { UnitIconComponent } from './unit-icon/unit-icon.component';
-import { EditableTextComponent } from './editable-text/editable-text.component';
-import { NodeItemComponent } from './page/nodes/node-item/node-item.component';
+import { MatAnimatedIconComponent } from './components/mat-animated-icon/mat-animated-icon.component';
+import { UnitIconComponent } from './components/unit-icon/unit-icon.component';
+import { EditableTextComponent } from './components/editable-text/editable-text.component';
+import { MainCardComponent } from './page/units-display/main-card/main-card.component';
 import { LSensorChartComponent } from './page/graphs/l-sensor-chart/l-sensor-chart.component';
 import { GraphsComponent } from './page/graphs/graphs.component';
 import { GraphFormsComponent } from './page/graphs/graph-forms/graph-forms.component';
-import { InputTimeComponent } from './input-time/input-time.component';
-import { UnitImageUploadComponent } from './page/nodes/unit-image-upload/unit-image-upload.component';
+import { InputTimeComponent } from './components/input-time/input-time.component';
+import { UnitImageUploadComponent } from './components/unit-image-upload/unit-image-upload.component';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { CustomSpinnerComponent } from './custom-spinner/custom-spinner.component';
-import { ClimacellComponent } from './climacell/climacell.component';
+import { CustomSpinnerComponent } from './components/custom-spinner/custom-spinner.component';
+import { ClimacellComponent } from './components/climacell/climacell.component';
 
+import { DragDropModule } from '@angular/cdk/drag-drop';
+import { ToolbarbComponent } from './navigation/toolbarb/toolbarb.component';
+import { SidenavComponent } from './navigation/sidenav/sidenav.component'
 
 @NgModule({
   declarations: [
     AppComponent,
-    NodeComponent,
+    UnitsDisplayComponent,
     //EngineComponent,
     HomeComponent,
     LoginComponent,
     ControlComponent,
-    ToolbarComponent,
-    NavbarComponent,
-    TemperatureComponent,
     AemetComponent,
-    ProfileSheetComponent,
-    UnitItemComponent,
+    UniCardComponent,
     MatAnimatedIconComponent,
     LightsComponent,
     UnitIconComponent,
     EditableTextComponent,
-    NodeItemComponent,
+    MainCardComponent,
     GraphsComponent,
     LSensorChartComponent,
     GraphFormsComponent,
     InputTimeComponent,
     UnitImageUploadComponent,
     CustomSpinnerComponent,
-    ClimacellComponent
+    ClimacellComponent,
+    ToolbarbComponent,
+    SidenavComponent
   ],
   imports: [
     BrowserModule,
@@ -76,7 +73,8 @@ import { ClimacellComponent } from './climacell/climacell.component';
     BrowserAnimationsModule,
     AngularMaterialModule,
     ChartsModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    DragDropModule
    ],
   providers: [
     [{

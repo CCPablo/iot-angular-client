@@ -1,0 +1,9 @@
+
+:host {
+  .material-icons {
+    transition: transform 1s;
+    &.animate {
+      transform: rotate(360deg);
+    }
+  }
+}

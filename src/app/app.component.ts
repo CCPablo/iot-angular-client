@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
-import { AuthenticationService } from './authentication/service/authentication.service';
-import { NavbarComponent } from './main-view/navbar/navbar.component'
+import { AuthenticationService } from './service/authentication.service';
 import { Router } from '@angular/router';
 
 @Component({
@@ -11,8 +10,7 @@ import { Router } from '@angular/router';
 export class AppComponent {
 
   public constructor (
-    private authService : AuthenticationService,
-    private router: Router) {}
+    private authService : AuthenticationService) {}
 
   ngOnInit(): void {
   }

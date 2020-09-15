@@ -2,6 +2,13 @@
 .chart-container {
   position: relative;
   margin: auto;
-  margin-top: 100px;
-  width: 70%;
+  margin-top: 70px;
+  width: 80%;
+  height: 60%;
+}
+
+@media screen and (max-width:600px) {
+  .chart-container {
+    height: 50%;
+  }
 }

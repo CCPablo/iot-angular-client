@@ -1,5 +1,5 @@
 import { Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
-import { NodeService } from '../nodes/nodes.service';
+import { NodeService } from '../../service/nodes.service';
 import { autorun } from 'mobx';
 import { FormGroup } from '@angular/forms';
 import { trigger, transition, style, animate, state } from '@angular/animations';
@@ -51,7 +51,6 @@ export class GraphsComponent implements OnInit {
 
   chartLoaded(loaded) {
     this.loaded = loaded;
-    console.log(loaded);
     this.changeDetector.detectChanges();
   }
 

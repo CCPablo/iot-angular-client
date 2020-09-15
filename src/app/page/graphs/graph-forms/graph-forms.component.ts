@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChildren, QueryList, ViewChild, EventEmitter, Output, ElementRef, AfterViewInit, Renderer2, RendererStyleFlags2 } from '@angular/core';
 import { FormControl, Validators, FormGroup } from '@angular/forms';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
-import { NodeService } from '../../nodes/nodes.service';
+import { NodeService } from '../../../service/nodes.service';
 import { autorun } from 'mobx';
 import { MatOptionSelectionChange, MatOption, MatOptgroup } from '@angular/material/core';
 import { MatChip } from '@angular/material/chips';

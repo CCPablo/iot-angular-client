@@ -1,0 +1,21 @@
+<div class="roof"></div>
+
+<div class="container">
+  <mat-form-field class="disposal-selector">
+    <mat-label>Mostrar</mat-label>
+    <mat-select [(value)]="cardsDisposalControl">
+      <mat-option value="localizacion">Por localización</mat-option>
+      <mat-option value="nodos">Por nodos</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <div *ngIf="isDesktop()" class="main-cards-container drag-list" cdkDropList (cdkDropListDropped)="drop($event)" [@listStagger]="(cardsDisposalControl == 'nodos' ? getNodes().length : getUnitsByLocation().length)">
+    <app-main-card class="drag-item" cdkDrag [packedUnits]="packedUnits"
+      *ngFor="let packedUnits of (cardsDisposalControl == 'nodos' ? getNodes() : getUnitsByLocation())"></app-main-card>
+  </div>
+  <div *ngIf="!isDesktop()" class="main-cards-container" [@listStagger]="(cardsDisposalControl == 'nodos' ? getNodes().length : getUnitsByLocation().length)">
+    <app-main-card [packedUnits]="packedUnits"
+      *ngFor="let packedUnits of (cardsDisposalControl == 'nodos' ? getNodes() : getUnitsByLocation())"></app-main-card>
+  </div>
+</div>
+

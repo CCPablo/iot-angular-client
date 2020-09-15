@@ -1,0 +1,32 @@
+<mat-card class="mat-elevation-z3">
+  <mat-card-title [ngClass]="{undescripted: !packedUnits.description}">
+    <app-editable-text
+        class="package-name"
+        [text]="packedUnits.name" (click)="expandUnits()"></app-editable-text>
+  </mat-card-title>
+  <mat-card-subtitle  *ngIf="packedUnits.description">
+    <app-editable-text
+        [text]="packedUnits.description"></app-editable-text>
+  </mat-card-subtitle>
+  <mat-card-content [@detailExpand]="expanded ? 'expanded' : 'collapsed'"
+                    style="overflow: hidden">
+    <div class="unit-cards-container">
+      <app-unit-card
+      reversable=true
+      [unitData]="unit"
+      *ngFor="let unit of getPlottableUnits()"
+      class="plottable">
+      </app-unit-card>
+    </div>
+
+    <div class="unit-cards-container">
+      <app-unit-card
+      [reversable]=false
+      [unitData]="unit"
+      *ngFor="let unit of getLights()"
+      class="no-plottable">
+      </app-unit-card>
+    </div>
+  </mat-card-content>
+
+</mat-card>
