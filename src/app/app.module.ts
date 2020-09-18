@@ -39,11 +39,14 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
 import { ToolbarbComponent } from './navigation/toolbarb/toolbarb.component';
 import { SidenavComponent } from './navigation/sidenav/sidenav.component'
 
+import { BackgroundCanvasComponent } from './background-canvas/background-canvas.component'
+
 @NgModule({
   declarations: [
     AppComponent,
     UnitsDisplayComponent,
     //EngineComponent,
+    BackgroundCanvasComponent,
     HomeComponent,
     LoginComponent,
     ControlComponent,

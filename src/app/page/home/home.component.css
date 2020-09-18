@@ -1,8 +1,16 @@
 .units-display-container {
   margin: 20px;
+  height: 100%;
 }
 
-@media screen and (min-width: 1025px) {
+
+@media screen and (min-width: 600px) {
+  .units-display-container {
+    width: 50%;
+  }
+}
+
+@media screen and (min-width: 1000px) {
   .units-display-container {
     width: 33%;
   }

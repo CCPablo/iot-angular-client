@@ -34,7 +34,7 @@ app-unit-card {
   position: absolute;
 }
 
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 1400px) {
   .plottable {
     flex: 1 0 100%;
   }
@@ -44,7 +44,7 @@ app-unit-card {
   }
 }
 
-@media screen and (min-width: 600px) {
+@media screen and (min-width: 1400px) {
   .plottable {
     flex: 0 0 47%;
   }

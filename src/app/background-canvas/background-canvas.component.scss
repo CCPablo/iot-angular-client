@@ -1,0 +1,17 @@
+iot-canvas:host {
+  display: block;
+}
+
+canvas {
+  position: fixed;
+  left:0;
+  top:0;
+  z-index: -3 !important;
+}
+
+.canvas-container {
+  position: fixed;
+  left:0;
+  top:0;
+  z-index: -3 !important;
+}

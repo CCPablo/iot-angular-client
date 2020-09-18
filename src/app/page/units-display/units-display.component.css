@@ -4,11 +4,18 @@
   border-right: solid 80px transparent;
 }
 
+.anthena {
+  position: absolute;
+  top: 5%;
+  left: 5%;
+}
+
 .container {
   padding: 20px;
   border-style: groove;
-  border-radius: 27px 27px 27px 27px;
+  border-radius: 5px 5px 5px 5px;
   background-color: white;
+  height: 100%;
 }
 
 .disposal-selector {
