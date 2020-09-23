@@ -20,5 +20,7 @@
     <app-main-card [packedUnits]="packedUnits"
       *ngFor="let packedUnits of (cardsDisposalControl == 'nodos' ? getNodes() : getUnitsByLocation())"></app-main-card>
   </div>
+
+  <app-custom-spinner width='10%' *ngIf="getNodes().length==0"></app-custom-spinner>
 </div>
 

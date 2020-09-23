@@ -27,9 +27,9 @@ export class Stars {
         periodOfDay == 'SUNSET') {
       alpha = 0;
     } else if (periodOfDay == 'SUNRISE') {
-      alpha = 255*this.s.day.mapValueWithInPeriod(1, 0);
+      alpha = 255*this.s.day.mapValueForCurrentPeriod(1, 0);
     } else if (periodOfDay == 'NIGHTFALL') {
-      alpha = 255*this.s.day.mapValueWithInPeriod(0, 1);
+      alpha = 255*this.s.day.mapValueForCurrentPeriod(0, 1);
     } else if (periodOfDay == 'NIGHT') {
       alpha = 255;
     }

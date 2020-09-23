@@ -40,13 +40,14 @@ export class JwtInterceptor implements HttpInterceptor {
           if(request.url.startsWith('https://opendata.aemet.es')) {
           }
 
-          else if (err.status === 401) {
-            alert('no existe ese usuario y contraseña')
+          else if (err.status === 304) {
+            alert('No existe ese usuario y contraseña')
+          }
+
+          else if (err.status === 403) {
           }
           else if (err.status === 500) {
             alert(err.error.message)
-            this.authenticationService.logout();
-            location.reload(true);
           }
           else if (err.status === 0) {
             //this.authenticationService.logout();

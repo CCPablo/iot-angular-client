@@ -8,44 +8,39 @@ export class Day {
       name: 'SUNRISE',
       skyUpColor: this.s.color(0,102,153),
       skyDownColor: this.s.color(179,98,36),
-      cloudsColor: this.s.color(250, 214, 165),
-      cloudsAffectSkyColor: 0.2,
-      initialPercent: 0.9,
+      cloudsColor: this.s.color(250,214,165),
+      initialPercent: 0.95,
       endPercent: 1
     },
     {
       name: 'MORNING',
       skyUpColor: this.s.color(70,170,215,160),
-      skyDownColor: this.s.color(153, 204, 255,160),
-      cloudsColor: this.s.color(255),
-      cloudsAffectSkyColor: 0.3,
+      skyDownColor: this.s.color(153, 204, 255),
+      cloudsColor: this.s.color(128),
       initialPercent: 0,
       endPercent: 0.1
     },
     {
       name:'DAY',
-      skyUpColor: this.s.color(70,170,215,160),
-      skyDownColor: this.s.color(153, 204, 255,160),
-      cloudsColor: this.s.color(255),
+      skyUpColor: this.s.color(70,170,215),
+      skyDownColor: this.s.color(153, 204, 255),
+      cloudsColor: this.s.color(128),
       initialPercent: 0.1,
-      cloudsAffectSkyColor: 0.4,
-      endPercent: 0.4
+      endPercent: 0.43
     },
     {
       name:'SUNSET',
-      skyUpColor: this.s.color(70,170,215,160),
-      skyDownColor: this.s.color(179,98,36),
-      cloudsColor: this.s.color(250, 214, 165),
-      cloudsAffectSkyColor: 0.55,
-      initialPercent: 0.4,
+      skyUpColor: this.s.color(70,170,215),
+      skyDownColor: this.s.color(179*1.3,98*1.3,36*1.3),
+      cloudsColor: this.s.color(255),
+      initialPercent: 0.43,
       endPercent: 0.5
     },
     {
       name:'NIGHTFALL',
       skyUpColor: this.s.color(2,20,24),
       skyDownColor: this.s.color(2,20,24),
-      cloudsColor: this.s.color(80),
-      cloudsAffectSkyColor: 0.4,
+      cloudsColor: this.s.color(179,98,36),
       initialPercent: 0.5,
       endPercent: 0.6
     },
@@ -53,19 +48,14 @@ export class Day {
       name:'NIGHT',
       skyUpColor: this.s.color(2,20,24),
       skyDownColor: this.s.color(2,20,24),
-      cloudsColor: this.s.color(80),
-      cloudsAffectSkyColor: 0.3,
+      cloudsColor: this.s.color(40),
       initialPercent: 0.6,
-      endPercent: 0.9
+      endPercent: 0.95
     }
   ];
 
   constructor(private s: any, sunDegreePercent) {
     this.update(sunDegreePercent)
-  }
-
-  getCurrentPeriod = () => {
-    return this.currentPeriod.name;
   }
 
   update = (sunDegreePercent: number) => {
@@ -78,20 +68,21 @@ export class Day {
     });
   }
 
-  getCloudAffectSkyForCurrentPeriod() {
-    return this.mapValueWithInPeriod(this.getPreviousPeriod().cloudsAffectSkyColor, this.currentPeriod.cloudsAffectSkyColor);
-  }
 
   getCloudColorForCurrentPeriod() {
-    return this.s.lerpColor(this.getPreviousPeriod().cloudsColor, this.currentPeriod.cloudsColor, this.mapValueWithInPeriod(0, 1));
+    return this.s.lerpColor(this.getPreviousPeriod().cloudsColor, this.currentPeriod.cloudsColor, this.mapValueForCurrentPeriod(0, 1));
   }
 
   getSkyUpColorForCurrentPeriod() {
-    return this.s.lerpColor(this.getPreviousPeriod().skyUpColor, this.currentPeriod.skyUpColor, this.mapValueWithInPeriod(0, 1));
+    return this.s.lerpColor(this.getPreviousPeriod().skyUpColor, this.currentPeriod.skyUpColor, this.mapValueForCurrentPeriod(0, 1));
   }
 
   getSkyDownColorForCurrentPeriod() {
-    return this.s.lerpColor(this.getPreviousPeriod().skyDownColor, this.currentPeriod.skyDownColor, this.mapValueWithInPeriod(0, 1));
+    return this.s.lerpColor(this.getPreviousPeriod().skyDownColor, this.currentPeriod.skyDownColor, this.mapValueForCurrentPeriod(0, 1));
+  }
+
+  getCurrentPeriod = () => {
+    return this.currentPeriod.name;
   }
 
   getPreviousPeriod() {
@@ -103,7 +94,11 @@ export class Day {
     }
   }
 
-  mapValueWithInPeriod(lowValue: number, highValue: number) {
+  getSunDegreePercent() {
+    return this.sunDegreePercent;
+  }
+
+  mapValueForCurrentPeriod(lowValue: number, highValue: number) {
     return this.s.map(this.sunDegreePercent, this.currentPeriod.initialPercent, this.currentPeriod.endPercent, lowValue, highValue);
   }
 }

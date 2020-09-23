@@ -7,18 +7,15 @@ import { environment } from 'src/environments/environment';
 @Injectable({
     providedIn: 'root'
   })
-export class NodeService implements OnInit{
+export class NodeService {
 
     constructor(
       private nodeStore: NodeStore,
       private http: HttpClient
     ) {
-      this.http.get(`${environment.apiUrl}/nodes`).subscribe(nodes => {
+      this.http.get(`${environment.apiUrl}/node`).subscribe(nodes => {
         this.setNodes(nodes);
       })
-    }
-
-    ngOnInit() {
     }
 
     setNodes(nodes) {

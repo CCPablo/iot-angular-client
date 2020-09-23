@@ -4,7 +4,7 @@ import { Component, OnInit, Input, ChangeDetectorRef, ChangeDetectionStrategy } 
 @Component({
   selector: 'app-main-card',
   templateUrl: './main-card.component.html',
-  styleUrls: ['./main-card.component.css'],
+  styleUrls: ['./main-card.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   animations: [
     trigger('detailExpand', [
@@ -25,7 +25,6 @@ export class MainCardComponent implements OnInit {
   }
 
   expandUnits() {
-    console.log('expanded:', this.expanded);
     this.expanded=!this.expanded;
     this.changeDetector.detectChanges();
   }

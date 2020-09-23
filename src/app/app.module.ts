@@ -4,7 +4,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { UnitsDisplayComponent } from './page/units-display/units-display.component';
+import { UnitsDisplayComponent } from './components/units-display/units-display.component';
 import { LoginComponent } from './page/login/login.component';
 import { LightsComponent } from './components/lights/lights.component'
 
@@ -20,12 +20,12 @@ import { ControlComponent } from './components/control/control.component'
 
 import { JwtInterceptor } from './authentication/interceptor/jwt.interceptor';
 import { AemetComponent } from './components/aemet/aemet.component'
-import { UniCardComponent } from './page/units-display/unit-card/unit-card.component';
+import { UniCardComponent } from './components/units-display/unit-card/unit-card.component';
 
 import { MatAnimatedIconComponent } from './components/mat-animated-icon/mat-animated-icon.component';
 import { UnitIconComponent } from './components/unit-icon/unit-icon.component';
 import { EditableTextComponent } from './components/editable-text/editable-text.component';
-import { MainCardComponent } from './page/units-display/main-card/main-card.component';
+import { MainCardComponent } from './components/units-display/main-card/main-card.component';
 import { LSensorChartComponent } from './page/graphs/l-sensor-chart/l-sensor-chart.component';
 import { GraphsComponent } from './page/graphs/graphs.component';
 import { GraphFormsComponent } from './page/graphs/graph-forms/graph-forms.component';
@@ -37,7 +37,6 @@ import { ClimacellComponent } from './components/climacell/climacell.component';
 
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { ToolbarbComponent } from './navigation/toolbarb/toolbarb.component';
-import { SidenavComponent } from './navigation/sidenav/sidenav.component'
 
 import { BackgroundCanvasComponent } from './background-canvas/background-canvas.component'
 
@@ -64,8 +63,7 @@ import { BackgroundCanvasComponent } from './background-canvas/background-canvas
     UnitImageUploadComponent,
     CustomSpinnerComponent,
     ClimacellComponent,
-    ToolbarbComponent,
-    SidenavComponent
+    ToolbarbComponent
   ],
   imports: [
     BrowserModule,

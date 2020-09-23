@@ -1,7 +1,9 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { sketch } from './sketch3';
+import { WeatherService } from 'src/app/service/weather.service'
 
 import * as p5 from 'p5';
+import { now } from 'mobx-utils';
 
 @Component({
   selector: 'iot-canvas',
@@ -12,19 +14,55 @@ import * as p5 from 'p5';
 export class BackgroundCanvasComponent implements OnInit {
   canvas;
 
-  constructor(private changeDetector: ChangeDetectorRef) { }
+  constructor(private weatherService: WeatherService,private changeDetector: ChangeDetectorRef) { }
 
   ngOnInit(): void {
-    const myCanvas = document.getElementById('myCanvas');
+    this.weatherService.requestRealtimeWeather().subscribe( (response: any) => {
+      const myCanvas = document.getElementById('myCanvas');
+      this.canvas = new p5(sketch, myCanvas);
+      let bodyResponse = response.body;
+      let cloudCoverPercent = bodyResponse.cloud_cover.value/100;
+      this.canvas.setCloudCoverPercent(cloudCoverPercent);
+      let sunDegreePercent = this.obtainSunDegreePercent(bodyResponse);
+      this.canvas.setSunDegreePercent(0.3);
+      this.canvas.update();
+      console.log(bodyResponse)
+    })
 
-    this.canvas = new p5(sketch, myCanvas);
 
     setInterval(()=> {
-      this.canvas.updateSunLight(0.0025);
-      this.canvas.updateCloudPercent(0.005);
-    },50);
+      this.weatherService.requestRealtimeWeather().subscribe( (response: any) => {
+        let bodyResponse = response.body;
+        console.log('updated cloud percent at '+ new Date().toString() + '.\n VALUE: ' + bodyResponse.cloud_cover.value/100);
+        this.canvas.setCloudCoverPercent(bodyResponse.cloud_cover.value/100);
+
+        let sunDegreePercent = this.obtainSunDegreePercent(bodyResponse);
+        console.log('updated sun percent at '+ new Date().toString() + '.\n VALUE:' + sunDegreePercent);
+        this.canvas.setSunDegreePercent(sunDegreePercent);
+        this.canvas.update();
+      })
+    },60000);
   }
 
+  obtainSunDegreePercent(bodyResponse: any) {
+    let now = Date.now();
+    let sunrise = Date.parse(bodyResponse.sunrise.value);
+    let sunset = Date.parse(bodyResponse.sunset.value);
+
+    let yesterdaySunset = new Date(sunset);
+    yesterdaySunset.setHours(yesterdaySunset.getHours() - 24);
+
+    let tomorrowSunrise = new Date(sunrise);
+    tomorrowSunrise.setHours(tomorrowSunrise.getHours() + 24);
+
+    if (now > sunrise && now <= sunset) {
+      return (0.5*(now - sunrise))/ (sunset - sunrise);
+    } else if (now <= sunrise) {
+      return 0.5 + (0.5*(now - yesterdaySunset.getTime()))/ (sunrise - yesterdaySunset.getTime());
+    } else if (now > sunset) {
+      return 0.5 + (0.5*(now - sunset))/ (tomorrowSunrise.getTime() - sunset);
+    }
+  }
 
   /*
   ngOnInit() {

@@ -1,3 +1,5 @@
+import { first } from 'rxjs/operators';
+
 export class Clouds {
   noiseXY = [];
 
@@ -11,10 +13,10 @@ export class Clouds {
   lastOffsetY = 0;
 
   resolution;
-  noiseLod = 11;
+  noiseLod = 10;
   noiseFalloff = 0.68;
-  color;
-  cloudBrihtness = 1;
+  defaultColor = this.s.color(200);
+  colorByPeriod;
   rainFactor = 0;
 
   width: number;
@@ -23,8 +25,7 @@ export class Clouds {
   lastColumnIndex: number;
   lastRowIndex: number;
 
-  constructor(private s: any, height: number, cloudPercent: number, resolution: number) {
-    this.color = this.s.color(255);
+  constructor(private s: any, height: number, cloudCoverPercent: number, resolution: number) {
     this.resolution = resolution;
     this.width = s.width + 2*this.resolution;
     this.height = height + 2*this.resolution;
@@ -32,33 +33,107 @@ export class Clouds {
     this.lastRowIndex = s.int(this.height/this.resolution);
 
     s.noiseDetail(this.noiseLod,this.noiseFalloff);
+    /*
     for(let i = 0; i < this.lastColumnIndex; i++) {
       this.noiseXY[i] = [];
       for(let j = 0; j < this.lastRowIndex; j++) {
-        this.noiseXY[i][j] = this.getNoise(i,j, cloudPercent);
+        this.noiseXY[i][j] = this.getNoise(i,j, cloudCoverPercent);
       }
     }
+    */
   }
 
-  getNoise = function(x: number,y: number, cloudPercent: number) {
-    if(cloudPercent == 0) {
-      return 0;
+  private getNoise = function(i: number,j: number, cloudCoverPercent: number) {
+
+    if (cloudCoverPercent < 0.001) return 0;
+
+    const inLowRange = 0.6 - cloudCoverPercent*0.4;
+    const inHighRange = 1;
+
+    const outLowRange = cloudCoverPercent*0.6;
+    const outHighRange = 0.6 + cloudCoverPercent*0.4;
+
+    let x = (i-1)*this.resolution;
+    let y = (j-1)*this.resolution;
+
+    let nearNoise = this.s.noise(0.0008*x, 0.003*y);
+    let farNoise = this.s.noise(0.001*x + 30,0.0000045*(y+100)*(y+100) + 30);
+
+    if ((nearNoise + farNoise)/2 < inLowRange) return 0;
+
+    let nearContribution = this.s.map(nearNoise, inLowRange, inHighRange, outLowRange, outHighRange, true);
+    let farContribution = this.s.map(farNoise, inLowRange, inHighRange, outLowRange, outHighRange, true);4
+    /*
+    nearContribution = this.s.map(nearContribution, 0, 1, 0, this.s.map(y/this.height, 0, 1, 1, 0.2));
+    farContribution = this.s.map(farContribution, 0, 1, 0, this.s.map(y/this.height, 0, 1, 0.2, 1));
+    */
+    /*
+    let contribution = (nearNoise + farNoise)/2;
+    if (contribution < inLowRange) return 0;
+    */
+    let contribution = (nearContribution + farContribution)/2;
+
+    //let finalNoise = this.s.map(contribution, inLowRange, inHighRange, outLowRange, outHighRange, true);
+    let finalNoise = contribution;
+
+    if(finalNoise < 0.6) {
+      finalNoise = this.s.map(finalNoise, 0.5, 0.6, 0.3, 0.5);
+    } else if(finalNoise < 0.7) {
+      finalNoise = this.s.map(finalNoise, 0.6, 0.7, 0.5, 0.65);
+    } else if(finalNoise < 0.8) {
+      finalNoise = this.s.map(finalNoise, 0.7, 0.8, 0.65, 0.8);
     }
-    let noise = this.s.noise(0.002*this.resolution*x,0.004*this.resolution*y);
 
-      return this.s.map(
-        this.s.map(noise*noise, 0.6 - cloudPercent*0.4, 1, cloudPercent*0.7, 1),
-        0, 1,
-        0, (0.4 + cloudPercent*0.6));
+    return finalNoise;
   }
 
-  update = function(cloudPercent: number, windSpeedX: number, windSpeedY: number, rainFactor: number) {
+  update = function(cloudCoverPercent: number, windSpeedX: number, windSpeedY: number, rainFactor: number) {
+    this.rainFactor = rainFactor;
+    this.colorByPeriod = this.s.day.getCloudColorForCurrentPeriod();
+    this.updateCloudsPosition(cloudCoverPercent, windSpeedX, windSpeedY);
+    return (this.lastOffsetX != this.offsetX || this.lastOffsetY != this.offsetY);
+  }
+
+  display = function(cloudCoverPercent) {
+    this.s.noStroke();
+    this.noiseXY = []
+    for(let i = 0; i < this.lastColumnIndex; i++) {
+      this.noiseXY[i] = []
+      for(let j = 0; j < this.lastRowIndex; j++) {
+        const noise = this.getNoise(i, j, cloudCoverPercent);
+        this.displayPixels(i, j, noise, cloudCoverPercent);
+      }
+    }
+    this.lastOffsetX = this.offsetX;
+    this.lastOffsetY = this.offsetY;
+  }
+
+  private displayPixels = (i, j, noise, cloudCoverPercent) => {
+    if(noise > 0) {
+
+      let x = (i-1)*this.resolution;
+      let y = (j-1)*this.resolution;
+      let depth = y/this.width;
+
+      const affectedBySun = this.s.pixelIsSunded(x, y);
+      const sunedColor = this.s.lerpColor(this.defaultColor, this.s.color(255), affectedBySun);
+      //const colorByPeriodAndDepth = this.s.lerpColor(sunedColor, this.colorByPeriod, depth); //high color
+
+      const cloudBrightness = noise*cloudCoverPercent + (1-cloudCoverPercent);
+
+      const red = cloudBrightness*this.s.red(sunedColor);
+      const green =  cloudBrightness*this.s.green(sunedColor);
+      const blue =  cloudBrightness*this.s.blue(sunedColor);
+      const alpha = noise*255;
+
+      this.s.fill(red, green, blue, alpha);
+      this.s.rect(x - this.offsetX, y - this.offsetY, this.resolution, this.resolution);
+    }
+  }
+
+  private updateCloudsPosition = (cloudCoverPercent, windSpeedX, windSpeedY) => {
     this.currentPositionX += windSpeedX;
     this.currentPositionY += windSpeedY;
-
-    this.rainFactor = rainFactor;
-
-    this.color = this.s.day.getCloudColorForCurrentPeriod();
 
     if(this.currentPositionX > 1) {
       this.advancedX += 1;
@@ -68,11 +143,10 @@ export class Clouds {
         }
       }
       for(let j = 0; j < this.lastRowIndex; j++) {
-        this.noiseXY[this.lastColumnIndex-1][j] = this.getNoise(this.lastColumnIndex+this.advancedX,j+this.advancedY, cloudPercent);
+        this.noiseXY[this.lastColumnIndex-1][j] = this.getNoise(this.lastColumnIndex+this.advancedX,j+this.advancedY, cloudCoverPercent);
       }
       this.currentPositionX = 0;
-    }
-    if(this.currentPositionX < -1) {
+    }else if(this.currentPositionX < -1) {
       this.advancedX -= 1;
       for(let i = this.lastColumnIndex-2; i >= 0; i--) {
         for(let j = 0; j< this.lastRowIndex; j++) {
@@ -80,7 +154,7 @@ export class Clouds {
         }
       }
       for(let j = 0; j < this.lastRowIndex; j++) {
-        this.noiseXY[0][j] = this.getNoise(this.advancedX,j + this.advancedY, cloudPercent);
+        this.noiseXY[0][j] = this.getNoise(this.advancedX,j + this.advancedY, cloudCoverPercent);
       }
       this.currentPositionX = 0;
     }
@@ -92,11 +166,10 @@ export class Clouds {
         }
       }
       for(let i = 0; i < this.lastColumnIndex; i++) {
-        this.noiseXY[i][this.lastRowIndex-1] = this.getNoise(i+this.advancedX,this.lastRowIndex+this.advancedY, cloudPercent);
+        this.noiseXY[i][this.lastRowIndex-1] = this.getNoise(i+this.advancedX,this.lastRowIndex+this.advancedY, cloudCoverPercent);
       }
       this.currentPositionY = 0;
-    }
-    if(this.currentPositionY < -1) {
+    }else if(this.currentPositionY < -1) {
       this.advancedY -= 1;
       for(let i = 0; i < this.lastColumnIndex; i++) {
         for(let j = this.lastRowIndex-2; j >= 0; j--) {
@@ -104,43 +177,16 @@ export class Clouds {
         }
       }
       for(let i = 0; i < this.lastColumnIndex; i++) {
-        this.noiseXY[i][0] = this.getNoise(i + this.advancedX, this.advancedY, cloudPercent);
+        this.noiseXY[i][0] = this.getNoise(i + this.advancedX, this.advancedY, cloudCoverPercent);
       }
       this.currentPositionY = 0;
     }
 
     this.offsetX = this.s.int(this.currentPositionX*this.resolution)
     this.offsetY = this.s.int(this.currentPositionY*this.resolution)
-
-    return (this.lastOffsetX != this.offsetX || this.lastOffsetY != this.offsetY);
   }
 
-
-  display = function() {
-    this.s.noStroke();
-    for(let i = 0; i < this.lastColumnIndex; i++) {
-      for(let j = 0; j < this.lastRowIndex; j++) {
-        let noise = this.noiseXY[i][j];
-        if(noise > 0) {
-          let depth = this.s.constrain(1.2 - 1.2*((j - this.currentPositionY)/this.lastRowIndex),0,1);
-
-          let noiseColor = this.s.map(noise,0,1,0.5*this.cloudBrihtness,1);
-
-          const red = noiseColor*this.s.red(this.color);
-          const green =  noiseColor*this.s.green(this.color);
-          const blue =  noiseColor*this.s.blue(this.color);
-          const alpha =  255*depth*depth*noise;
-
-          this.s.fill(red, green, blue, alpha);
-          this.s.rect((i-1)*this.resolution - this.offsetX, (j-1)*this.resolution - this.offsetY, this.resolution, this.resolution);
-        }
-      }
-    }
-    this.lastOffsetX = this.offsetX;
-    this.lastOffsetY = this.offsetY;
-  }
-
-  reset = function(cloudPercent: number, width: number, height: number) {
+  reset = function(cloudCoverPercent: number, width: number, height: number) {
     this.width = width + 2*this.resolution;
     this.height = height + 2*this.resolution;
     this.lastColumnIndex = this.s.int(this.width/this.resolution);
@@ -155,8 +201,12 @@ export class Clouds {
     for(let i = 0; i < this.lastColumnIndex; i++) {
       this.noiseXY[i] = [];
       for(let j = 0; j < this.lastRowIndex; j++) {
-        this.noiseXY[i][j] = this.getNoise(i,j, cloudPercent);
+        this.noiseXY[i][j] = this.getNoise(i,j, cloudCoverPercent);
       }
     }
+  }
+
+  pixelIsClouded(x, y) {
+    return this.noiseXY[this.s.int((x-1)/this.resolution)][this.s.int((y-1)/this.resolution)] > 0.6;
   }
 }

@@ -1,5 +1,5 @@
 
-.toolbar-items {
+app-toolbarb:host {
   display: inline-flex;
   justify-content: space-between;
   width: 100%;
@@ -18,7 +18,7 @@ li {
 }
 
 .router-items {
- flex: 1 0 auto;
+  flex: 1 0 auto;
 }
 
 .profile-menu.button {

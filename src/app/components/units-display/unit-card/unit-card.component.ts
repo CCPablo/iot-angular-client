@@ -41,8 +41,6 @@ export class UniCardComponent implements OnInit, OnDestroy {
 
   @Input() reversable: boolean = false;
 
-  @Input() plottable: boolean = false;
-
   value;
 
   disposers: IReactionDisposer[] = [];

@@ -9,7 +9,7 @@ import { NodeService } from './nodes.service';
     providedIn: 'root'
   })
 export class SensorValuesService {
-    readonly VALUES_URL: any = "/values";
+    readonly VALUES_URL: any = "/value";
 
     constructor(
       private sensorValuesStore: SensorValuesStore,
