@@ -22,9 +22,9 @@ export class BackgroundCanvasComponent implements OnInit {
       this.canvas = new p5(sketch, myCanvas);
       let bodyResponse = response.body;
       let cloudCoverPercent = bodyResponse.cloud_cover.value/100;
-      this.canvas.setCloudCoverPercent(cloudCoverPercent);
+      this.canvas.setCloudCoverPercent(0.7);
       let sunDegreePercent = this.obtainSunDegreePercent(bodyResponse);
-      this.canvas.setSunDegreePercent(0.3);
+      this.canvas.setSunDegreePercent(0.35);
       this.canvas.update();
       console.log(bodyResponse)
     })

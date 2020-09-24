@@ -28,8 +28,7 @@
               "src/themes/custom-theme.scss",
               "src/styles.scss"
             ],
-            "scripts": [],
-            "webWorkerTsConfig": "tsconfig.worker.json"
+            "scripts": []
           },
           "configurations": {
             "production": {
@@ -104,8 +103,7 @@
             "tsConfig": [
               "tsconfig.app.json",
               "tsconfig.spec.json",
-              "e2e/tsconfig.json",
-              "tsconfig.worker.json"
+              "e2e/tsconfig.json"
             ],
             "exclude": [
               "**/node_modules/**"

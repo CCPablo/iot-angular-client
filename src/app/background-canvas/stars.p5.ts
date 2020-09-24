@@ -21,7 +21,7 @@ export class Stars {
   display() {
     this.s.noStroke();
     let alpha = 0;
-    let periodOfDay = this.s.day.getCurrentPeriod();
+    let periodOfDay = this.s.day.getCurrentPeriodName();
     if( periodOfDay == 'DAY' ||
         periodOfDay == 'MORNING' ||
         periodOfDay == 'SUNSET') {

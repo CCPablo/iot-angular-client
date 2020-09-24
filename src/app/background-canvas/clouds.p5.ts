@@ -13,7 +13,7 @@ export class Clouds {
   lastOffsetY = 0;
 
   resolution;
-  noiseLod = 10;
+  noiseLod = 8;
   noiseFalloff = 0.68;
   defaultColor = this.s.color(200);
   colorByPeriod;
@@ -56,28 +56,28 @@ export class Clouds {
     let x = (i-1)*this.resolution;
     let y = (j-1)*this.resolution;
 
-    let nearNoise = this.s.noise(0.0008*x, 0.003*y);
-    let farNoise = this.s.noise(0.001*x + 30,0.0000045*(y+100)*(y+100) + 30);
+    let nearNoise = this.s.noise(0.001*x, 0.003*y);
+    let farNoise = this.s.noise(0.0004*x + 40,0.0000015*(y+100)*(y+100) + 30);
 
     if ((nearNoise + farNoise)/2 < inLowRange) return 0;
 
     let nearContribution = this.s.map(nearNoise, inLowRange, inHighRange, outLowRange, outHighRange, true);
-    let farContribution = this.s.map(farNoise, inLowRange, inHighRange, outLowRange, outHighRange, true);4
-    /*
-    nearContribution = this.s.map(nearContribution, 0, 1, 0, this.s.map(y/this.height, 0, 1, 1, 0.2));
-    farContribution = this.s.map(farContribution, 0, 1, 0, this.s.map(y/this.height, 0, 1, 0.2, 1));
-    */
+    let farContribution = this.s.map(farNoise, inLowRange, inHighRange, outLowRange, outHighRange, true);
+
+    nearContribution = this.s.map(nearContribution, 0, 1, 0, this.s.map(y/this.height, 0, 1, 1, 0.1));
+    farContribution = this.s.map(farContribution, 0, 1, 0, this.s.map(y/this.height, 0, 1, 0.1, 1));
+
     /*
     let contribution = (nearNoise + farNoise)/2;
     if (contribution < inLowRange) return 0;
     */
-    let contribution = (nearContribution + farContribution)/2;
+    let contribution = (nearContribution + farContribution);
 
     //let finalNoise = this.s.map(contribution, inLowRange, inHighRange, outLowRange, outHighRange, true);
     let finalNoise = contribution;
 
     if(finalNoise < 0.6) {
-      finalNoise = this.s.map(finalNoise, 0.5, 0.6, 0.3, 0.5);
+      finalNoise = this.s.map(finalNoise, 0.5, 0.6, 0.2, 0.5);
     } else if(finalNoise < 0.7) {
       finalNoise = this.s.map(finalNoise, 0.6, 0.7, 0.5, 0.65);
     } else if(finalNoise < 0.8) {
@@ -117,13 +117,13 @@ export class Clouds {
 
       const affectedBySun = this.s.pixelIsSunded(x, y);
       const sunedColor = this.s.lerpColor(this.defaultColor, this.s.color(255), affectedBySun);
-      //const colorByPeriodAndDepth = this.s.lerpColor(sunedColor, this.colorByPeriod, depth); //high color
+      const colorByPeriodAndDepth = this.s.lerpColor(sunedColor, this.colorByPeriod, depth); //high color
 
       const cloudBrightness = noise*cloudCoverPercent + (1-cloudCoverPercent);
 
-      const red = cloudBrightness*this.s.red(sunedColor);
-      const green =  cloudBrightness*this.s.green(sunedColor);
-      const blue =  cloudBrightness*this.s.blue(sunedColor);
+      const red = cloudBrightness*this.s.red(colorByPeriodAndDepth);
+      const green =  cloudBrightness*this.s.green(colorByPeriodAndDepth);
+      const blue =  cloudBrightness*this.s.blue(colorByPeriodAndDepth);
       const alpha = noise*255;
 
       this.s.fill(red, green, blue, alpha);

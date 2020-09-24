@@ -46,6 +46,7 @@ export const sketch = (s) => {
     */
     if(s.needsUpdate) {
       s.day.update(sunDegreePercent);
+      sun.update();
       clouds.update(cloudCoverPercent, windSpeedX, windSpeedY, 0);
       sky.update(cloudCoverPercent, clouds.colorByPeriod);
       moon.update();
@@ -85,10 +86,10 @@ export const sketch = (s) => {
 
   s.mouseClicked = function() {
 
-    //sunDegreePercent = (sunDegreePercent + 0.01)%1;
+    sunDegreePercent = (sunDegreePercent + 0.01)%1;
 
     cloudCoverPercent = (cloudCoverPercent + 0.05)%1;
-    clouds.reset(cloudCoverPercent, s.windowWidth, s.windowHeight);
+    //clouds.reset(cloudCoverPercent, s.windowWidth, s.windowHeight);
     s.print(cloudCoverPercent);
     s.update();
   }

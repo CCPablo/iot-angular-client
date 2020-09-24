@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormGroup, Validators } from '@angular/forms';
 import { first, map } from 'rxjs/operators';
-import { LoginObject } from '../../authentication/model/login-object.model';
+import { User } from '../../authentication/model/login-object.model';
 
 import { AuthenticationService } from '../../service/authentication.service';
 import { FormControl } from '@angular/forms';
@@ -51,13 +51,13 @@ export class LoginComponent implements OnInit {
   submitLogin() {
       //this.engine.updateCubeSize({x:1, y:1, z:1});
 
-      const loginFormCopy = this.loginForm.getRawValue();
+      const loginFormCopy = new User(this.loginForm.value);
 
       if (this.loginForm.invalid) {
           return;
       }
 
-      this.login(new LoginObject(this.loginForm.value))
+      this.login(new User(loginFormCopy))
           .pipe(first()).subscribe(
               token => {
                   this.correctLogin(token, loginFormCopy);
@@ -69,20 +69,20 @@ export class LoginComponent implements OnInit {
               });
   }
 
-  private login(loginObj: LoginObject): Observable<string> {
+  private login(user: User): Observable<string> {
       let params = new HttpParams();
-      params = params.append('username', loginObj.username);
-      params = params.append('password', loginObj.password);
-      return this.http.post<any>(`${environment.apiUrl}${this.authenticationService.authUrl}`, null, {params: params, observe: 'response'})
+      params = params.append('username', user.username);
+      params = params.append('password', user.password);
+      return this.http.post<any>(`${environment.apiUrl}${this.authenticationService.authFolder}`, null, {params: params, observe: 'response'})
           .pipe(map(res => {
             return res.headers.get('Authorization');
       }));
   }
 
-  private correctLogin(token: string, loginFormCopy){
+  private correctLogin(token: string, formCopy: User){
       this.authenticationService.setCurrentSession({
-        token:token,
-        user:loginFormCopy.username
+        token: token,
+        user: formCopy
       })
       this.router.navigate(['/home']);
   }

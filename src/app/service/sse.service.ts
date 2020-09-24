@@ -1,5 +1,6 @@
 import { Injectable, NgZone } from "@angular/core";
 import { Observable } from "rxjs";
+import { environment } from 'src/environments/environment';
 
 
 @Injectable({
@@ -7,12 +8,16 @@ import { Observable } from "rxjs";
 })
 export class SseService {
 
+  readonly VALUES = "/sse/stream";
+
+  readonly URL = `${environment.apiUrl}${this.VALUES}`;
+
   constructor(private zone: NgZone) {
   }
 
-  getServerSentEvent(url: string): Observable<MessageEvent> {
-    return Observable.create(observer => {
-      const eventSource = this.getEventSource(url);
+  getServerSentEvent(): Observable<MessageEvent> {
+    return new Observable(observer => {
+      const eventSource = this.getEventSource();
       eventSource.onmessage = event => {
         this.zone.runOutsideAngular(() => {
           observer.next(event);
@@ -26,7 +31,8 @@ export class SseService {
     });
   }
 
-  private getEventSource(url: string): EventSource {
-    return new EventSource(url);
+  private getEventSource(): EventSource {
+    return new EventSource(this.URL);
+
   }
 }

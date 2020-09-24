@@ -27,10 +27,12 @@ export class HomeComponent implements OnInit, OnDestroy {
     autorun(() => {
       this.changeDetector.detectChanges();
     });
-    this.sseSubscription = this.sseService.getServerSentEvent("http://localhost:8080/sse").subscribe(serverEvent => {
+    this.sseSubscription = this.sseService.getServerSentEvent().subscribe(
+      serverEvent => {
       this.sseData = JSON.parse(serverEvent.data).integer;
       this.changeDetector.detectChanges();
-    });
+      }
+    );
   }
 
   getNodes() {

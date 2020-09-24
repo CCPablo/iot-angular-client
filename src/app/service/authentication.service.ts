@@ -9,7 +9,7 @@ import { Subscription, Subject, Observable } from 'rxjs';
 export class AuthenticationService implements OnDestroy {
 
     private currentSession : Session;
-    authUrl = '/login';
+    authFolder = '/login';
 
     private logoutSubscription : Subscription;
 
@@ -49,7 +49,7 @@ export class AuthenticationService implements OnDestroy {
 
     getCurrentUser(): string {
         var session: Session = this.getCurrentSession();
-        return (session && session.user) ? session.user : null;
+        return (session && session.user.username) ? session.user.username : null;
     };
 
     public isAuthenticated(): boolean {
